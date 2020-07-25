@@ -8,6 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/core": "^1.0.0-next.6",
+    "@chakra-ui/theme": "^1.0.0-next.6",
+    "@chakra-ui/theme-tools": "^1.0.0-next.3",
     "bcryptjs": "^2.4.3",
     "graphql-iso-date": "^3.6.1",
     "graphql-type-json": "^0.3.1",
@@ -23,10 +26,10 @@
     "@graphql-codegen/cli": "1.17.4",
     "@graphql-codegen/typescript": "^1.17.4",
     "@graphql-codegen/typescript-resolvers": "1.17.4",
-    "@types/node": "^14.0.26",
-    "@types/react": "^16.9.43",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^26.0.6",
+    "@types/node": "^14.0.26",
+    "@types/react": "^16.9.43",
     "@vercel/node": "^1.7.3",
     "concurrently": "^5.2.0",
     "eslint": "^7.5.0",
