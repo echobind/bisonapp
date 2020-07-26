@@ -1,20 +1,18 @@
 # Setup
 
-## Configure to Deploy on Vercel
+## Configure Vercel
 
 1. run `vercel` or `vc`
-1. choose the appropriate scope / organization
-1. keep all the build defaults
-
-### Deploy an existing project
-
-1. Choose "link to an existing project" when prompted
+1. choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
+1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
 1. Run `vercel env pull`. This will sync your dev env vars and save them to .env.
 
-## Setup Prisma
+## Configure Prisma
 
-1. Add an .env file to `api/prisma` and copy your . It will look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public&connection_limit=1"`. Be sure and change the database name from myapp_dev
-1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist.
+1. Add an .env file to `api/prisma` and copy your . It will look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public&connection_limit=1"`. Be sure and change the database name from myapp_dev to whatever you want the name of your local database to be.
+1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist:
+
+![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
 
 # Run the app
 

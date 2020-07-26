@@ -1,7 +1,7 @@
 import { schema } from 'nexus';
 import { Role } from '@prisma/client';
-import { AuthenticationError, UserInputError } from 'apollo-server-errors';
-import { hashPassword, appJwtForUser, comparePasswords } from '../services/auth';
+import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
+import { hashPassword, appJwtForUser, comparePasswords, isAdmin } from '../services/auth';
 
 // User Type
 schema.objectType({
@@ -10,6 +10,7 @@ schema.objectType({
   definition(t) {
     t.model.id();
     t.model.email();
+    t.model.roles();
     t.model.createdAt();
     t.model.updatedAt();
   },
@@ -43,7 +44,7 @@ schema.queryType({
       filtering: true,
       ordering: true,
       resolve: async (root, args, ctx, info, originalResolve) => {
-        // TODO: if (!isAdmin(ctx)) return null
+        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized.');
         return await originalResolve(root, args, ctx, info);
       },
     });

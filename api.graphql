@@ -98,6 +98,7 @@ type User {
   createdAt: DateTime!
   email: String!
   id: String!
+  roles: [Role!]!
   updatedAt: DateTime!
 }
 

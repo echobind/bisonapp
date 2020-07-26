@@ -1,8 +1,9 @@
 import { settings, use } from 'nexus';
 import { prisma } from 'nexus-plugin-prisma';
-import { prisma as client } from '../lib/prisma';
 import './context';
 import './user';
+
+export const GRAPHQL_PATH = '/api/graphql';
 
 // Enable nexus prisma plugin with crud features
 use(prisma({ migrations: true, features: { crud: true } }));

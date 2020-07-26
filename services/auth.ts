@@ -36,5 +36,24 @@ export const appJwtForUser = (user: Partial<User>): string => {
  * @param user The user to check the role for
  */
 export const isAdmin = (user: Partial<User>): boolean => {
-  return user.role === Role.ADMIN;
+  return user?.roles.includes(Role.ADMIN);
 };
+
+/**
+ * Parses and verifies a JWT token from header string
+ * @param header The header to verify
+ */
+export const verifyAuthHeader = (header?: string): JWT | undefined => {
+  if (!header) return;
+  const token = header.replace('Bearer ', '');
+
+  try {
+    return jwt.verify(token, process.env.APP_SECRET) as JWT;
+  } catch (e) {
+    return;
+  }
+};
+
+interface JWT {
+  userId: string;
+}
