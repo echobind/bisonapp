@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { Heading, Center, Button } from '@chakra-ui/core';
+import { Heading, Center } from '@chakra-ui/core';
 
 function Home() {
   return (

@@ -13,8 +13,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "sourceMap": true
+    "sourceMap": true,
+    "plugins": [{ "name": "nexus/typescript-language-service" }],
+    "typeRoots": ["node_modules/@types", "types"],
+    "rootDir": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [".", "next-env.d.ts", "types.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

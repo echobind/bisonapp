@@ -1,30 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Setup
 
-## Getting Started
+## Configure to Deploy on Vercel
 
-First, run the development server:
+1. run `vercel` or `vc`
+1. choose the appropriate scope / organization
+1. keep all the build defaults
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Deploy an existing project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Choose "link to an existing project" when prompted
+1. Run `vercel env pull`. This will sync your dev env vars and save them to .env.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Setup Prisma
 
-## Learn More
+1. Add an .env file to `api/prisma` and copy your . It will look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public&connection_limit=1"`. Be sure and change the database name from myapp_dev
+1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist.
 
-To learn more about Next.js, take a look at the following resources:
+# Run the app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+From the root, run `yarn dev`. This will do the following:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- run `vercel dev` to run the frontend and serverless functions locally
+- start a watcher to generate the Prisma client on schema changes
+- start a watcher to generate TypeScript types for graphql files
