@@ -1,6 +1,7 @@
 import { schema } from 'nexus';
 import { Role } from '@prisma/client';
 import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
+
 import { hashPassword, appJwtForUser, comparePasswords, isAdmin } from '../services/auth';
 
 // User Type
@@ -45,6 +46,7 @@ schema.queryType({
       ordering: true,
       resolve: async (root, args, ctx, info, originalResolve) => {
         if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
+
         return await originalResolve(root, args, ctx, info);
       },
     });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChakraProvider, CSSReset } from '@chakra-ui/core';
+
 import { MainLayout } from '../layouts/MainLayout';
 import theme from '../chakra';
 

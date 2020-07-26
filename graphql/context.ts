@@ -1,4 +1,5 @@
 import { schema } from 'nexus';
+
 import { prisma } from '../lib/prisma';
 import { verifyAuthHeader } from '../services/auth';
 

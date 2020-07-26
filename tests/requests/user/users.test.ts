@@ -1,6 +1,7 @@
+import { Role } from '@prisma/client';
+
 import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
-import { Role } from '@prisma/client';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

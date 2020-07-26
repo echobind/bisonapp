@@ -1,10 +1,11 @@
 import { User } from '@prisma/client';
 import request from 'supertest';
+import { Client } from 'pg';
+
 import { GRAPHQL_PATH } from '../graphql/schema';
 import server from '../pages/api/graphql';
 import { appJwtForUser } from '../services/auth';
 import { prisma, connect, disconnect } from '../lib/prisma';
-import { Client } from 'pg';
 
 // reexport prisma methods
 export { prisma, connect, disconnect };
