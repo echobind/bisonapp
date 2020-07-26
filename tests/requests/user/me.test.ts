@@ -1,5 +1,4 @@
-import { Role } from '@prisma/client';
-import { graphQLRequest, graphQLRequestAsUser, resetDB, prisma, disconnect } from '../../helpers';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
 
 beforeEach(async () => resetDB());
@@ -15,6 +14,7 @@ describe('me query', () => {
           }
         }
       `;
+
       const response = await graphQLRequest({ query });
 
       expect(response.body).toMatchInlineSnapshot(`

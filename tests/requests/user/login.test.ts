@@ -1,4 +1,4 @@
-import { graphQLRequest, resetDB, prisma, disconnect } from '../../helpers';
+import { graphQLRequest, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
 
 beforeEach(async () => resetDB());
@@ -50,6 +50,7 @@ describe('login mutation', () => {
   describe('valid password', () => {
     it('returns the auth payload', async () => {
       const password = 'asdf';
+
       const user = await UserFactory.create({
         email: 'test@wee.net',
         password,

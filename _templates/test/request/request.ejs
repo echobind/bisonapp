@@ -1,0 +1,56 @@
+---
+to: tests/requests/<%= name %>.test.ts
+---
+<% formattedPath = name -%>
+<% model = name.split('/')[0] %>
+<% section = h.baseName(name) -%>
+<% upper = h.inflection.camelize(model, false) -%>
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
+import { <%= upper %>Factory } from '../../factories/<%= model %>';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('<%= upper %> <%= section %> mutation', () => {
+  const query = `
+    mutation LOGIN($email: String!, $password: String!) {
+      login(email: $email, password: $password) {
+        user {
+          email
+        }
+      }
+    }
+  `;
+
+  describe('invalid email', () => {
+    it('returns an Authentication error', async () => {
+      await <%= upper %>Factory.create({ email: 'foo@wee.net' });
+
+      const variables = { email: 'fake', password: 'fake' };
+      const response = await graphQLRequest({ query, variables });
+      const errorMessages = response.body.errors.map((e) => e.message);
+
+      expect(errorMessages).toMatchInlineSnapshot();
+    });
+  });
+
+  describe('as a user', () => {
+    it('does something expected', async () => {
+
+      const query = `
+        query ME {
+          me {
+            user {
+              email
+            }
+          }
+        }
+      `;
+      const user = await UserFactory.create();
+      const <%= model %> = await <%= upper %>Factory.create();
+      const response = await graphQLRequestAsUser(user, { query });
+
+      expect(response.body).toBe(true)
+    })
+  })
+});

@@ -1,0 +1,27 @@
+---
+to: tests/factories/<%= name %>.ts
+---
+<% single = h.inflection.singularize(name) -%>
+<% upper = h.inflection.camelize(single, false) -%>
+import Chance from 'chance';
+import { <%= upper %> } from '@prisma/client';
+import { prisma } from '../helpers';
+
+const chance = new Chance();
+
+export const <%= upper %>Factory = {
+  build: (attrs: Partial<<%= upper %>> = {}) => {
+    return {
+      id: chance.guid(),
+      ...attrs,
+    };
+  },
+
+  create: async (attrs: Partial<<%= upper %>> = {}) => {
+    const <%= single %> = <%= upper %>Factory.build(attrs);
+
+    return await prisma.<%= single %>.create({
+      data: { ...<%= single %> },
+    });
+  },
+};

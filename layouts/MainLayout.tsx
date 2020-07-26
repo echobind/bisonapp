@@ -1,4 +1,6 @@
-import { Box, Center, Flex, Image, Text, Button } from '@chakra-ui/core';
+import React from 'react';
+import { Box, Center, Flex, Text, Button } from '@chakra-ui/core';
+
 import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
 

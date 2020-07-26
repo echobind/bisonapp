@@ -1,6 +1,7 @@
 import Chance from 'chance';
 import { User, Role } from '@prisma/client';
-import { prisma, disconnect } from '../helpers';
+
+import { prisma } from '../helpers';
 import { hashPassword } from '../../services/auth';
 
 const chance = new Chance();

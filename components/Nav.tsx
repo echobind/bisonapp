@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link, Stack, useBreakpoint, MenuButton, Menu, MenuList, MenuItem } from '@chakra-ui/core';
 import NextLink from 'next/link';
 
