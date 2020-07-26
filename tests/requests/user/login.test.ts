@@ -1,6 +1,5 @@
 import { graphQLRequest, resetDB, prisma, disconnect } from '../../helpers';
-import { Role } from '@prisma/client';
-import { hashPassword } from '../../../services/auth';
+import { UserFactory } from '../../factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -18,9 +17,7 @@ describe('login mutation', () => {
 
   describe('invalid email', () => {
     it('returns an Authentication error', async () => {
-      await prisma.user.create({
-        data: { email: 'foo@wee.net', password: 'asdf', roles: { set: [Role.USER] } },
-      });
+      await UserFactory.create({ email: 'foo@wee.net' });
 
       const variables = { email: 'fake', password: 'fake' };
       const response = await graphQLRequest({ query, variables });
@@ -36,9 +33,7 @@ describe('login mutation', () => {
 
   describe('invalid password', () => {
     it('returns an Authentication error', async () => {
-      const user = await prisma.user.create({
-        data: { email: 'foo@wee.net', password: 'asdf', roles: { set: [Role.USER] } },
-      });
+      const user = await UserFactory.create({ email: 'foo@wee.net' });
 
       const variables = { email: user.email, password: 'fake' };
       const response = await graphQLRequest({ query, variables });
@@ -55,9 +50,9 @@ describe('login mutation', () => {
   describe('valid password', () => {
     it('returns the auth payload', async () => {
       const password = 'asdf';
-      const hashedPassword = hashPassword(password);
-      const user = await prisma.user.create({
-        data: { email: 'foo@wee.net', password: hashedPassword, roles: { set: [Role.USER] } },
+      const user = await UserFactory.create({
+        email: 'test@wee.net',
+        password,
       });
 
       const variables = { email: user.email, password };
@@ -68,7 +63,7 @@ describe('login mutation', () => {
           "data": Object {
             "login": Object {
               "user": Object {
-                "email": "foo@wee.net",
+                "email": "test@wee.net",
               },
             },
           },

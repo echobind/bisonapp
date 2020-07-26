@@ -37,6 +37,7 @@
     "@types/react": "^16.9.43",
     "@types/supertest": "^2.0.10",
     "@vercel/node": "^1.7.3",
+    "chance": "^1.1.6",
     "concurrently": "^5.2.0",
     "eslint": "^7.5.0",
     "eslint-plugin-echobind": "^0.2.0",
