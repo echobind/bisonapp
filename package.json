@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn nexus build && next build",
     "start": "next start",
     "g:migration": "yarn -s prisma migrate save --experimental",
     "db:migrate": "yarn -s prisma migrate up --experimental",
