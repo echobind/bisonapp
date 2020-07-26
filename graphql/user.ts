@@ -44,7 +44,7 @@ schema.queryType({
       filtering: true,
       ordering: true,
       resolve: async (root, args, ctx, info, originalResolve) => {
-        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized.');
+        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
         return await originalResolve(root, args, ctx, info);
       },
     });
@@ -89,7 +89,7 @@ schema.mutationType({
     t.crud.createOneUser({
       alias: 'createUser',
       computedInputs: {
-        role: () => Role.USER,
+        roles: () => [Role.USER],
         password: ({ args }) => hashPassword(args.data.password),
       },
       resolve: async (root, args, ctx, info, originalResolve) => {

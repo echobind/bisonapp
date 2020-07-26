@@ -12,7 +12,7 @@ class PrismaTestEnvironment extends NodeEnvironment {
     super(config);
 
     // Generate a unique schema identifier for this test context
-    this.schema = `test_${nanoid()}`;
+    this.schema = `test_${nanoid().toLowerCase()}`;
     // Generate the pg connection string for the test schema
     this.databaseUrl = `postgres://postgres:postgres@localhost:5432/testing?schema=${this.schema}`;
   }

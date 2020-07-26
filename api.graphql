@@ -107,12 +107,7 @@ input UserCreateInput {
   email: String!
   id: String
   profile: ProfileCreateOneWithoutUserInput
-  roles: UserCreaterolesInput
   updatedAt: DateTime
-}
-
-input UserCreaterolesInput {
-  set: [Role!]
 }
 
 input UserOrderByInput {
