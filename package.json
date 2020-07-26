@@ -9,7 +9,8 @@
     "g:migration": "yarn -s prisma migrate save --experimental",
     "db:migrate": "yarn -s prisma migrate up --experimental",
     "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
-    "test": "yarn withEnv:test jest --runInBand"
+    "test": "yarn withEnv:test jest --runInBand --watch",
+    "test:ci": "yarn withEnv:test jest --runInBand"
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-next.6",

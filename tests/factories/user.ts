@@ -19,12 +19,8 @@ export const UserFactory = {
   create: async (attrs: Partial<User> = {}) => {
     const user = UserFactory.build(attrs);
 
-    const record = await prisma.user.create({
+    return await prisma.user.create({
       data: { ...user, password: hashPassword(user.password), roles: { set: user.roles } },
     });
-
-    await disconnect();
-
-    return record;
   },
 };

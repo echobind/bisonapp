@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client';
 import { graphQLRequest, graphQLRequestAsUser, resetDB, prisma, disconnect } from '../../helpers';
+import { UserFactory } from '../../factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -37,10 +38,9 @@ describe('me query', () => {
         }
       `;
 
-      const user = await prisma.user.create({
-        data: { email: 'foo@wee.net', password: 'asdf', roles: { set: [Role.USER] } },
+      const user = await UserFactory.create({
+        email: 'foo@wee.net',
       });
-      await disconnect();
 
       const response = await graphQLRequestAsUser(user, { query });
 
