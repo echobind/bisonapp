@@ -21,6 +21,7 @@
     "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.0.2",
     "@chakra-ui/core": "^1.0.0-rc.0",
     "@chakra-ui/theme": "^1.0.0-rc.0",
     "@chakra-ui/theme-tools": "^1.0.0-rc.0",
@@ -28,13 +29,15 @@
     "bcryptjs": "^2.4.3",
     "graphql-iso-date": "^3.6.1",
     "graphql-type-json": "^0.3.1",
+    "hijackresponse": "^4.0.0",
     "isomorphic-unfetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "next": "9.4.4",
     "nexus": "^0.25.0",
     "nexus-plugin-prisma": "^0.16.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-hook-form": "^6.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.4",

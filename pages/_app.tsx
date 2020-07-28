@@ -1,18 +1,24 @@
 import React from 'react';
 import { ChakraProvider, CSSReset } from '@chakra-ui/core';
+import { ApolloProvider } from '@apollo/client';
 
 import { MainLayout } from '../layouts/MainLayout';
+import { createApolloClient } from '../lib/apolloClient';
 import theme from '../chakra';
 
 function App({ pageProps, Component }) {
-  return (
-    <ChakraProvider theme={theme}>
-      <CSSReset />
+  const apolloClient = createApolloClient();
 
-      <MainLayout>
-        <Component {...pageProps} />
-      </MainLayout>
-    </ChakraProvider>
+  return (
+    <ApolloProvider client={apolloClient}>
+      <ChakraProvider theme={theme}>
+        <CSSReset />
+
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
+      </ChakraProvider>
+    </ApolloProvider>
   );
 }
 

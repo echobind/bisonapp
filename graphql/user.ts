@@ -1,7 +1,8 @@
 import { schema } from 'nexus';
 import { Role } from '@prisma/client';
-import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
 
+// import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
+import { AuthenticationError, UserInputError, ForbiddenError } from '../lib/errors';
 import { hashPassword, appJwtForUser, comparePasswords } from '../services/auth';
 import { isAdmin, canAccess } from '../services/permissions';
 
