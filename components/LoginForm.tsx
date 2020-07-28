@@ -32,6 +32,7 @@ export function LoginForm() {
       const response = await login({ variables: data });
       console.log(response);
     } catch (e) {
+      console.log('errors?', errors);
       setError('email', { type: 'manual', message: 'nooooo' });
       console.log(e.graphQLErrors);
       console.log(e.networkError);
