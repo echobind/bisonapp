@@ -61,7 +61,7 @@ describe('users query', () => {
       `;
 
       // create an admin and a regular user
-      const user1 = await UserFactory.create({ roles: [Role.ADMIN] });
+      const user1 = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
       const user2 = await UserFactory.create();
 
       const response = await graphQLRequestAsUser(user1, { query });
@@ -71,6 +71,54 @@ describe('users query', () => {
       const actualUsers = users.map((u) => u.email);
 
       expect(expectedUsers).toEqual(actualUsers);
+    });
+  });
+
+  describe('trying to view another users email', () => {
+    it('returns undefined for the email', async () => {
+      const query = `
+        query USER($id: String!) {
+          user(where: { id: $id }) {
+            id
+            email
+          }
+        }
+      `;
+
+      // create 2 users
+      const user1 = await UserFactory.create();
+      const user2 = await UserFactory.create();
+      const variables = { id: user2.id };
+
+      const response = await graphQLRequestAsUser(user1, { query, variables });
+      const { id, email } = response.body.data.user;
+
+      expect(id).not.toBeNull();
+      expect(email).toBeNull();
+    });
+  });
+
+  describe('admin trying to view another users email', () => {
+    it('returns the email', async () => {
+      const query = `
+        query USER($id: String!) {
+          user(where: { id: $id }) {
+            id
+            email
+          }
+        }
+      `;
+
+      // create an admin and a regular user
+      const user1 = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
+      const user2 = await UserFactory.create();
+      const variables = { id: user2.id };
+
+      const response = await graphQLRequestAsUser(user1, { query, variables });
+      const { id, email } = response.body.data.user;
+
+      expect(id).not.toBeNull();
+      expect(email).not.toBeNull();
     });
   });
 });

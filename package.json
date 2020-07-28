@@ -5,8 +5,9 @@
   "scripts": {
     "build": "yarn nexus build && next build",
     "db:migrate": "yarn -s prisma migrate up --experimental",
-    "dev": "next dev",
+    "dev": "concurrently -n \"WATCHERS,VERCEL\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"vc dev\"",
     "g:component": "hygen component new --name",
+    "g:graphql": "hygen graphql new --name",
     "g:page": "hygen page new --name",
     "g:migration": "yarn -s prisma migrate save --experimental",
     "g:test:request": "hygen test request --name",
@@ -15,12 +16,14 @@
     "start": "next start",
     "test:ci": "yarn withEnv:test jest --runInBand",
     "test": "yarn withEnv:test jest --runInBand --watch",
-    "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv"
+    "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
+    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\"",
+    "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts"
   },
   "dependencies": {
-    "@chakra-ui/core": "^1.0.0-next.6",
-    "@chakra-ui/theme": "^1.0.0-next.6",
-    "@chakra-ui/theme-tools": "^1.0.0-next.3",
+    "@chakra-ui/core": "^1.0.0-rc.0",
+    "@chakra-ui/theme": "^1.0.0-rc.0",
+    "@chakra-ui/theme-tools": "^1.0.0-rc.0",
     "apollo-server-errors": "^2.4.2",
     "bcryptjs": "^2.4.3",
     "graphql-iso-date": "^3.6.1",

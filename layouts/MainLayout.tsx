@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Center, Flex, Text, Button } from '@chakra-ui/core';
+import NextLink from 'next/link';
 
 import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
@@ -13,9 +14,11 @@ export function MainLayout({ children }) {
 
           <Nav />
 
-          <Button ml={16} display={{ base: 'none', lg: 'inline-flex' }}>
-            Login
-          </Button>
+          <NextLink href="login" passHref>
+            <Button as="a" ml={16} display={{ base: 'none', lg: 'inline-flex' }}>
+              Login
+            </Button>
+          </NextLink>
         </Flex>
       </>
 

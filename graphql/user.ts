@@ -2,7 +2,8 @@ import { schema } from 'nexus';
 import { Role } from '@prisma/client';
 import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
 
-import { hashPassword, appJwtForUser, comparePasswords, isAdmin } from '../services/auth';
+import { hashPassword, appJwtForUser, comparePasswords } from '../services/auth';
+import { isAdmin, canAccess } from '../services/permissions';
 
 // User Type
 schema.objectType({
@@ -14,6 +15,13 @@ schema.objectType({
     t.model.roles();
     t.model.createdAt();
     t.model.updatedAt();
+    t.model.profile();
+
+    // Show email as null for unauthorized users
+    t.string('email', {
+      nullable: true,
+      resolve: (profile, _args, ctx) => (canAccess(profile, ctx) ? profile.email : null),
+    });
   },
 });
 
@@ -50,6 +58,9 @@ schema.queryType({
         return await originalResolve(root, args, ctx, info);
       },
     });
+
+    // User Query
+    t.crud.user();
   },
 });
 
@@ -90,16 +101,29 @@ schema.mutationType({
     // User Create
     t.crud.createOneUser({
       alias: 'createUser',
-      computedInputs: {
-        roles: () => [Role.USER],
-        password: ({ args }) => hashPassword(args.data.password),
-      },
       resolve: async (root, args, ctx, info, originalResolve) => {
         const user = await ctx.db.user.findOne({ where: { email: args.data.email } });
         if (user) throw new UserInputError('Email already exists');
 
-        return originalResolve(root, args, ctx, info);
+        // force role to user and hash the password
+        const updatedArgs = {
+          data: {
+            ...args.data,
+            roles: { set: [Role.USER] },
+            password: hashPassword(args.data.password),
+          },
+        };
+
+        return originalResolve(root, updatedArgs, ctx, info);
       },
     });
+  },
+});
+
+// Add password to the generated UserCreateInput
+schema.extendInputType({
+  type: 'UserCreateInput',
+  definition: (t) => {
+    t.string('password', { required: true });
   },
 });

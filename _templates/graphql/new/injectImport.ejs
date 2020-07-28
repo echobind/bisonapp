@@ -1,0 +1,7 @@
+---
+inject: true
+to: graphql/schema.ts
+after: import './context'
+skip_if: import './<%= name %>'
+---
+import './<%= name %>';

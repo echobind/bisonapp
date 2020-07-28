@@ -21,3 +21,21 @@ From the root, run `yarn dev`. This will do the following:
 - run `vercel dev` to run the frontend and serverless functions locally
 - start a watcher to generate the Prisma client on schema changes
 - start a watcher to generate TypeScript types for graphql files
+
+# FAQ
+
+## Where are the generated nexus types?
+
+`node_modules/@types/nexus-typegen`. To use these in your code, import like so:
+
+```ts
+import { NexusGenRootTypes } from 'graphql-nexus';
+
+const user: NexusGenRootTypes['User'];
+```
+
+This will be a fully typed user according to the fields exposed on the GraphQL API.
+
+## My types aren't working, even though Nexus is generating them
+
+Try reopening VSCode.

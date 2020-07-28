@@ -165,6 +165,7 @@ const theme = {
     },
   },
   styles: {
+    ...chakraTheme.styles,
     global: {
       ...chakraTheme.styles.global,
 

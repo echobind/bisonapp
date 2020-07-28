@@ -4,6 +4,7 @@ import { prisma } from 'nexus-plugin-prisma';
 import { prisma as instance } from '../lib/prisma';
 import './context';
 import './user';
+import './profile';
 
 export const GRAPHQL_PATH = '/api/graphql';
 

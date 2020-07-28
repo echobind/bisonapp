@@ -46,20 +46,41 @@ enum OrderByArg {
   desc
 }
 
+"""A User Profile"""
+type Profile {
+  createdAt: DateTime!
+  firstName: String!
+
+  """The first and last name of a user"""
+  fullName: String
+  id: String!
+  lastName: String!
+  updatedAt: DateTime!
+  user: User!
+}
+
 input ProfileCreateOneWithoutUserInput {
   connect: ProfileWhereUniqueInput
   create: ProfileCreateWithoutUserInput
 }
 
 input ProfileCreateWithoutUserInput {
+  createdAt: DateTime
+  firstName: String!
   id: String
+  lastName: String!
+  updatedAt: DateTime
 }
 
 input ProfileWhereInput {
   AND: [ProfileWhereInput!]
+  createdAt: DateTimeFilter
+  firstName: StringFilter
   id: StringFilter
+  lastName: StringFilter
   NOT: [ProfileWhereInput!]
   OR: [ProfileWhereInput!]
+  updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
 }
@@ -71,6 +92,7 @@ input ProfileWhereUniqueInput {
 type Query {
   """Returns the currently logged in user"""
   me: User
+  user(where: UserWhereUniqueInput!): User
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: UserOrderByInput, where: UserWhereInput): [User!]!
 }
 
@@ -96,8 +118,9 @@ input StringFilter {
 """A User"""
 type User {
   createdAt: DateTime!
-  email: String!
+  email: String
   id: String!
+  profile: Profile
   roles: [Role!]!
   updatedAt: DateTime!
 }
@@ -106,8 +129,14 @@ input UserCreateInput {
   createdAt: DateTime
   email: String!
   id: String
+  password: String!
   profile: ProfileCreateOneWithoutUserInput
+  roles: UserCreaterolesInput
   updatedAt: DateTime
+}
+
+input UserCreaterolesInput {
+  set: [Role!]
 }
 
 input UserOrderByInput {

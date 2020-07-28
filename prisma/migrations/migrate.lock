@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20200726094736-initial-migration
+20200726203519-profile-timestamps

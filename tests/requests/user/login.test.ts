@@ -64,7 +64,7 @@ describe('login mutation', () => {
           "data": Object {
             "login": Object {
               "user": Object {
-                "email": "test@wee.net",
+                "email": null,
               },
             },
           },

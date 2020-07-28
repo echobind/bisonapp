@@ -4,7 +4,7 @@
 
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { Role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 /**
  * Hashes a password using bcrypt
@@ -29,14 +29,6 @@ export function comparePasswords(password: string, hashedPassword: string): bool
  */
 export const appJwtForUser = (user: Partial<User>): string => {
   return jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-};
-
-/**
- * Returns true if the user has a role of admin
- * @param user The user to check the role for
- */
-export const isAdmin = (user: Partial<User>): boolean => {
-  return user?.roles.includes(Role.ADMIN);
 };
 
 /**

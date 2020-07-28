@@ -11,7 +11,7 @@ function Home() {
       </Head>
 
       <Center>
-        <Heading size="lg">I am home page</Heading>
+        <Heading size="lg">I am home page!</Heading>
       </Center>
     </>
   );
