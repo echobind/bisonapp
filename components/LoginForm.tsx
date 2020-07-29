@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
   Link,
@@ -14,6 +15,9 @@ import {
 import { useForm } from 'react-hook-form';
 import { useMutation, gql } from '@apollo/client';
 
+import { useAuth } from '../context/auth';
+import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
+
 const LOGIN_MUTATION = gql`
   mutation LOGIN($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -25,23 +29,28 @@ const LOGIN_MUTATION = gql`
 /** Form to Login */
 export function LoginForm() {
   const { register, handleSubmit, errors, setError } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [login] = useMutation(LOGIN_MUTATION);
+  const { login: loginUser } = useAuth();
+  const router = useRouter();
 
-  async function handleLogin(data) {
+  /**
+   * Submits the login form
+   * @param formData the data passed from the form hook
+   */
+  async function handleLogin(formData) {
     try {
-      const response = await login({ variables: data });
-      console.log(response);
-    } catch (e) {
-      console.log('errors?', errors);
-      setError('email', { type: 'manual', message: 'nooooo' });
-      console.log(e.graphQLErrors);
-      console.log(e.networkError);
-      console.log(e.message);
-      console.log(e.extraInfo);
-    }
+      setIsLoading(true);
+      const { data } = await login({ variables: formData });
 
-    // setError('email', { type: 'manual', message: 'nooooo' });
-    // setError('password', { type: 'manual', message: 'nooooo' });
+      await loginUser(data.login.token);
+
+      router.replace('/');
+    } catch (e) {
+      setErrorsFromGraphQLErrors(setError, e.graphQLErrors || []);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -78,7 +87,7 @@ export function LoginForm() {
         </FormControl>
       </Stack>
 
-      <Button type="submit" marginTop={8} width="full">
+      <Button type="submit" marginTop={8} width="full" isLoading={isLoading}>
         Login
       </Button>
 

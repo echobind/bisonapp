@@ -1,6 +1,6 @@
 import { schema } from 'nexus';
 import { Role } from '@prisma/client';
-import { AuthenticationError, UserInputError, ForbiddenError } from 'apollo-server-errors';
+import { UserInputError, ForbiddenError } from 'apollo-server-express';
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../services/auth';
 import { isAdmin, canAccess } from '../services/permissions';
@@ -80,13 +80,17 @@ schema.mutationType({
         const user = await ctx.db.user.findOne({ where: { email } });
 
         if (!user) {
-          throw new AuthenticationError(`No user found for email: ${email}`);
+          throw new UserInputError(`No user found for email: ${email}`, {
+            invalidArgs: { email: 'is invalid' },
+          });
         }
 
         const valid = comparePasswords(password, user.password);
 
         if (!valid) {
-          throw new AuthenticationError('Invalid password');
+          throw new UserInputError('Invalid password', {
+            invalidArgs: { password: 'is invalid' },
+          });
         }
 
         const token = appJwtForUser(user);
@@ -103,7 +107,12 @@ schema.mutationType({
       alias: 'createUser',
       resolve: async (root, args, ctx, info, originalResolve) => {
         const user = await ctx.db.user.findOne({ where: { email: args.data.email } });
-        if (user) throw new UserInputError('Email already exists');
+
+        if (user) {
+          throw new UserInputError('Email already exists.', {
+            invalidArgs: { email: 'already exists' },
+          });
+        }
 
         // force role to user and hash the password
         const updatedArgs = {

@@ -2,21 +2,38 @@ import React from 'react';
 import { ChakraProvider, CSSReset } from '@chakra-ui/core';
 import { ApolloProvider } from '@apollo/client';
 
-import { MainLayout } from '../layouts/MainLayout';
+import { AuthProvider, useAuth } from '../context/auth';
+import { LoggedInLayout } from '../layouts/LoggedIn';
+import { LoggedOutLayout } from '../layouts/LoggedOut';
 import { createApolloClient } from '../lib/apolloClient';
 import theme from '../chakra';
 
-function App({ pageProps, Component }) {
-  const apolloClient = createApolloClient();
+/**
+ * Renders a layout depending on the result of the useAuth hook
+ */
+function AppWithAuth({ children }) {
+  const { user } = useAuth();
 
+  return user ? (
+    <LoggedInLayout>{children}</LoggedInLayout>
+  ) : (
+    <LoggedOutLayout>{children}</LoggedOutLayout>
+  );
+}
+
+const apolloClient = createApolloClient();
+
+function App({ pageProps, Component }) {
   return (
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
-        <CSSReset />
+        <AuthProvider>
+          <CSSReset />
 
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+          <AppWithAuth>
+            <Component {...pageProps} />
+          </AppWithAuth>
+        </AuthProvider>
       </ChakraProvider>
     </ApolloProvider>
   );

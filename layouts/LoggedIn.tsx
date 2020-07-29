@@ -1,11 +1,21 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Box, Center, Flex, Text, Button } from '@chakra-ui/core';
-import NextLink from 'next/link';
 
 import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
+import { useAuth } from '../context/auth';
 
-export function MainLayout({ children }) {
+export function LoggedInLayout({ children }) {
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await logout();
+
+    router.replace('/login');
+  }
+
   return (
     <Flex direction="column" minH="100vh">
       <>
@@ -14,11 +24,14 @@ export function MainLayout({ children }) {
 
           <Nav />
 
-          <NextLink href="login" passHref>
-            <Button as="a" ml={16} display={{ base: 'none', lg: 'inline-flex' }}>
-              Login
-            </Button>
-          </NextLink>
+          <Button
+            as="a"
+            ml={16}
+            display={{ base: 'none', lg: 'inline-flex' }}
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
         </Flex>
       </>
 

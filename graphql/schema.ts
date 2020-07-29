@@ -17,5 +17,6 @@ settings.change({
   server: {
     playground: process.env.NODE_ENV !== 'production',
     path: '/api/graphql',
+    cors: false,
   },
 });
