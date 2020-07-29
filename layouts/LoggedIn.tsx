@@ -11,9 +11,9 @@ export function LoggedInLayout({ children }) {
   const router = useRouter();
 
   async function handleLogout() {
-    await logout();
+    logout();
 
-    router.replace('/login');
+    await router.replace('/login');
   }
 
   return (

@@ -29,7 +29,7 @@ From the root, run `yarn dev`. This will do the following:
 `node_modules/@types/nexus-typegen`. To use these in your code, import like so:
 
 ```ts
-import { NexusGenRootTypes } from 'graphql-nexus';
+import { NexusGenRootTypes } from 'nexus-typegen';
 
 const user: NexusGenRootTypes['User'];
 ```

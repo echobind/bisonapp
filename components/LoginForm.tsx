@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, gql } from '@apollo/client';
 
 import { useAuth } from '../context/auth';
+import { ErrorText } from '../components/ErrorText';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
 
 const LOGIN_MUTATION = gql`
@@ -47,7 +48,7 @@ export function LoginForm() {
 
       router.replace('/');
     } catch (e) {
-      setErrorsFromGraphQLErrors(setError, e.graphQLErrors || []);
+      setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +73,7 @@ export function LoginForm() {
             ref={register({ required: true })}
             isInvalid={errors.email}
           />
-          {errors.email && errors.email.message}
+          <ErrorText>{errors.email && errors.email.message}</ErrorText>
         </FormControl>
 
         <FormControl id="password">
@@ -83,7 +84,7 @@ export function LoginForm() {
             ref={register({ required: true })}
             isInvalid={errors.password}
           />
-          {errors.password && errors.password.message}
+          <ErrorText>{errors.password && errors.password.message}</ErrorText>
         </FormControl>
       </Stack>
 

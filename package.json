@@ -13,13 +13,13 @@
     "g:test:request": "hygen test request --name",
     "g:test:factory": "hygen test factory --name",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
-    "postinstall": "patch-package",
     "start": "next start",
     "test:ci": "yarn withEnv:test jest --runInBand",
     "test": "yarn withEnv:test jest --runInBand --watch",
     "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
-    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\"",
-    "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts"
+    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\"",
+    "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts",
+    "watch:codegen": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
@@ -35,15 +35,15 @@
     "next": "9.4.4",
     "nexus": "^0.26.0-next.13",
     "nexus-plugin-prisma": "^0.16.1",
-    "patch-package": "^6.2.2",
-    "postinstall-postinstall": "^2.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.1.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.17.4",
-    "@graphql-codegen/typescript": "^1.17.4",
+    "@graphql-codegen/cli": "1.17.6",
+    "@graphql-codegen/typescript": "1.17.6",
+    "@graphql-codegen/typescript-operations": "^1.17.6",
+    "@graphql-codegen/typescript-react-apollo": "1.17.6",
     "@graphql-codegen/typescript-resolvers": "1.17.4",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^26.0.6",

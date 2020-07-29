@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
-import { NexusGenRootTypes } from 'nexus-typegen';
+import { gql } from '@apollo/client';
 
+import { useMeLazyQuery, User } from '../types';
 import { FullPageSpinner } from '../components/FullPageSpinner';
 
 export const LOGIN_TOKEN_KEY = 'myapp-user';
@@ -20,7 +20,7 @@ export const ME_QUERY = gql`
 
 function AuthProvider({ ...props }: Props) {
   const [tokenLoaded, setTokenLoaded] = useState(true);
-  const [loadCurrentUser, { data, loading, refetch }] = useLazyQuery(ME_QUERY);
+  const [loadCurrentUser, { data, loading, refetch }] = useMeLazyQuery();
   const user = data?.me;
 
   // Load current user if there's an item in local storage
@@ -61,12 +61,12 @@ const useAuth = () => useContext(AuthContext);
 export { AuthProvider, useAuth };
 
 interface Props {
-  loggedInUser?: Partial<NexusGenRootTypes['User']>;
+  loggedInUser?: Partial<User>;
   children: ReactNode;
 }
 
 export interface AuthContextObject {
-  user?: Partial<NexusGenRootTypes['User']>;
+  user?: Partial<User>;
   login?: (token?: string) => any;
   logout?: () => any;
 }
