@@ -215,6 +215,18 @@ export type LoginMutation = { __typename?: 'Mutation' } & {
   login?: Maybe<{ __typename?: 'AuthPayload' } & Pick<AuthPayload, 'token'>>;
 };
 
+export type SignupMutationVariables = Exact<{
+  data: SignupInput;
+}>;
+
+export type SignupMutation = { __typename?: 'Mutation' } & {
+  signup?: Maybe<
+    { __typename?: 'AuthPayload' } & Pick<AuthPayload, 'token'> & {
+        user?: Maybe<{ __typename?: 'User' } & Pick<User, 'id'>>;
+      }
+  >;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = { __typename?: 'Query' } & {
@@ -222,7 +234,7 @@ export type MeQuery = { __typename?: 'Query' } & {
 };
 
 export const LoginDocument = gql`
-  mutation LOGIN($email: String!, $password: String!) {
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
     }
@@ -265,6 +277,53 @@ export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+>;
+export const SignupDocument = gql`
+  mutation signup($data: SignupInput!) {
+    signup(data: $data) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
+export type SignupMutationFn = ApolloReactCommon.MutationFunction<
+  SignupMutation,
+  SignupMutationVariables
+>;
+
+/**
+ * __useSignupMutation__
+ *
+ * To run a mutation, you first call `useSignupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signupMutation, { data, loading, error }] = useSignupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSignupMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<SignupMutation, SignupMutationVariables>
+) {
+  return ApolloReactHooks.useMutation<SignupMutation, SignupMutationVariables>(
+    SignupDocument,
+    baseOptions
+  );
+}
+
+export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
+export type SignupMutationResult = ApolloReactCommon.MutationResult<SignupMutation>;
+export type SignupMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SignupMutation,
+  SignupMutationVariables
 >;
 export const MeDocument = gql`
   query me {

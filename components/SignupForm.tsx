@@ -11,46 +11,49 @@ import {
   Button,
   Circle,
 } from '@chakra-ui/core';
-// import { gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
-// import { useAuth } from '../context/auth';
+import { useAuth } from '../context/auth';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
+import { useSignupMutation } from '../types';
 
 import { ErrorText } from './ErrorText';
 
-// const SIGNUP_MUTATION = gql`
-//   mutation SIGNUP($data: SignupInput!) {
-//     signup(data: $data) {
-//       token
-//       user {
-//         id
-//       }
-//     }
-//   }
-// `;
+export const SIGNUP_MUTATION = gql`
+  mutation signup($data: SignupInput!) {
+    signup(data: $data) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
 
 /** Form to sign up */
 export function SignupForm() {
   const { register, handleSubmit, errors, setError } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-  // const [login] =
-  // const { login } = useAuth();
-  // const router = useRouter();
+  const [signup] = useSignupMutation();
+  const { login } = useAuth();
+  const router = useRouter();
 
   /**
    * Submits the login form
    * @param formData the data passed from the form hook
    */
-  async function handleSignup(_formData) {
+  async function handleSignup(formData) {
     try {
       setIsLoading(true);
-      // const { data } = await logi({ variables: formData });
+      const { email, password, ...profile } = formData;
+      const variables = { data: { email, password, profile: { create: profile } } };
+      const { data } = await signup({ variables });
 
-      // await loginUser(data.signup.token);
+      await login(data.signup.token);
 
-      // router.replace('/');
+      router.replace('/');
     } catch (e) {
       setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
     } finally {

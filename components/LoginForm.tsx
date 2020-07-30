@@ -13,14 +13,15 @@ import {
   Circle,
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
-import { useMutation, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 
 import { useAuth } from '../context/auth';
 import { ErrorText } from '../components/ErrorText';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
+import { useLoginMutation } from '../types';
 
-const LOGIN_MUTATION = gql`
-  mutation LOGIN($email: String!, $password: String!) {
+export const LOGIN_MUTATION = gql`
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
     }
@@ -31,7 +32,7 @@ const LOGIN_MUTATION = gql`
 export function LoginForm() {
   const { register, handleSubmit, errors, setError } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const [login] = useMutation(LOGIN_MUTATION);
+  const [login] = useLoginMutation();
   const { login: loginUser } = useAuth();
   const router = useRouter();
 
