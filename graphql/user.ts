@@ -102,13 +102,44 @@ schema.mutationType({
       },
     });
 
-    // User Create
+    // User Create (admin only)
     t.crud.createOneUser({
       alias: 'createUser',
       resolve: async (root, args, ctx, info, originalResolve) => {
+        if (!isAdmin(ctx.user)) {
+          throw new ForbiddenError('Not authorized');
+        }
+
         const user = await ctx.db.user.findOne({ where: { email: args.data.email } });
 
         if (user) {
+          throw new UserInputError('Email already exists.', {
+            invalidArgs: { email: 'already exists' },
+          });
+        }
+
+        // force role to user and hash the password
+        const updatedArgs = {
+          data: {
+            ...args.data,
+            password: hashPassword(args.data.password),
+          },
+        };
+
+        return originalResolve(root, updatedArgs, ctx, info);
+      },
+    });
+
+    t.field('signup', {
+      type: 'AuthPayload',
+      description: 'Signup for an account',
+      args: {
+        data: schema.arg({ type: 'SignupInput', required: true }),
+      },
+      resolve: async (_root, args, ctx) => {
+        const existingUser = await ctx.db.user.findOne({ where: { email: args.data.email } });
+
+        if (existingUser) {
           throw new UserInputError('Email already exists.', {
             invalidArgs: { email: 'already exists' },
           });
@@ -123,9 +154,24 @@ schema.mutationType({
           },
         };
 
-        return originalResolve(root, updatedArgs, ctx, info);
+        const user = await ctx.db.user.create(updatedArgs);
+        const token = appJwtForUser(user);
+
+        return {
+          user,
+          token,
+        };
       },
     });
+  },
+});
+
+schema.inputObjectType({
+  name: 'SignupInput',
+  definition: (t) => {
+    t.string('email', { required: true });
+    t.string('password', { required: true });
+    t.field('profile', { type: 'ProfileCreateOneWithoutUserInput' });
   },
 });
 

@@ -45,6 +45,8 @@ export type Mutation = {
   createUser: User;
   /** Login to an existing account */
   login?: Maybe<AuthPayload>;
+  /** Signup for an account */
+  signup?: Maybe<AuthPayload>;
 };
 
 export type MutationCreateUserArgs = {
@@ -54,6 +56,10 @@ export type MutationCreateUserArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationSignupArgs = {
+  data?: Maybe<SignupInput>;
 };
 
 export enum OrderByArg {
@@ -129,6 +135,12 @@ export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
 }
+
+export type SignupInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  profile?: Maybe<ProfileCreateOneWithoutUserInput>;
+};
 
 export type StringFilter = {
   contains?: Maybe<Scalars['String']>;

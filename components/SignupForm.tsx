@@ -11,6 +11,18 @@ import {
   Button,
   Circle,
 } from '@chakra-ui/core';
+// import { gql } from '@apollo/client';
+
+// const SIGNUP_MUTATION = gql`
+//   mutation SIGNUP($data: SignupInput!) {
+//     signup(data: $data) {
+//       token
+//       user {
+//         id
+//       }
+//     }
+//   }
+// `;
 
 /** Form to sign up */
 export function SignupForm() {

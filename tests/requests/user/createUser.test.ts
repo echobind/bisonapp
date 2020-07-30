@@ -1,14 +1,14 @@
 import { Role } from '@prisma/client';
 
-import { graphQLRequest, resetDB, disconnect } from '../../helpers';
+import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
 import { UserFactory } from '../../factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
 describe('User createUser mutation', () => {
-  describe('existing email', () => {
-    it('returns a UserInput error', async () => {
+  describe('non-admin', () => {
+    it('returns a Forbidden error', async () => {
       const query = `
         mutation SIGNUP($data: UserCreateInput!) {
           createUser(data: $data) {
@@ -20,20 +20,20 @@ describe('User createUser mutation', () => {
 
       const user = await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables = { email: user.email, password: 'fake' };
-      const response = await graphQLRequest({ query, variables });
+      const variables = { data: { email: user.email, password: 'fake' } };
+      const response = await graphQLRequestAsUser(user, { query, variables });
       const errorMessages = response.body.errors.map((e) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
-          "Variable \\"$data\\" of required type \\"UserCreateInput!\\" was not provided.",
+          "Not authorized",
         ]
       `);
     });
   });
 
-  describe('trying to pass role', () => {
-    it('forces to USER', async () => {
+  describe('admin', () => {
+    it('allows setting role', async () => {
       const query = `
         mutation SIGNUP($data: UserCreateInput!) {
           createUser(data: $data) {
@@ -43,34 +43,18 @@ describe('User createUser mutation', () => {
         }
       `;
 
+      const admin = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
+
       const variables = {
         data: { email: 'hello@wee.net', password: 'fake', roles: { set: [Role.ADMIN] } },
       };
 
-      const response = await graphQLRequest({ query, variables });
+      const response = await graphQLRequestAsUser(admin, { query, variables });
       const user = response.body.data.createUser;
 
-      const expectedRoles = [Role.USER];
-      expect(user.roles).toEqual(expectedRoles);
-    });
-  });
-
-  describe('valid signup', () => {
-    it('creates the user', async () => {
-      const query = `
-        mutation SIGNUP($data: UserCreateInput!) {
-          createUser(data: $data) {
-            id
-          }
-        }
-      `;
-
-      const attrs = UserFactory.build();
-      const variables = { data: { ...attrs } };
-      const response = await graphQLRequest({ query, variables });
-      const user = response.body.data.createUser;
-
+      const expectedRoles = [Role.ADMIN];
       expect(user.id).not.toBeNull();
+      expect(user.roles).toEqual(expectedRoles);
     });
   });
 });

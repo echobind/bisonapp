@@ -39,6 +39,9 @@ type Mutation {
 
   """Login to an existing account"""
   login(email: String!, password: String!): AuthPayload
+
+  """Signup for an account"""
+  signup(data: SignupInput): AuthPayload
 }
 
 enum OrderByArg {
@@ -99,6 +102,12 @@ type Query {
 enum Role {
   ADMIN
   USER
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  profile: ProfileCreateOneWithoutUserInput
 }
 
 input StringFilter {
