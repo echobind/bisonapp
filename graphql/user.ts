@@ -174,11 +174,3 @@ schema.inputObjectType({
     t.field('profile', { type: 'ProfileCreateOneWithoutUserInput' });
   },
 });
-
-// Add password to the generated UserCreateInput
-schema.extendInputType({
-  type: 'UserCreateInput',
-  definition: (t) => {
-    t.string('password', { required: true });
-  },
-});

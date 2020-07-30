@@ -41,7 +41,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
 
   """Signup for an account"""
-  signup(data: SignupInput): AuthPayload
+  signup(data: SignupInput!): AuthPayload
 }
 
 enum OrderByArg {

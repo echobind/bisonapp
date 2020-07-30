@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NextLink from 'next/link';
 import {
   Link,
@@ -12,6 +12,13 @@ import {
   Circle,
 } from '@chakra-ui/core';
 // import { gql } from '@apollo/client';
+import { useForm } from 'react-hook-form';
+// import { useRouter } from 'next/router';
+
+// import { useAuth } from '../context/auth';
+import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
+
+import { ErrorText } from './ErrorText';
 
 // const SIGNUP_MUTATION = gql`
 //   mutation SIGNUP($data: SignupInput!) {
@@ -26,8 +33,33 @@ import {
 
 /** Form to sign up */
 export function SignupForm() {
+  const { register, handleSubmit, errors, setError } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  // const [login] =
+  // const { login } = useAuth();
+  // const router = useRouter();
+
+  /**
+   * Submits the login form
+   * @param formData the data passed from the form hook
+   */
+  async function handleSignup(_formData) {
+    try {
+      setIsLoading(true);
+      // const { data } = await logi({ variables: formData });
+
+      // await loginUser(data.signup.token);
+
+      // router.replace('/');
+    } catch (e) {
+      setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <>
+    <form onSubmit={handleSubmit(handleSignup)}>
       <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
         <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
 
@@ -39,26 +71,50 @@ export function SignupForm() {
       <Stack spacing={4}>
         <FormControl id="email">
           <FormLabel>Email address</FormLabel>
-          <Input type="email" />
+          <Input
+            type="email"
+            name="email"
+            ref={register({ required: true })}
+            isInvalid={errors.email}
+          />
+          <ErrorText>{errors.email && errors.email.message}</ErrorText>
         </FormControl>
 
         <FormControl id="password">
           <FormLabel>Password</FormLabel>
-          <Input type="password" />
+          <Input
+            type="password"
+            name="password"
+            ref={register({ required: true })}
+            isInvalid={errors.password}
+          />
+          <ErrorText>{errors.password && errors.password.message}</ErrorText>
         </FormControl>
 
         <FormControl id="firstName">
           <FormLabel>First Name</FormLabel>
-          <Input type="text" />
+          <Input
+            type="text"
+            name="firstName"
+            ref={register({ required: true })}
+            isInvalid={errors.firstName}
+          />
+          <ErrorText>{errors.firstName && errors.firstName.message}</ErrorText>
         </FormControl>
 
         <FormControl id="lastName">
           <FormLabel>Last Name</FormLabel>
-          <Input type="text" />
+          <Input
+            type="text"
+            name="lastName"
+            ref={register({ required: true })}
+            isInvalid={errors.lastName}
+          />
+          <ErrorText>{errors.lastName && errors.lastName.message}</ErrorText>
         </FormControl>
       </Stack>
 
-      <Button marginTop={8} width="full">
+      <Button type="submit" marginTop={8} width="full" isLoading={isLoading}>
         Signup
       </Button>
 
@@ -72,6 +128,6 @@ export function SignupForm() {
           </NextLink>
         </Text>
       </Flex>
-    </>
+    </form>
   );
 }

@@ -59,7 +59,7 @@ export type MutationLoginArgs = {
 };
 
 export type MutationSignupArgs = {
-  data?: Maybe<SignupInput>;
+  data: SignupInput;
 };
 
 export enum OrderByArg {
