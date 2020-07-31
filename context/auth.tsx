@@ -25,9 +25,9 @@ function AuthProvider({ ...props }: Props) {
 
   // Load current user if there's an item in local storage
   useEffect(() => {
-    localStorage.getItem(LOGIN_TOKEN_KEY);
+    const token = localStorage.getItem(LOGIN_TOKEN_KEY);
     setTokenLoaded(true);
-    loadCurrentUser();
+    if (token) loadCurrentUser();
   }, [loadCurrentUser]);
 
   if (!tokenLoaded || (tokenLoaded && loading)) {

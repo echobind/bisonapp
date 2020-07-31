@@ -1,0 +1,18 @@
+---
+to: tests/unit/components/<%= h.camelizedBaseName(name) %>.test.tsx
+---
+<% component = h.camelizedBaseName(name) -%>
+import React from 'react';
+
+import { render } from '../../../tests/utils';
+import { <%= component %> } from '../../../components/<%= component %>';
+
+describe('<%= component %>', () => {
+  it('loads', async () => {
+    const { findByText } = render(<<%= component %>>Hello</<%= component %>>);
+
+    const component = await findByText('Hello');
+
+    expect(component).toBeVisible();
+  });
+});

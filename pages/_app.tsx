@@ -1,11 +1,8 @@
 import React from 'react';
-import { ChakraProvider, CSSReset } from '@chakra-ui/core';
-import { ApolloProvider } from '@apollo/client';
 import dynamic from 'next/dynamic';
 
-import { AuthProvider, useAuth } from '../context/auth';
-import { createApolloClient } from '../lib/apolloClient';
-import theme from '../chakra';
+import { AllProviders } from '../components/AllProviders';
+import { useAuth } from '../context/auth';
 
 /**
  * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
@@ -32,21 +29,13 @@ function AppWithAuth({ children }) {
   );
 }
 
-const apolloClient = createApolloClient();
-
 function App({ pageProps, Component }) {
   return (
-    <ApolloProvider client={apolloClient}>
-      <ChakraProvider theme={theme}>
-        <AuthProvider>
-          <CSSReset />
-
-          <AppWithAuth>
-            <Component {...pageProps} />
-          </AppWithAuth>
-        </AuthProvider>
-      </ChakraProvider>
-    </ApolloProvider>
+    <AllProviders>
+      <AppWithAuth>
+        <Component {...pageProps} />
+      </AppWithAuth>
+    </AllProviders>
   );
 }
 

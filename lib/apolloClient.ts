@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import fetch from 'cross-fetch';
 
 import { LOGIN_TOKEN_KEY } from '../context/auth';
 
@@ -23,6 +24,7 @@ export function createApolloClient(ctx?: Record<string, any>) {
 
   const httpLink = createHttpLink({
     uri,
+    fetch,
   });
 
   const authLink = setContext((_, { headers }) => {

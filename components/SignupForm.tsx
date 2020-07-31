@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../context/auth';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
 import { useSignupMutation } from '../types';
+import { EMAIL_REGEX } from '../constants';
 
 import { ErrorText } from './ErrorText';
 
@@ -73,22 +74,28 @@ export function SignupForm() {
 
       <Stack spacing={4}>
         <FormControl id="email">
-          <FormLabel>Email address</FormLabel>
+          <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
-            type="email"
+            type="text"
             name="email"
-            ref={register({ required: true })}
+            ref={register({
+              required: 'email is required',
+              pattern: {
+                value: EMAIL_REGEX,
+                message: 'invalid email',
+              },
+            })}
             isInvalid={errors.email}
           />
           <ErrorText>{errors.email && errors.email.message}</ErrorText>
         </FormControl>
 
         <FormControl id="password">
-          <FormLabel>Password</FormLabel>
+          <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             type="password"
             name="password"
-            ref={register({ required: true })}
+            ref={register({ required: 'password is required', minLength: 8 })}
             isInvalid={errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
