@@ -58,20 +58,41 @@ export const SIGNUP_MUTATION = gql`
 
 5. Use the newly generated types from codegen instead of the typical `useQuery` or `useMutation` hook. For the example above, that would be `useSignupMutation`. You'll now have a fully typed response to work with!
 
-# FAQ
+```tsx
+import { User, useMeQuery } from './types';
 
-## Where are the generated nexus types?
+// adding this will auto-generate a custom hook in ./types
+export const ME_QUERY = gql`
+  query me {
+    me {
+      id
+      email
+    }
+  }
+`;
 
-`node_modules/@types/nexus-typegen`. To use these in your code, import like so:
+// an example of taking a user as an argument with optional attributes
+function noIdea(user: Partial<User>) {
+  console.log(user.email);
+}
 
-```ts
-import { NexusGenRootTypes } from 'nexus-typegen';
+function fakeComponent() {
+  // use the generated hook
+  const { data, loading, error } = useMeQuery();
 
-const user: NexusGenRootTypes['User'];
+  if (loading) return <Loading />;
+
+  // data.user will be fully typed
+  return <Success user={data.user}>
+}
 ```
 
-This will be a fully typed user according to the fields exposed on the GraphQL API.
+# FAQ
 
-## My types aren't working, even though Nexus is generating them
+## Where are the generated types?
+
+TypeScript Types for GraphQL types, queries, and mutations are generated automatically and placed in `./types.ts`. To use these in your code, import like so:
+
+## My types aren't working, even though they are in ./types.ts
 
 Try reopening VSCode.
