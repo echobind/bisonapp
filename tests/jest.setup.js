@@ -19,6 +19,7 @@ module.exports = async () => {
 
   process.env.DATABASE_URL = global.databaseUrl;
   global.process.env.DATABASE_URL = global.databaseUrl;
+
   // Run the migrations to ensure our schema has the required structure
   await exec(`yarn prisma migrate up --create-db --experimental`);
 };

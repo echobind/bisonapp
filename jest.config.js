@@ -3,7 +3,7 @@ const testPathIgnorePatterns = [
   'cypress',
   'factories',
   'helpers',
-  'tests/nexus-test-environment.js',
+  'tests/e2e',
 ];
 
 module.exports = {

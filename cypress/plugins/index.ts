@@ -43,6 +43,8 @@ export default (on, _config) => {
       return resetDB();
     },
     setupDB: () => {
+      console.log('DB', process.env.DATABASE_URL);
+
       return setupDB();
     },
     disconnectDB: () => {
