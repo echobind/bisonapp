@@ -1,10 +1,14 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { gql } from '@apollo/client';
 
+import { cookies } from '../lib/cookies';
 import { useMeLazyQuery, User } from '../types';
 import { FullPageSpinner } from '../components/FullPageSpinner';
+import { LOGIN_TOKEN_KEY } from '../constants';
 
-export const LOGIN_TOKEN_KEY = 'myapp-user';
+const now = new Date();
+const timeValidInMs = 365 * 24 * 60 * 60 * 1000;
+const COOKIE_EXPIRE_DATE = new Date(now.getTime() + timeValidInMs);
 
 const AuthContext = createContext<AuthContextObject>({});
 AuthContext.displayName = 'AuthContext';
@@ -20,15 +24,21 @@ export const ME_QUERY = gql`
 
 function AuthProvider({ ...props }: Props) {
   const [tokenLoaded, setTokenLoaded] = useState(true);
-  const [loadCurrentUser, { data, loading, refetch }] = useMeLazyQuery();
+  const [loadCurrentUser, { called, data, loading, refetch }] = useMeLazyQuery();
   const user = data?.me;
 
   // Load current user if there's an item in local storage
   useEffect(() => {
-    const token = window.localStorage.getItem(LOGIN_TOKEN_KEY);
-    setTokenLoaded(true);
-    if (token) loadCurrentUser();
-  }, [loadCurrentUser]);
+    if (called) return;
+
+    async function fetchUser() {
+      const token = cookies().get(LOGIN_TOKEN_KEY);
+      setTokenLoaded(true);
+      if (token) await loadCurrentUser();
+    }
+
+    fetchUser();
+  }, [loadCurrentUser, called]);
 
   if (!tokenLoaded || (tokenLoaded && loading)) {
     return <FullPageSpinner />;
@@ -39,18 +49,21 @@ function AuthProvider({ ...props }: Props) {
    * @param token the token to login with
    */
   function login(token) {
-    window.localStorage.setItem(LOGIN_TOKEN_KEY, token);
+    cookies().set(LOGIN_TOKEN_KEY, token, { path: '/', expires: COOKIE_EXPIRE_DATE });
 
-    return refetch();
+    const fetchUserData = called ? refetch : loadCurrentUser;
+    return fetchUserData();
   }
 
   /**
    * Logs out a user by removing their token from cookies.
    */
   async function logout() {
-    window.localStorage.removeItem(LOGIN_TOKEN_KEY);
+    cookies().remove(LOGIN_TOKEN_KEY, { path: '/', expires: COOKIE_EXPIRE_DATE });
 
-    return refetch();
+    // TODO: remove from cache rather than call API
+    const fetchUserData = called ? refetch : loadCurrentUser;
+    return fetchUserData();
   }
 
   const value = { user, login, logout };

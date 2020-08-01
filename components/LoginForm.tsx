@@ -45,14 +45,10 @@ export function LoginForm() {
     try {
       setIsLoading(true);
       const { data } = await login({ variables: formData });
-
       await loginUser(data.login.token);
-
       await router.replace('/');
-      console.log('i should be done?');
     } catch (e) {
       setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
-    } finally {
       setIsLoading(false);
     }
   }

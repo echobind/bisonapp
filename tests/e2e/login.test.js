@@ -1,6 +1,6 @@
 describe('Login', () => {
   describe('with an email that doesnt exist', () => {
-    it('Shows an error', () => {
+    it('shows an error', () => {
       const email = 'nowayshouldIexist@wee.net';
       const password = 'test1234';
 
@@ -16,9 +16,10 @@ describe('Login', () => {
   });
 
   describe('with valid credentials', () => {
-    it('Shows an error', () => {
+    it('logs in', () => {
       const attrs = { password: 'superawesome' };
 
+      // note: async/await breaks cypress 😭
       cy.task('factory', { name: 'User', attrs }).then((user) => {
         cy.visit('/');
         cy.findByText(/login/i).click();
@@ -28,10 +29,8 @@ describe('Login', () => {
         cy.findByLabelText(/password/i).type(attrs.password);
         cy.findAllByRole('button', { name: /login/i }).click();
 
-        // TODO: WHY NOT GOING TO NEW PAGE
-        cy.findByText(/home page/i);
+        cy.findByText(/logout/i).should('exist');
         cy.location('pathname').should('equal', '/');
-        cy.findByText(/home page/i).should('exist');
       });
     });
   });
