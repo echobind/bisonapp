@@ -1,11 +1,16 @@
-import { User } from '@prisma/client';
+import util from 'util';
+import childProcess from 'child_process';
+
 import request from 'supertest';
+import { User } from '@prisma/client';
 import { Client } from 'pg';
 
 import { GRAPHQL_PATH } from '../graphql/schema';
 import server from '../pages/api/graphql';
 import { appJwtForUser } from '../services/auth';
 import { prisma, connect, disconnect } from '../lib/prisma';
+
+const exec = util.promisify(childProcess.exec);
 
 // reexport prisma methods
 export { prisma, connect, disconnect };
@@ -46,8 +51,10 @@ export const graphQLRequestAsUser = async (
  * Resets a database to a blank state.
  * Truncates all tables except for _Migrations
  */
-export const resetDB = async (): Promise<void> => {
-  const schema = process.env.DATABASE_URL.match(/schema=(.*)$/)[1];
+export const resetDB = async (): Promise<boolean> => {
+  if (process.env.NODE_ENV === 'production') return Promise.resolve(false);
+
+  const schema = process.env.DATABASE_URL.match(/schema=(\w*)(&.*)*$/)[1] || 'public';
 
   // NOTE: the prisma client does not handle this query well, use pg instead
   const client = new Client({
@@ -69,6 +76,18 @@ export const resetDB = async (): Promise<void> => {
     $func$;`);
 
   await client.end();
+
+  return true;
+};
+
+/**
+ * Sets up a test database. Assumes DATABASE_URL is set properly.
+ */
+export const setupDB = async (): Promise<boolean> => {
+  // ensure the db is created and migrated
+  await exec(`yarn prisma migrate up --create-db --experimental`);
+
+  return true;
 };
 
 interface GraphQLRequestOptions {

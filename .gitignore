@@ -31,3 +31,6 @@ yarn-error.log*
 prisma/.env
 
 .vercel
+
+cypress/videos*
+cypress/screenshots*

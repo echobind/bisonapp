@@ -1,8 +1,6 @@
 const util = require('util');
 const childProcess = require('child_process');
 
-const { Client } = require('pg');
-const NodeEnvironment = require('jest-environment-node');
 const { nanoid } = require('nanoid');
 
 const exec = util.promisify(childProcess.exec);

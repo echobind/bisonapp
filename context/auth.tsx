@@ -25,7 +25,7 @@ function AuthProvider({ ...props }: Props) {
 
   // Load current user if there's an item in local storage
   useEffect(() => {
-    const token = localStorage.getItem(LOGIN_TOKEN_KEY);
+    const token = window.localStorage.getItem(LOGIN_TOKEN_KEY);
     setTokenLoaded(true);
     if (token) loadCurrentUser();
   }, [loadCurrentUser]);
@@ -39,7 +39,7 @@ function AuthProvider({ ...props }: Props) {
    * @param token the token to login with
    */
   function login(token) {
-    localStorage.setItem(LOGIN_TOKEN_KEY, token);
+    window.localStorage.setItem(LOGIN_TOKEN_KEY, token);
 
     return refetch();
   }
@@ -48,7 +48,7 @@ function AuthProvider({ ...props }: Props) {
    * Logs out a user by removing their token from cookies.
    */
   async function logout() {
-    localStorage.removeItem(LOGIN_TOKEN_KEY);
+    window.localStorage.removeItem(LOGIN_TOKEN_KEY);
 
     return refetch();
   }

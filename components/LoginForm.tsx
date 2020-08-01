@@ -48,7 +48,8 @@ export function LoginForm() {
 
       await loginUser(data.login.token);
 
-      router.replace('/');
+      await router.replace('/');
+      console.log('i should be done?');
     } catch (e) {
       setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
     } finally {
@@ -96,7 +97,13 @@ export function LoginForm() {
         </FormControl>
       </Stack>
 
-      <Button type="submit" marginTop={8} width="full" isLoading={isLoading}>
+      <Button
+        type="submit"
+        marginTop={8}
+        width="full"
+        isLoading={isLoading}
+        onClick={handleSubmit(handleLogin)}
+      >
         Login
       </Button>
 
