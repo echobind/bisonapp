@@ -1,5 +1,3 @@
-import { User } from '@prisma/client';
-
 describe('Login', () => {
   describe('with an email that doesnt exist', () => {
     it('Shows an error', () => {
@@ -31,7 +29,6 @@ describe('Login', () => {
         cy.findAllByRole('button', { name: /login/i }).click();
 
         // TODO: WHY NOT GOING TO NEW PAGE
-        console.log(window.localStorage);
         cy.findByText(/home page/i);
         cy.location('pathname').should('equal', '/');
         cy.findByText(/home page/i).should('exist');
