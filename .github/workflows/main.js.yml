@@ -36,13 +36,15 @@ jobs:
           yarn install --pure-lockfile --frozen-lockfile --ignore-optional
 
       # Build to ensure we generate proper typescript types
-      - run: yarn build
+      - run: yarn nexus build
 
       # Lint Code
-      - name: ESLint / TypeScript Check
-        run: |
-          yarn lint
-          tsc
+      - name: ESLint
+        run: yarn lint
+
+      # TypeScript compile check
+      - name: TS Compile
+        run: yarn tsc
 
   ###############
   # Test
@@ -60,7 +62,7 @@ jobs:
           POSTGRES_PASSWORD: ''
         ports: ['5432:5432']
         # Make sure the database is ready before we use it
-        options: --health-cmd pg_isready --health-interval 10ms --health-timeout 500ms --health-retries 15
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Checkout code
