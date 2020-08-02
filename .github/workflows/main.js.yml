@@ -35,6 +35,9 @@ jobs:
         run: |
           yarn install --pure-lockfile --frozen-lockfile --ignore-optional
 
+      # Build to ensure we generate proper typescript types
+      run: yarn build
+
       # Lint Code
       - name: ESLint / TypeScript Check
         run: |
