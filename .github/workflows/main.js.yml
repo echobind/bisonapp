@@ -9,11 +9,11 @@ jobs:
   linters:
     name: Linters
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       # Node
       - name: Setup Node
         uses: actions/setup-node@v2.1.1
@@ -34,32 +34,35 @@ jobs:
       - name: Install packages
         run: |
           yarn install --pure-lockfile --frozen-lockfile --ignore-optional
-        
+
       # Lint Code
       - name: ESLint / TypeScript Check
         run: |
           yarn lint
           tsc
-          
+
   ###############
   # Test
-  ###############          
+  ###############
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    needs: linters
     services:
       postgres:
         image: postgres:11
         env:
           POSTGRES_USER: myapp
           POSTGRES_DB: myapp_test
-          POSTGRES_PASSWORD: ""
-        ports: ["5432:5432"]
+          POSTGRES_PASSWORD: ''
+        ports: ['5432:5432']
+        # Make sure the database is ready before we use it
+        options: --health-cmd pg_isready --health-interval 10ms --health-timeout 500ms --health-retries 15
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-          
+
       # Node
       - name: Setup Node
         uses: actions/setup-node@v2.1.1
@@ -88,15 +91,15 @@ jobs:
           DATABASE_URL: postgres://postgres@localhost/myapp_test
         run: |
           yarn db:migrate
-      
+
       # Build app and generate types
       - name: Build App
         run: yarn build
-        
+
       # Jest Tests (API/Frontend)
       - name: Run Jest Tests (API & Frontend)
         run: yarn test:ci
-      
+
       # E2E Tests via Cypress
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v1.16.1
@@ -120,9 +123,6 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
-          
-          
-          
 #   push:
 #     branches: [ master ]
 #   pull_request:
@@ -131,8 +131,8 @@ jobs:
 # jobs:
 #   build:
 #     runs-on: ubuntu-latest
-    
-#     container: 
+
+#     container:
 #       image: cypress/base:14.0.0
 
 #     steps:
@@ -145,7 +145,7 @@ jobs:
 #       # Jest Tests (API/Frontend)
 #       - name: Run Jest Tests (API & Frontend)
 #         run: yarn test:ci
-      
+
 #       # E2E Tests via Cypress
 #       - name: Run Cypress E2E Tests
 #         uses: cypress-io/github-action@v1.16.1
