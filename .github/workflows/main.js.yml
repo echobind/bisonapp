@@ -55,7 +55,7 @@ jobs:
     needs: linters
     services:
       postgres:
-        image: postgres:11
+        image: postgres:11.5
         env:
           POSTGRES_USER: myapp
           POSTGRES_DB: myapp_test
