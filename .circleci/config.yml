@@ -1,0 +1,89 @@
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1.19.1
+
+aliases:
+  - &yarn-cache-key cache-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}-v2
+
+executors:
+  cypress-node-12:
+    docker:
+      - image: 'cypress/base:12.14.0'
+  cypress-node-12-with-postgres:
+    docker:
+      - image: 'cypress/base:12.14.0'
+        environment:
+          DATABASE_URL: postgres://postgres:mypassword@localhost/myapp_test?connection_limit=1
+
+      - image: circleci/postgres:12.2-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: myapp_test
+          POSTGRES_PASSWORD: mypassword
+
+jobs:
+  install-dependencies:
+    executor: cypress-node-12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *yarn-cache-key
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --ignore-optional
+      - run:
+          name: Verify Cypress
+          command: npx cypress verify
+      - save_cache:
+          key: *yarn-cache-key
+          paths:
+            - ~/.cache
+  jest:
+    executor: cypress-node-12-with-postgres
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Migrate Test Database
+          command: yarn db:migrate
+      - run:
+          name: Run Jest Tests
+          command: yarn test
+
+workflows:
+  build-and-test:
+    jobs:
+      - cypress/install:
+          executor: cypress-node-12
+          yarn: true
+          post-install:
+            - run:
+                name: Add Global Vercel package
+                command: yarn global add vercel
+      - jest:
+          requires:
+            - cypress/install
+      - cypress/run:
+          requires:
+            - cypress/install
+          executor: cypress-node-12-with-postgres
+          yarn: true
+          post-install:
+            - run:
+                name: Add Global Vercel package
+                command: yarn global add vercel
+            - run:
+                name: Sync Dev ENV vars
+                command: vercel env pull --token $VERCEL_TOKEN
+          start: yarn test:server --token $VERCEL_TOKEN
+          wait-on: 'http://localhost:3001'
