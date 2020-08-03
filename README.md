@@ -87,6 +87,14 @@ function fakeComponent() {
 }
 ```
 
+# Set up CI
+
+This project uses GitHub actions for CI.
+
+To ensure your project can run on CI for E2E tests, you need to add a few ENV vars to GitHub Secrets.
+
+![ENV Vars](https://user-images.githubusercontent.com/14339/89191816-78a01800-d571-11ea-82bd-156b54e27434.png)
+
 # FAQ
 
 ## Where are the generated types?
