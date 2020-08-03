@@ -1,6 +1,12 @@
+<div style="text-align:center"><h1>Bison - The Full Stack JAMstack in-a-box.</h1>
+  <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/workflows/main/badge.svg"/></p>
+</div>
+
 # Setup
 
 ## Configure Vercel
+
+Right now, this is setup for Vercel. To run the app locally:
 
 1. run `vercel` or `vc`
 1. choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
