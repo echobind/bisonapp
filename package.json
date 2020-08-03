@@ -19,7 +19,7 @@
     "test": "yarn withEnv:test jest --runInBand --watch",
     "test:ci": "yarn withEnv:test jest --runInBand",
     "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test test:server http://localhost:3001 cypress:run",
-    "test:server": "next dev --port 3001",
+    "test:server": "next start --port 3001",
     "cypress:run": "cypress run",
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",

@@ -57,6 +57,7 @@ jobs:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: myapp_test
+      NODE_ENV: test
     services:
       postgres:
         image: postgres:11.5
