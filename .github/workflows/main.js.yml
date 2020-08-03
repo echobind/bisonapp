@@ -57,9 +57,9 @@ jobs:
       postgres:
         image: postgres:11.5
         env:
-          POSTGRES_USER: myapp
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: myapp_test
-          POSTGRES_PASSWORD: ''
         ports: ['5432:5432']
         # Make sure the database is ready before we use it
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -93,7 +93,7 @@ jobs:
       - name: Setup test database
         env:
           NODE_ENV: test
-          DATABASE_URL: postgres://postgres@localhost/myapp_test
+          DATABASE_URL: postgres://postgres:postgres@localhost/myapp_test
         run: |
           yarn db:migrate
 
