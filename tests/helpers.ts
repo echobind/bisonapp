@@ -54,7 +54,8 @@ export const graphQLRequestAsUser = async (
 export const resetDB = async (): Promise<boolean> => {
   if (process.env.NODE_ENV === 'production') return Promise.resolve(false);
 
-  const schema = process.env.DATABASE_URL.match(/schema=(\w*)(&.*)*$/)[1] || 'public';
+  const match = process.env.DATABASE_URL.match(/schema=(\w*)(&.*)*$/);
+  const schema = match ? match[1] : 'public';
 
   // NOTE: the prisma client does not handle this query well, use pg instead
   const client = new Client({
