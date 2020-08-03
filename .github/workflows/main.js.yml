@@ -97,7 +97,7 @@ jobs:
       - name: Setup test database
         env:
           NODE_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost/myapp_test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
         run: |
           yarn db:migrate
 
@@ -121,7 +121,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          DATABASE_URL: postgres://postgres:postgres@localhost/myapp_test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
 
       - name: Upload Cypress Screenshots
         uses: actions/upload-artifact@v1
