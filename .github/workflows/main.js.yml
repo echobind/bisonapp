@@ -117,6 +117,7 @@ jobs:
           start: yarn test:server
           wait-on: 'http://localhost:3001'
         env:
+          NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
