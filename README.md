@@ -1,8 +1,8 @@
-<div style="text-align:center">
+<p align="center" style="text-align:center">
   <img alt="Bison Logo" src="https://user-images.githubusercontent.com/14339/89243835-f47e7c80-d5d2-11ea-8d8d-36202227d0ec.png" />
   <h1>The Full Stack JAMstack in-a-box.</h1>
   <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/workflows/main/badge.svg"/></p>
-</div>
+</p>
 
 Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our current "Greenfield Web Stack" that we use when creating web apps for clients.
 

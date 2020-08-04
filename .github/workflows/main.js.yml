@@ -4,50 +4,7 @@ on: [push]
 
 jobs:
   ###############
-  # Lint
-  ###############
-  # linters:
-  #   name: Linters
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     # Node
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v2.1.1
-  #       with:
-  #         node-version: 14.6.0
-
-  #     # Yarn cache/install
-  #     - name: Find yarn cache location
-  #       id: yarn-cache
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
-  #     - name: JS package cache
-  #       uses: actions/cache@v2.1.0
-  #       with:
-  #         path: ${{ steps.yarn-cache.outputs.dir }}
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-  #     - name: Install packages
-  #       run: |
-  #         yarn install --pure-lockfile --frozen-lockfile --ignore-optional
-
-  #     # Build to ensure we generate proper typescript types
-  #     - run: yarn nexus build
-
-  #     # Lint Code
-  #     - name: ESLint
-  #       run: yarn lint
-
-  #     # TypeScript compile check
-  #     - name: TS Compile
-  #       run: yarn tsc
-
-  ###############
-  # Test
+  # Lint & Test
   ###############
   tests:
     name: Tests
@@ -110,10 +67,6 @@ jobs:
       - name: ESLint
         run: yarn lint
 
-      # TypeScript compile check
-      - name: TS Compile
-        run: yarn tsc
-
       # Jest Tests (API/Frontend)
       - name: Run Jest Tests (API & Frontend)
         run: yarn test:ci
@@ -152,7 +105,7 @@ jobs:
   # Deploy!
   ###############
   deployStaging:
-    name: Deploy to Vercel
+    name: Deploy to Preview
     runs-on: ubuntu-latest
     # To speed up CI builds, we deploy this in parallel
     # needs: tests
@@ -172,7 +125,7 @@ jobs:
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
 
   deployProd:
-    name: Deploy to Vercel
+    name: Deploy to Production
     runs-on: ubuntu-latest
     # For production deploys, make sure tests pass first
     needs: tests
