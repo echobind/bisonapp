@@ -1,21 +1,66 @@
-<div style="text-align:center"><h1>Bison - The Full Stack JAMstack in-a-box.</h1>
+<div style="text-align:center">
+  <img alt="Bison Logo" src="https://user-images.githubusercontent.com/14339/89243835-f47e7c80-d5d2-11ea-8d8d-36202227d0ec.png" />
+  <h1>The Full Stack JAMstack in-a-box.</h1>
   <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/workflows/main/badge.svg"/></p>
 </div>
 
-# Setup
+Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our current "Greenfield Web Stack" that we use when creating web apps for clients.
+
+We're always improving on this, and welcome suggestions from the community!
+
+## Technology
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- GraphQL API built with [Nexus](https://nexusjs.org/)
+- [Prisma](https://www.prisma.io/) w/ Postgres
+- [GraphQL Codegen](https://graphql-code-generator.com/) to generate TypeScript types (Schema types and query/mutation hooks)
+- [Chakra UI](https://chakra-ui.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Cypress](https://www.cypress.io/) for E2E tests
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io/) for unit and API request tests
+
+## Features
+
+- Preconfigured for CI using [GitHub actions](https://github.com/features/actions)
+- Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
+- Fully wired up login/signup pages with client and server-side validation.
+- Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
+- Pre-configured for [Vercel](https://vercel.io) deployment.
+
+## Conventions
+
+- Don't copy/paste files, use generators and Hygen templates.
+- Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend.
+- Don't manually type GraphQL responses... use the generated query hooks from GraphQL Codegen.
+- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in a any Next app.
+
+## Tradeoffs
+
+- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app more like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more "intermingled" than your used to.
+
+---
+
+# Getting Started
+
+Create a new repo fom the Bison template.
+
+![New Repo Button](https://user-images.githubusercontent.com/14339/89247205-d61c7f00-d5da-11ea-9a74-990cc75c04a0.png)
 
 ## Configure Vercel
 
-Right now, this is setup for Vercel. To run the app locally:
+Make sure you have a Vercel account.
 
-1. run `vercel` or `vc`
-1. choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
+To run the app locally:
+
+1. Run `vercel` or `vc`
+1. Choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
 1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
-1. Run `vercel env pull`. This will sync your dev env vars and save them to .env.
+1. Run `vc env pull`. This will sync your dev env vars and save them to .env.
 
 ## Configure Prisma
 
-1. Add an .env file to `api/prisma` and copy your . It will look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public&connection_limit=1"`. Be sure and change the database name from myapp_dev to whatever you want the name of your local database to be.
+1. Add an .env file to `api/prisma` and add DATABASE_URL. If you synced variables above, you can copy the same value. It should look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public"`. Be sure and change the database name from myapp_dev to whatever you want the name of your local database to be.
 1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
@@ -24,13 +69,13 @@ Right now, this is setup for Vercel. To run the app locally:
 
 From the root, run `yarn dev`. This will do the following:
 
-- run `vercel dev` to run the frontend and serverless functions locally
+- run `vc dev` to run the frontend and serverless functions locally
 - start a watcher to generate the Prisma client on schema changes
-- start a watcher to generate TypeScript types for graphql files
+- start a watcher to generate TypeScript types for GraphQL files
 
 # Recommended Dev Workflow
 
-You're not required to follow this exact workflow, but we've found it gives a great developer experience
+You're not required to follow this exact workflow, but we've found it gives a good developer experience.
 
 ## API
 
@@ -39,7 +84,7 @@ You're not required to follow this exact workflow, but we've found it gives a gr
 1. Create a new request test using `yarn g:test:request`
 1. Run `yarn test` to start the test watcher
 1. Add tests cases and update schema code accordingly
-1. The graphql playground can be helpful to form the proper queries to use in tests.
+1. The GraphQL playground (localhost:3000/api/graphql) can be helpful to form the proper queries to use in tests.
 1. `types.ts` and `api.graphql` should update automatically as you change files. Sometimes it's helpful to open these as a sanity check before moving on to the frontend code.
 
 ## Frontend
@@ -47,7 +92,7 @@ You're not required to follow this exact workflow, but we've found it gives a gr
 1. Generate a new page using `yarn g:page`
 1. Generate a new component using `yarn g:component`
 1. If you need to fetch data in your component, use a cell. Generate one using `yarn g:cell` (TODO)
-1. To generate a typed graphql query, simply add it to the component or page:
+1. To generate a typed GraphQL query, simply add it to the component or page:
 
 ```ts
 export const SIGNUP_MUTATION = gql`
@@ -99,7 +144,21 @@ This project uses GitHub actions for CI.
 
 To ensure your project can run on CI for E2E tests, you need to add a few ENV vars to GitHub Secrets.
 
-![ENV Vars](https://user-images.githubusercontent.com/14339/89191816-78a01800-d571-11ea-82bd-156b54e27434.png)
+![ENV Vars](https://user-images.githubusercontent.com/14339/89292945-228fab00-d62b-11ea-90c2-4198dfcf30f1.png)
+
+The Vercel project and org id, can be copied from `.vercel/project.json`. You can generate a token from https://vercel.com/account/tokens.
+
+# Setup Preview / Production Deployments
+
+After tests pass, the app will deploy to Vercel. By default, every push creates a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production. To configure deployments:
+
+- Make sure you've set the variables above
+- Configure the branches in the workflow:
+  ```
+  ## For a typical JAMstack flow, this should be your default branch.
+  ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
+  if: github.ref != 'refs/heads/production' # every branch EXCEPT production
+  ```
 
 # FAQ
 
