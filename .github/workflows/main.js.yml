@@ -52,7 +52,7 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    needs: linters
+    # needs: linters
     env:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
