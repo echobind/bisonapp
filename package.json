@@ -1,98 +1,40 @@
 {
-  "name": "echobind-webstack2",
+  "name": "create-bison-app",
   "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "build": "yarn nexus build && next build",
-    "db:migrate": "yarn -s prisma migrate up --experimental",
-    "dev": "concurrently -n \"WATCHERS,VERCEL\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"vc dev\"",
-    "g:component": "hygen component new --name",
-    "g:graphql": "hygen graphql new --name",
-    "g:page": "hygen page new --name",
-    "g:migration": "yarn -s prisma migrate save --experimental",
-    "g:test:component": "hygen test component --name",
-    "g:test:factory": "hygen test factory --name",
-    "g:test:request": "hygen test request --name",
-    "g:test:util": "hygen test util --name",
-    "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
-    "start": "next start",
-    "test": "yarn withEnv:test jest --runInBand --watch",
-    "test:ci": "yarn withEnv:test jest --runInBand",
-    "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test test:server http://localhost:3001 cypress:run",
-    "test:server": "next start --port 3001",
-    "cypress:run": "cypress run",
-    "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
-    "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
-    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\"",
-    "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts",
-    "watch:codegen": "graphql-codegen --config codegen.yml --watch"
+  "description": "Creates a production-ready full-stack JAMstack app",
+  "license": "MIT",
+  "repository": "echobind/bison",
+  "author": {
+    "name": "Chris Ball",
+    "email": "chris@echobind.com",
+    "url": "https://echobind.com"
   },
+  "bin": "cli.js",
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {},
+  "files": [
+    "index.js",
+    "cli.js",
+    "template"
+  ],
+  "keywords": [
+    "bison",
+    "jamstack",
+    "template",
+    "boilerplate"
+  ],
   "dependencies": {
-    "@apollo/client": "^3.0.2",
-    "@chakra-ui/core": "^1.0.0-rc.0",
-    "@chakra-ui/theme": "^1.0.0-rc.0",
-    "@chakra-ui/theme-tools": "^1.0.0-rc.0",
-    "bcryptjs": "^2.4.3",
-    "cross-fetch": "^3.0.5",
-    "graphql-iso-date": "^3.6.1",
-    "graphql-type-json": "^0.3.1",
-    "isomorphic-unfetch": "^3.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "next": "9.4.4",
-    "nexus": "^0.26.0-next.13",
-    "nexus-plugin-prisma": "^0.16.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-hook-form": "^6.1.0"
+    "cpy": "^7.2.0",
+    "execa": "^1.0.0",
+    "listr": "^0.14.3",
+    "meow": "^5.0.0",
+    "replace-string": "^3.0.0",
+    "slugify": "^1.3.4",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@apollo/react-testing": "^4.0.0",
-    "@graphql-codegen/cli": "1.17.6",
-    "@graphql-codegen/typescript": "1.17.6",
-    "@graphql-codegen/typescript-operations": "^1.17.6",
-    "@graphql-codegen/typescript-react-apollo": "1.17.6",
-    "@graphql-codegen/typescript-resolvers": "1.17.4",
-    "@testing-library/cypress": "^6.0.0",
-    "@testing-library/dom": "^7.21.7",
-    "@testing-library/jest-dom": "^5.11.2",
-    "@testing-library/react": "^10.4.7",
-    "@testing-library/user-event": "^12.0.17",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/jest": "^26.0.6",
-    "@types/node": "^14.0.26",
-    "@types/react": "^16.9.43",
-    "@types/supertest": "^2.0.10",
-    "@vercel/node": "^1.7.3",
-    "chance": "^1.1.6",
-    "concurrently": "^5.2.0",
-    "cypress": "^4.11.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-cypress": "^2.11.1",
-    "eslint-plugin-echobind": "^0.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.2.5",
-    "hygen": "^6.0.4",
-    "jest": "^26.1.0",
-    "jest-environment-node": "^26.1.0",
-    "lint-staged": "^10.2.11",
-    "msw": "^0.20.1",
-    "nanoid": "^3.1.10",
-    "pg": "^8.3.0",
-    "prettier": "^2.0.5",
-    "start-server-and-test": "^1.11.2",
-    "supertest": "^4.0.2",
-    "ts-jest": "^26.1.3",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
-    "universal-cookie": "^4.0.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "yarn lint"
+    "prettier": "^2.0.5"
   }
 }
