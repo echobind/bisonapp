@@ -7,30 +7,37 @@ const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
 const cpy = require("cpy");
+const nodegit = require("nodegit");
+const Logo = require("./logo");
+const postInstallText = require("./postInstallText");
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const deleteFile = promisify(fs.unlink);
+const templateFolder = path.join(__dirname, "template");
+const fromPath = (file) => path.join(templateFolder, file);
 
-const copyWithTemplate = async (from, to, variables) => {
+const TEMPLATE_NAME_TOKEN = "%NAME%";
+
+async function copyWithTemplate(from, to, variables) {
   const source = await readFile(from, "utf8");
   let generatedSource = source;
 
   if (typeof variables === "object") {
-    generatedSource = replaceString(source, "%NAME%", variables.name);
+    generatedSource = replaceString(
+      source,
+      TEMPLATE_NAME_TOKEN,
+      variables.name
+    );
   }
 
   await writeFile(to, generatedSource);
-};
+}
 
-const moveWithTemplate = async (from, to, variables) => {
+async function moveWithTemplate(from, to, variables) {
   await copyWithTemplate(from, to, variables);
-  // await deleteFile(from);
-};
-
-const templateFolder = path.join(__dirname, "template");
-const fromPath = (file) => path.join(templateFolder, file);
-// const toPath = (file) => path.join(process.cwd(), file);
+  await deleteFile(from);
+}
 
 module.exports = (name) => {
   const pkgName = slugify(name);
@@ -119,10 +126,16 @@ module.exports = (name) => {
       },
     },
     {
-      title: "Cleanup...",
+      title: "Install dependencies",
+      task: async () => {
+        return execa("yarn", ["install"], { cwd: pkgName });
+      },
+    },
+    {
+      title: "Cleanup",
       task: async () => {
         return Promise.all([
-          copyWithTemplate(
+          moveWithTemplate(
             toPath("prisma/_.env"),
             toPath("prisma/.env"),
             variables
@@ -131,17 +144,37 @@ module.exports = (name) => {
       },
     },
     {
-      title: "Install dependencies",
+      title: "Git init",
       task: async () => {
-        await execa("yarn", ["install"]);
+        const repo = await nodegit.Repository.init(targetFolder, 0);
+        const index = await repo.refreshIndex();
+        await index.addAll(".");
+        await index.write();
+        const id = await index.writeTree();
+
+        const author = nodegit.Signature.now(
+          "Bison Template",
+          "hello@echobind.com"
+        );
+
+        const committer = nodegit.Signature.now(
+          "Bison Template",
+          "hello@echobind.com"
+        );
+
+        const message = `Initial commit from Bison Template!`;
+
+        // Since we're creating an inital commit, it has no parents. Note that unlike
+        // normal we don't get the head either, because there isn't one yet.
+        return repo.createCommit("HEAD", author, committer, message, id, []);
       },
     },
-    // {
-    //   title: "Add placeholder .env files",
-    //   task: () => Promise.resolve(),
-    // },
   ]);
 
-  console.log();
-  return tasks.run();
+  console.log(Logo);
+
+  return tasks.run().then(() => {
+    const text = replaceString(postInstallText, TEMPLATE_NAME_TOKEN, pkgName);
+    console.log(text);
+  });
 };

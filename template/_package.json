@@ -1,9 +1,11 @@
 {
-  "name": "echobind-webstack2",
+  "name": "%NAME%",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "yarn nexus build && next build",
+    "cypress:run": "cypress run",
+    "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
     "dev": "concurrently -n \"WATCHERS,VERCEL\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"vc dev\"",
     "g:component": "hygen component new --name",
@@ -20,8 +22,6 @@
     "test:ci": "yarn withEnv:test jest --runInBand",
     "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test test:server http://localhost:3001 cypress:run",
     "test:server": "next start --port 3001",
-    "cypress:run": "cypress run",
-    "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
     "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\"",
     "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts",
@@ -39,8 +39,8 @@
     "isomorphic-unfetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "next": "9.4.4",
-    "nexus": "^0.26.0-next.13",
-    "nexus-plugin-prisma": "^0.16.1",
+    "nexus": "^0.26.1",
+    "nexus-plugin-prisma": "^0.17.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.1.0"
