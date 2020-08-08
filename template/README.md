@@ -26,7 +26,7 @@ We're always improving on this, and welcome suggestions from the community!
 - Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
-- Pre-configured for [Vercel](https://vercel.io) deployment.
+- Pre-configured for deployment on [Vercel](https://vercel.io) with customizable branch workflow.
 
 ## Conventions
 
@@ -45,7 +45,17 @@ We're always improving on this, and welcome suggestions from the community!
 
 Create a new repo fom the Bison template.
 
-![New Repo Button](https://user-images.githubusercontent.com/14339/89247205-d61c7f00-d5da-11ea-9a74-990cc75c04a0.png)
+Using yarn:
+
+```sh
+yarn create bison-app
+```
+
+Using npx:
+
+```sh
+npx create-bison-app
+```
 
 ## Configure Vercel
 
@@ -56,14 +66,15 @@ To run the app locally:
 1. Run `vercel` or `vc`
 1. Choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
 1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
-1. Run `vc env pull`. This will sync your dev env vars and save them to .env.
+1. If setting up an existing project, run `vc env pull`. This will sync your dev env vars and save them to .env.
 
-## Configure Prisma
+## Migrate the database
 
-1. Add an .env file to `api/prisma` and add DATABASE_URL. If you synced variables above, you can copy the same value. It should look something like this: `DATABASE_URL="postgresql://postgres@localhost:5432/myapp_dev?schema=public"`. Be sure and change the database name from myapp_dev to whatever you want the name of your local database to be.
 1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
+
+If you'd like to change the database name or schema, change the DATABASE_URL in `prisma/.env`.
 
 # Run the app
 
