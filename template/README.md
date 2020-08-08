@@ -26,7 +26,7 @@ We're always improving on this, and welcome suggestions from the community!
 - Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
-- Pre-configured for [Vercel](https://vercel.io) deployment.
+- Pre-configured for deployment on [Vercel](https://vercel.io).
 
 ## Conventions
 
@@ -45,7 +45,9 @@ We're always improving on this, and welcome suggestions from the community!
 
 Create a new repo fom the Bison template.
 
-![New Repo Button](https://user-images.githubusercontent.com/14339/89247205-d61c7f00-d5da-11ea-9a74-990cc75c04a0.png)
+```sh
+npx create-bison-app
+```
 
 ## Configure Vercel
 
