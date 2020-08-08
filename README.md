@@ -1,8 +1,32 @@
 <p align="center" style="text-align:center">
   <img alt="Bison Logo" src="https://user-images.githubusercontent.com/14339/89243835-f47e7c80-d5d2-11ea-8d8d-36202227d0ec.png" />
-  <h1>%NAME%</h1>
+  <h1>The Full Stack JAMstack in-a-box.</h1>
   <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/workflows/main/badge.svg"/></p>
 </p>
+
+Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our current "Greenfield Web Stack" that we use when creating web apps for clients.
+
+We're always improving on this, and welcome suggestions from the community!
+
+## Technology
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- GraphQL API built with [Nexus](https://nexusjs.org/)
+- [Prisma](https://www.prisma.io/) w/ Postgres
+- [GraphQL Codegen](https://graphql-code-generator.com/) to generate TypeScript types (Schema types and query/mutation hooks)
+- [Chakra UI](https://chakra-ui.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Cypress](https://www.cypress.io/) for E2E tests
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io/) for unit and API request tests
+
+## Features
+
+- Preconfigured for CI using [GitHub actions](https://github.com/features/actions)
+- Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
+- Fully wired up login/signup pages with client and server-side validation.
+- Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
+- Pre-configured for deployment on [Vercel](https://vercel.io) with customizable branch workflow.
 
 ## Conventions
 
@@ -19,7 +43,19 @@
 
 # Getting Started
 
-Clone this repo.
+Create a new repo fom the Bison template.
+
+Using yarn:
+
+```sh
+yarn create bison-app
+```
+
+Using npx:
+
+```sh
+npx create-bison-app
+```
 
 ## Configure Vercel
 
