@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
@@ -13,7 +13,9 @@
   "engines": {
     "node": ">=8"
   },
-  "scripts": {},
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
   "files": [
     "index.js",
     "cli.js",
@@ -35,6 +37,7 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "semantic-release": "^17.1.1"
   }
 }
