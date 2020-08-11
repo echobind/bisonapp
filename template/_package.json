@@ -8,6 +8,7 @@
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
     "dev": "concurrently -n \"WATCHERS,VERCEL\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"vc dev\"",
+    "g:cell": "hygen cell new --name",
     "g:component": "hygen component new --name",
     "g:graphql": "hygen graphql new --name",
     "g:page": "hygen page new --name",
