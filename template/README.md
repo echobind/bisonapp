@@ -42,11 +42,11 @@ If you'd like to change the database name or schema, change the DATABASE_URL in 
 
 # Run the app
 
-From the root, run `yarn dev`. This will do the following:
+From the root, run `yarn dev`. This:
 
-- run `vc dev` to run the frontend and serverless functions locally
-- start a watcher to generate the Prisma client on schema changes
-- start a watcher to generate TypeScript types for GraphQL files
+- runs `vc dev` to run the frontend and serverless functions locally
+- starts a watcher to generate the Prisma client on schema changes
+- starts a watcher to generate TypeScript types for GraphQL files
 
 # Recommended Dev Workflow
 
