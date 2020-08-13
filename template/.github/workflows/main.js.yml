@@ -49,7 +49,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install packages
         run: |
-          yarn install --pure-lockfile
+          yarn install --frozen-lockfile
 
       # Setup & configure database
       - name: Setup test database
@@ -81,9 +81,6 @@ jobs:
         env:
           NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
 
       - name: Upload Cypress Screenshots
