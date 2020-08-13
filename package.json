@@ -17,9 +17,11 @@
     "semantic-release": "semantic-release"
   },
   "files": [
+    "logo.js",
     "index.js",
     "cli.js",
-    "template"
+    "template",
+    "postInstallText.js"
   ],
   "keywords": [
     "bison",
