@@ -21,7 +21,7 @@ We're always improving on this, and welcome suggestions from the community!
 
 ## Features
 
-- Preconfigured for CI using [GitHub actions](https://github.com/features/actions)
+- Preconfigured for CI using [GitHub Actions](https://github.com/features/actions)
 - Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
@@ -29,14 +29,29 @@ We're always improving on this, and welcome suggestions from the community!
 
 ## Conventions
 
-- Don't copy/paste files, use generators and Hygen templates.
-- Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend.
-- Don't manually type GraphQL responses... use the generated query hooks from GraphQL Codegen.
-- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in a any Next app.
+- Don't copy/paste files, use generators and Hygen templates. Need to update the generator as your project evolves? they are all in the `_templates` folder.
+- Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend. By doing this you can ensure your types are always up-to-date.
+- Don't manually write types for GraphQL responses... use the generated query hooks from GraphQL Codegen.
+- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in any Next app.
 
 ## Tradeoffs
 
-- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app more like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more "intermingled" than your used to.
+- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app a bit more like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more "intermingled" than your used to.
+- Currently, Bison only works on Vercel. We plan to add support for Netlify soon.
+
+## Alternatives
+
+There are a few other projects that are rapidly maturing in the Full Stack JAMStack space.
+
+**RedwoodJS**
+Redwood is a very promising framework we've got our eye on. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!).
+
+**Blitz.js**
+Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to "remove" the API layer using conventions provided by Next.js.
+
+Like what we've added to Bison, both of these projects are driven by conventions. We may borrow concepts from Redwood and Blitz over time, and may even switch to one in the future as things continue to mature.
+
+We hope Bison can provide a great jumping off point for new apps. Especially if you're the type that likes to see how everything is wired together and adapt the "framework" to your needs.
 
 ---
 
@@ -150,7 +165,7 @@ function fakeComponent() {
 
 # Set up CI
 
-This project uses GitHub actions for CI.
+This project uses GitHub Actions for CI.
 
 To ensure your project can run on CI for E2E tests, you need to add a few ENV vars to GitHub Secrets.
 
@@ -174,8 +189,8 @@ After tests pass, the app will deploy to Vercel. By default, every push creates 
 
 ## Where are the generated types?
 
-TypeScript Types for GraphQL types, queries, and mutations are generated automatically and placed in `./types.ts`. To use these in your code, import like so:
+TypeScript Types for GraphQL types, queries, and mutations are generated automatically and placed in `./types.ts`.
 
-## My types aren't working, even though they are in ./types.ts
+## VSCode can't find new types, even though they are in ./types.ts
 
 Try reopening VSCode.
