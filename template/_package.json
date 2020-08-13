@@ -7,6 +7,7 @@
     "cypress:run": "cypress run",
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
+    "db:setup": "yarn db:migrate && yarn prisma generate",
     "dev": "concurrently -n \"WATCHERS,NEXT\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"next dev\"",
     "g:cell": "hygen cell new --name",
     "g:component": "hygen component new --name",
