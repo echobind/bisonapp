@@ -71,9 +71,9 @@ Using npx:
 npx create-bison-app MyApp
 ```
 
-## Migrate the database
+## Setup the database
 
-1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist:
+1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
 
