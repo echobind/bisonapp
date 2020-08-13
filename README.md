@@ -32,7 +32,7 @@ We're always improving on this, and welcome suggestions from the community!
 - Don't copy/paste files, use generators and Hygen templates. Need to update the generator as your project evolves? they are all in the `_templates` folder.
 - Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend. By doing this you can ensure your types are always up-to-date.
 - Don't manually write types for GraphQL responses... use the generated query hooks from GraphQL Codegen.
-- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in a any Next app.
+- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in any Next app.
 
 ## Tradeoffs
 
@@ -44,7 +44,7 @@ We're always improving on this, and welcome suggestions from the community!
 There are a few other projects that are rapidly maturing in the Full Stack JAMStack space.
 
 **RedwoodJS**
-Redwood is a very promising framework we've got our eye on. We took the concept of "Cells" directly from them (though admittedly our version takes a bit more manual wiring up!).
+Redwood is a very promising framework we've got our eye on. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!).
 
 **Blitz.js**
 Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to "remove" the API layer using conventions provided by Next.js.
