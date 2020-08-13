@@ -49,9 +49,9 @@ Redwood is a very promising framework we've got our eye on. We took the concept 
 **Blitz.js**
 Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to "remove" the API layer using conventions provided by Next.js.
 
-Like what we've added to Bison, both of these projects are driven by conventions. We may borrow concepts from Redwood and Blitz over time, and may even switch to one in the future as things continue to mature.
+We may borrow concepts from Redwood and Blitz over time, and could even switch to one in the future as things continue to mature.
 
-We hope Bison can provide a great jumping off point for new apps. Especially if you're the type that likes to see how everything is wired together and adapt the "framework" to your needs.
+Think of Bison as a bit closer to the metal, but preconfigured for maximum DX and efficiency. The good news is, if you disagree with any of the choices we've made, nothing is hidden from you and you're welcome to adapt the "framework" to fit your needs.
 
 ---
 
@@ -62,25 +62,14 @@ Create a new repo fom the Bison template.
 Using yarn:
 
 ```sh
-yarn create bison-app
+yarn create bison-app MyApp
 ```
 
 Using npx:
 
 ```sh
-npx create-bison-app
+npx create-bison-app MyApp
 ```
-
-## Configure Vercel
-
-Make sure you have a Vercel account.
-
-To run the app locally:
-
-1. Run `vercel` or `vc`
-1. Choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
-1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
-1. If setting up an existing project, run `vc env pull`. This will sync your dev env vars and save them to .env.
 
 ## Migrate the database
 
@@ -90,7 +79,7 @@ To run the app locally:
 
 If you'd like to change the database name or schema, change the DATABASE_URL in `prisma/.env`.
 
-# Run the app
+# Run the app locally
 
 From the root, run `yarn dev`. This will do the following:
 
@@ -165,25 +154,27 @@ function fakeComponent() {
 
 # Set up CI
 
-This project uses GitHub Actions for CI.
+This project uses GitHub Actions for CI and should work out of the box. Note, as you add ENV vars to your app, you'll want to also add them in GitHub Secrets.
 
-To ensure your project can run on CI for E2E tests, you need to add a few ENV vars to GitHub Secrets.
+Easiest CI configuration ever, right?
+
+# Setup Preview / Production Deployments
+
+To ensure your project can be deployed using GitHub Actions, you need to add a few ENV vars to GitHub Secrets:
 
 ![ENV Vars](https://user-images.githubusercontent.com/14339/89292945-228fab00-d62b-11ea-90c2-4198dfcf30f1.png)
 
 The Vercel project and org id, can be copied from `.vercel/project.json`. You can generate a token from https://vercel.com/account/tokens.
 
-# Setup Preview / Production Deployments
+After tests pass, the app will deploy to Vercel. By default, every push creates a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production.
 
-After tests pass, the app will deploy to Vercel. By default, every push creates a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production. To configure deployments:
+If you'd like to change these configurations, update the section below:
 
-- Make sure you've set the variables above
-- Configure the branches in the workflow:
-  ```
-  ## For a typical JAMstack flow, this should be your default branch.
-  ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
-  if: github.ref != 'refs/heads/production' # every branch EXCEPT production
-  ```
+```
+## For a typical JAMstack flow, this should be your default branch.
+## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
+if: github.ref != 'refs/heads/production' # every branch EXCEPT production
+```
 
 # FAQ
 
