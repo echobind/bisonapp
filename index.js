@@ -132,6 +132,14 @@ module.exports = (name) => {
       },
     },
     {
+      title: "Generate Nexus types",
+      task: async () => {
+        return execa("yarn", ["nexus", "build", "--no-bundle"], {
+          cwd: pkgName,
+        });
+      },
+    },
+    {
       title: "Cleanup",
       task: async () => {
         return Promise.all([
