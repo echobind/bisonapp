@@ -132,6 +132,14 @@ module.exports = (name) => {
       },
     },
     {
+      title: "Generate Prisma client",
+      task: async () => {
+        return execa("yarn", ["prisma", "generate"], {
+          cwd: pkgName,
+        });
+      },
+    },
+    {
       title: "Generate Nexus types",
       task: async () => {
         return execa("yarn", ["nexus", "build", "--no-bundle"], {
