@@ -15,7 +15,7 @@ module.exports = async () => {
   // console.log(`[jest] server is up...`);
 
   global.schema = `test_${nanoid().toLowerCase()}`;
-  global.databaseUrl = `postgresql://postgres:postgres@localhost:5432/testing?schema=${this.schema}`;
+  global.databaseUrl = `postgresql://postgres:postgres@localhost:5432/testing?schema=${global.schema}`;
 
   process.env.DATABASE_URL = global.databaseUrl;
   global.process.env.DATABASE_URL = global.databaseUrl;
