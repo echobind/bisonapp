@@ -3,9 +3,9 @@
   <h1 align="center">The Full Stack JAMstack in-a-box.</h1>
 </p>
 
-Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our current "Greenfield Web Stack" that we use when creating web apps for clients.
+Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our team's "Greenfield Web Stack" that we use when creating web apps for clients.
 
-We're always improving on this, and welcome suggestions from the community!
+We're always improving on this, and we welcome suggestions from the community!
 
 ## Technology
 
@@ -36,22 +36,22 @@ We're always improving on this, and welcome suggestions from the community!
 
 ## Tradeoffs
 
-- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app a bit more like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more "intermingled" than your used to.
+- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more intermingled than you're used to.
 - Currently, Bison only works on Vercel. We plan to add support for Netlify soon.
 
 ## Alternatives
 
-There are a few other projects that are rapidly maturing in the Full Stack JAMStack space.
+A few other projects that are rapidly maturing in the Full Stack JAMStack space.
 
 **RedwoodJS**
-Redwood is a very promising framework we've got our eye on. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!).
+Redwood is a very promising framework that we're watching. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!)
 
 **Blitz.js**
-Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to "remove" the API layer using conventions provided by Next.js.
+Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to remove the API layer using conventions provided by Next.js.
 
-We may borrow concepts from Redwood and Blitz over time, and could even switch to one in the future as things continue to mature.
+We may borrow concepts from Redwood and Blitz over time or even switch to one as they continue to mature.
 
-Think of Bison as a bit closer to the metal, but preconfigured for maximum DX and efficiency. The good news is, if you disagree with any of the choices we've made, nothing is hidden from you and you're welcome to adapt the "framework" to fit your needs.
+Think of Bison as a bit closer to the metal and preconfigured for maximum DX and efficiency. The good news is, if you disagree with any of the choices that we've made, nothing is hidden from you. You're welcome to adapt the "framework" to fit your needs.
 
 ---
 
@@ -154,7 +154,7 @@ function fakeComponent() {
 
 # Set up CI
 
-This project uses GitHub Actions for CI and should work out of the box. Note, as you add ENV vars to your app, you'll want to also add them in GitHub Secrets.
+This project uses GitHub Actions for CI and should work out of the box. As you add ENV vars to your app, you'll want to also add them in GitHub Secrets.
 
 Easiest CI configuration ever, right?
 
