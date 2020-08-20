@@ -32,9 +32,9 @@ To run the app locally:
 1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
 1. If setting up an existing project, run `vc env pull`. This will sync your dev env vars and save them to .env.
 
-## Migrate the database
+## Setup the database
 
-1. Migrate the database with `yarn db:migrate`. You'll be prompted to create the database if it doesn't exist:
+1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
 
@@ -44,7 +44,7 @@ If you'd like to change the database name or schema, change the DATABASE_URL in 
 
 From the root, run `yarn dev`. This:
 
-- runs `vc dev` to run the frontend and serverless functions locally
+- runs `next dev` to run the frontend and serverless functions locally
 - starts a watcher to generate the Prisma client on schema changes
 - starts a watcher to generate TypeScript types for GraphQL files
 
