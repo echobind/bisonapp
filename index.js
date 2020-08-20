@@ -2,34 +2,24 @@
 const { promisify } = require("util");
 const path = require("path");
 const fs = require("fs");
-const replaceString = require("replace-string");
 const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
 const cpy = require("cpy");
 const nodegit = require("nodegit");
-const Logo = require("./logo");
-const postInstallText = require("./postInstallText");
+const ejs = require("ejs");
 
-const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const deleteFile = promisify(fs.unlink);
+const renderFile = promisify(ejs.renderFile);
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
 
-const TEMPLATE_NAME_TOKEN = "%NAME%";
-
 async function copyWithTemplate(from, to, variables) {
-  const source = await readFile(from, "utf8");
-  let generatedSource = source;
-
-  if (typeof variables === "object") {
-    generatedSource = replaceString(
-      source,
-      TEMPLATE_NAME_TOKEN,
-      variables.name
-    );
-  }
+  // const generatedSource = await renderFile(from, variables);
+  const generatedSource = await ejs.renderFile(from, variables, {
+    async: true,
+  });
 
   await writeFile(to, generatedSource);
 }
@@ -39,7 +29,7 @@ async function moveWithTemplate(from, to, variables) {
   await deleteFile(from);
 }
 
-module.exports = (name) => {
+module.exports = ({ name, ...answers }) => {
   const pkgName = slugify(name);
   const targetFolder = path.join(process.cwd(), pkgName);
 
@@ -49,6 +39,7 @@ module.exports = (name) => {
 
   const variables = {
     name: pkgName,
+    ...answers,
   };
 
   const tasks = new Listr([
@@ -59,25 +50,25 @@ module.exports = (name) => {
           execa("mkdir", ["-p", pkgName]),
 
           copyWithTemplate(
-            fromPath("_package.json"),
+            fromPath("package.json.ejs"),
             toPath("package.json"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("README.md"),
+            fromPath("README.md.ejs"),
             toPath("README.md"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("_.env.local"),
+            fromPath("_.env.local.ejs"),
             toPath(".env.local"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("_.env.test"),
+            fromPath("_.env.test.ejs"),
             toPath(".env.test"),
             variables
           ),
@@ -122,24 +113,6 @@ module.exports = (name) => {
               parents: true,
             }
           ),
-        ]);
-      },
-    },
-    {
-      title: "Update package.json",
-      task: async () => {
-        const packagePath = path.join(targetFolder, "package.json");
-        const packageContents = require(packagePath);
-
-        // if heroku, add in some extras
-        packageContents.cacheDirectories = [".next/cache"];
-
-        return Promise.all([
-          await writeFile(packagePath, JSON.stringify(packageContents)),
-
-          execa("yarn", ["prettier", "--write", "package.json"], {
-            cwd: pkgName,
-          }),
         ]);
       },
     },
@@ -205,10 +178,8 @@ module.exports = (name) => {
     },
   ]);
 
-  console.log(Logo);
-
   return tasks.run().then(() => {
-    const text = replaceString(postInstallText, TEMPLATE_NAME_TOKEN, pkgName);
+    const text = renderFile("./postInstallText.ejs", variables);
     console.log(text);
   });
 };

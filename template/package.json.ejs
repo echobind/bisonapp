@@ -1,7 +1,10 @@
 {
-  "name": "%NAME%",
+  "name": "<%= name %>",
   "version": "0.1.0",
   "private": true,
+<% if (host.name === 'heroku') { -%>
+  "cacheDirectories": [".next/cache"],
+<% } -%>
   "scripts": {
     "build": "yarn nexus build && next build",
     "cypress:run": "cypress run",
