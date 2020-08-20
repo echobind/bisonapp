@@ -126,6 +126,24 @@ module.exports = (name) => {
       },
     },
     {
+      title: "Update package.json",
+      task: async () => {
+        const packagePath = path.join(targetFolder, "package.json");
+        const packageContents = require(packagePath);
+
+        // if heroku, add in some extras
+        packageContents.cacheDirectories = [".next/cache"];
+
+        return Promise.all([
+          await writeFile(packagePath, JSON.stringify(packageContents)),
+
+          execa("yarn", ["prettier", "--write", "package.json"], {
+            cwd: pkgName,
+          }),
+        ]);
+      },
+    },
+    {
       title: "Install dependencies",
       task: async () => {
         return execa("yarn", ["install"], { cwd: pkgName });
