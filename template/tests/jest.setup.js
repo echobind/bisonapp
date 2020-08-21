@@ -13,9 +13,14 @@ module.exports = async () => {
   //   isUp = await statusCheck();
   // }
   // console.log(`[jest] server is up...`);
+  const testDatabaseName = 'testing';
+  const testSchema = `test_${nanoid().toLowerCase()}`;
+  const testDatabaseUrl = new URL(process.env.DATABASE_URL);
+  testDatabaseUrl.pathname = `/${testDatabaseName}`;
+  testDatabaseUrl.searchParams.set('schema', testSchema);
 
-  global.schema = `test_${nanoid().toLowerCase()}`;
-  global.databaseUrl = `postgresql://postgres:postgres@localhost:5432/testing?schema=${global.schema}`;
+  global.schema = testSchema;
+  global.databaseUrl = testDatabaseUrl;
 
   process.env.DATABASE_URL = global.databaseUrl;
   global.process.env.DATABASE_URL = global.databaseUrl;
