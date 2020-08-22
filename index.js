@@ -11,7 +11,6 @@ const ejs = require("ejs");
 
 const writeFile = promisify(fs.writeFile);
 const deleteFile = promisify(fs.unlink);
-const renderFile = promisify(ejs.renderFile);
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
 
@@ -29,7 +28,7 @@ async function moveWithTemplate(from, to, variables) {
   await deleteFile(from);
 }
 
-module.exports = ({ name, ...answers }) => {
+module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);
   const targetFolder = path.join(process.cwd(), pkgName);
 
@@ -178,8 +177,10 @@ module.exports = ({ name, ...answers }) => {
     },
   ]);
 
-  return tasks.run().then(() => {
-    const text = renderFile("./postInstallText.ejs", variables);
-    console.log(text);
-  });
+  await tasks.run();
+
+  // Show the post install instructions
+  const postInstallPath = path.join(__dirname, "postInstallText.ejs");
+  const text = await ejs.renderFile(postInstallPath, variables);
+  console.log(text);
 };

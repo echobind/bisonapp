@@ -112,6 +112,7 @@ jobs:
     if: github.ref != 'refs/heads/production' # every branch EXCEPT production
     steps:
       - uses: actions/checkout@v2
+<% if (host.name === 'vercel') { -%>
       - uses: ngduc/vercel-deploy-action@master
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -120,6 +121,13 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
+<% } else if (host.name === 'heroku') { -%>
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: ${{host.stagingAppName}}
+<% } -%>
 
   deployProd:
     name: Deploy to Production
@@ -131,6 +139,7 @@ jobs:
     if: github.ref == 'refs/heads/production'
     steps:
       - uses: actions/checkout@v2
+<% if (host.name === 'vercel') { -%>
       - uses: ngduc/vercel-deploy-action@master
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -140,3 +149,10 @@ jobs:
           # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-args: '--prod'
+<% } else if (host.name === 'heroku') { -%>
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: ${{host.productionAppName}}
+<% } -%>
