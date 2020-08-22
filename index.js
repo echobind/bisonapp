@@ -72,10 +72,22 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
+          copyWithTemplate(
+            fromPath(".github/workflows/main.js.yml.ejs"),
+            toPath(".github/workflows/main.js.yml"),
+            variables
+          ),
+
+          copyWithTemplate(
+            fromPath(".github/PULL_REQUEST_TEMPLATE.md"),
+            toPath(".github/PULL_REQUEST_TEMPLATE.md"),
+            variables
+          ),
+
           cpy(
             [
               "_templates",
-              ".github",
+              // ".github",
               ".vscode",
               "chakra",
               "components",

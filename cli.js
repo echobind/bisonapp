@@ -18,16 +18,14 @@ function generateQuestions(appName) {
     {
       name: "host.stagingAppName",
       type: "input",
-      message:
-        "Enter the name you'd like to use for the staging app (must be unique)",
+      message: "Enter the name for the staging app (must be unique)",
       when: (answers) => answers.host.name === "heroku",
       default: `${appName}-staging`,
     },
     {
       name: "host.productionAppName",
       type: "input",
-      message:
-        "Enter the name you'd like to use for the production app (must be unique)",
+      message: "Enter the name for the production app (must be unique)",
       when: (answers) => answers.host.name === "heroku",
       default: `${appName}`,
     },
@@ -48,6 +46,7 @@ require("yargs").usage(
     console.log(Logo);
 
     const { name } = yargs;
+    const questions = generateQuestions(name);
     const answers = await inquirer.prompt(questions);
 
     createBisonApp({ name, ...answers });
