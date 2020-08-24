@@ -1,25 +1,25 @@
-All set! To finalize setup, do the following:
+All set! 🎸
 
-cd <%= name %>
+Change to your project directory:
+<%= color.bold(`cd ${name}`) %>
 
-* Setup your database with \`yarn db:setup\`. You will be prompted to create it if necessary.
-* Run the app with \`yarn dev\`. This will start the dev server and watchers for generating types.
-* Create a new GitHub repo, and push the code from your newly generated app.
+To set up your local environment:
+* Setup your database with <%= color.bold('yarn db:setup') %>. You will be prompted to create it if necessary.
+* Run the app with <%= color.bold('yarn dev') %>. This will start the dev server and watchers for generating types.
 
 <% if (host.name === 'vercel') { -%>
-To setup Vercel:
-* Create a new vercel app by running `vercel`
+To deploy to Vercel:
+* Create a new vercel app by running <%= color.bold('vercel') %>
 * Create a staging and production database on Heroku, Digital Ocean, or AWS. Note the URL.
 * Visit the settings for the new app in the Vercel dashboard
-* Add values for `APP_SECRET` and `DATABASE_URL` ENV vars to the preview and production settings
+* Add values for APP_SECRET and DATABASE_URL ENV vars to the preview and production settings
 <% } else if (host.name === 'heroku') { -%>
-To setup Heroku:
-* Create a new staging app: `heroku apps:create <%= name %>-staging --remote staging`
-* Add a value for APP_SECRET. `heroku config:add APP_SECRET=mysecret`
-* Add a database: `heroku addons:create heroku-postgresql:hobby-dev` 
-* Create a new production app: `heroku apps:create <%= name %> --remote production`
-* Add a value for APP_SECRET. `heroku config:add APP_SECRET=mysecret`
-* Add a database: `heroku addons:create heroku-postgresql:standard-0` (use hobby-dev if testing)
+To deploy to Heroku:
+* Enable review apps for your pipeline: <%= color.bold(`heroku pipeline:open ${name}`) %>
+* Add a value for APP_SECRET. <%= color.bold('heroku config:add APP_SECRET=mysecret -r staging') %>
+* Deploy the app: <%= color.bold('git push staging') %>
+
+<%= color.bold('Repeat with production') %> and you're good to go 👍.
 <% } -%>
 
 See https://github.com/echobind/bisonapp#getting-started for full instructions!

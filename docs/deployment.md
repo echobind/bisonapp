@@ -10,6 +10,8 @@ Verify things work by running `vercel` again.
 
 ## Deploying to Heroku
 
+Heroku is not typically used to host Jamstack apps. If possible, you should leverage Vercel or Netlify (coming soon!) as they have some advantages in doing so. That said, we wanted to ensure Bison apps could still be deployed to Heroku if required. Especially since many choose to use Heroku to host their database.
+
 - Create a new staging app: `heroku apps:create myapp-staging --remote staging`
 - Add a value for APP_SECRET. `heroku config:add APP_SECRET=mysecret --remote staging`
 - Add a database: `heroku addons:create heroku-postgresql:hobby-dev --remote staging`
