@@ -6,14 +6,4 @@ require('../../graphql/schema');
 
 app.assemble();
 
-<% if serverless { -%>
-// IF SERVERLESS
-async function handler(req, res) {
-  return app.server.handlers.graphql(req, res);
-}
-
-export default handler;
-<% } -%>
-<% else { -%>
-export default app.server.handlers;
-<% } -%>
+export default app.server.handlers.graphql;
