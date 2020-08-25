@@ -73,9 +73,8 @@ npx create-bison-app MyApp
 
 ## Setup the database
 
-1. Create a new database locally (Postgres is the only type fully supported right now)
+1. Setup a database locally (Postgres is the only type fully supported right now)
 1. Make sure your database user has permission to create schemas and databases. We recommend using a superuser account locally to keep things easy.
-1. Search for DATABASE_URL in the project, and make sure the values are correct for your system.
 1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)

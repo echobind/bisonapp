@@ -116,6 +116,12 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
+          copyWithTemplate(
+            fromPath("tests/jest.setup.js.ejs"),
+            toPath("tests/jest.setup.js"),
+            variables
+          ),
+
           ...herokuFiles(),
 
           cpy(
@@ -134,11 +140,12 @@ module.exports = async ({ name, ...answers }) => {
               "pages",
               "!pages/api/graphql*",
               "prisma",
-              "!prisma/_.env",
+              "!prisma/_.env*",
               "public",
               "scripts",
               "services",
               "tests",
+              "!tests/jest.setup*",
               "utils",
               ".eslintrc.js",
               ".gitignore",
