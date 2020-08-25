@@ -1,7 +1,10 @@
 {
-  "name": "%NAME%",
+  "name": "<%= name %>",
   "version": "0.1.0",
   "private": true,
+<% if (host.name === 'heroku') { -%>
+  "cacheDirectories": [".next/cache"],
+<% } -%>
   "scripts": {
     "build": "yarn nexus build && next build",
     "cypress:run": "cypress run",
@@ -19,7 +22,7 @@
     "g:test:request": "hygen test request --name",
     "g:test:util": "hygen test util --name",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
     "test:ci": "yarn withEnv:test jest --runInBand",
     "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test test:server http://localhost:3001 cypress:run",
@@ -44,7 +47,8 @@
     "nexus-plugin-prisma": "^0.17.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-hook-form": "^6.1.0"
+    "react-hook-form": "^6.1.0",
+    "universal-cookie": "^4.0.3"
   },
   "devDependencies": {
     "@apollo/react-testing": "^4.0.0",
@@ -66,7 +70,7 @@
     "@vercel/node": "^1.7.3",
     "chance": "^1.1.6",
     "concurrently": "^5.2.0",
-    "cypress": "^4.11.0",
+    "cypress": "^5.0.0",
     "eslint": "^7.5.0",
     "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-echobind": "^0.2.0",
@@ -85,8 +89,7 @@
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.3",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
-    "universal-cookie": "^4.0.3"
+    "typescript": "^3.9.7"
   },
   "husky": {
     "hooks": {

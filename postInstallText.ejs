@@ -1,0 +1,28 @@
+All set! 🎸
+
+Change to your project directory:
+<%= color.bold(`cd ${name}`) %>
+
+To set up your local environment:
+* Setup your database with <%= color.bold('yarn db:setup') %>. You will be prompted to create it if necessary.
+* Run the app with <%= color.bold('yarn dev') %>. This will start the dev server and watchers for generating types.
+
+<% if (host.name === 'vercel') { -%>
+To deploy to Vercel:
+* Create a new vercel app by running <%= color.bold('vercel') %>
+* Create a staging and production database on Heroku, Digital Ocean, or AWS. Note the URL.
+* Visit the settings for the new app in the Vercel dashboard
+* Add values for APP_SECRET and DATABASE_URL ENV vars to the preview and production settings
+<% } else if (host.name === 'heroku') { -%>
+To deploy to Heroku:
+<% if (!host.createAppsAndPipelines) { -%>
+* Create staging and production apps, databases, and a pipeline to manage them.
+<% } -%>
+* Enable review apps for your pipeline: <%= color.bold(`heroku pipelines:open ${name}`) %>
+* Add a value for APP_SECRET. <%= color.bold('heroku config:add APP_SECRET=mysecret -r staging') %>
+* Deploy the app: <%= color.bold('git push staging') %>
+
+<%= color.bold('Repeat with production') %> and you're good to go 👍.
+<% } -%>
+
+See https://github.com/echobind/bisonapp#getting-started for full instructions!
