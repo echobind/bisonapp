@@ -155,7 +155,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-          # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
+          # SET THIS👇 OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-args: '--prod'
 <% } else if (host.name === 'heroku') { -%>
