@@ -16,6 +16,42 @@ function generateQuestions(appName) {
       message: "Create a new GitHub repo and paste the url here:",
     },
     {
+      name: "db.dev.name",
+      type: "input",
+      message: "What is the local database name?",
+      default: `${appName}_dev`,
+    },
+    {
+      name: "db.dev.user",
+      type: "input",
+      message: "What is the local database username?",
+      default: "postgres",
+    },
+    {
+      name: "db.dev.password",
+      type: "input",
+      message: "What is the local database password?",
+      default: "",
+    },
+    {
+      name: "db.dev.host",
+      type: "input",
+      message: "What is the local database host?",
+      default: "localhost",
+    },
+    {
+      name: "db.dev.port",
+      type: "input",
+      message: "What is the local database port?",
+      default: "5432",
+    },
+    {
+      name: "db.test.name",
+      type: "input",
+      message: "What is the local test database name?",
+      default: `${appName}_test`,
+    },
+    {
       name: "host.name",
       type: "list",
       message: "Where will you deploy the app?",

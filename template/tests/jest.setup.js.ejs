@@ -13,7 +13,7 @@ module.exports = async () => {
   //   isUp = await statusCheck();
   // }
   // console.log(`[jest] server is up...`);
-  const testDatabaseName = 'testing';
+  const testDatabaseName = '<%= db.test.name %>';
   const testSchema = `test_${nanoid().toLowerCase()}`;
   const testDatabaseUrl = new URL(process.env.DATABASE_URL);
   testDatabaseUrl.pathname = `/${testDatabaseName}`;
