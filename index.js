@@ -111,7 +111,7 @@ module.exports = async ({ name, ...answers }) => {
           ),
 
           copyWithTemplate(
-            fromPath("prisma/_.env"),
+            fromPath("prisma/_.env.ejs"),
             toPath("prisma/.env"),
             variables
           ),
