@@ -164,127 +164,129 @@ module.exports = async ({ name, ...answers }) => {
         ]);
       },
     },
-    // {
-    //   title: "Install dependencies",
-    //   task: async () => {
-    //     return execa("yarn", ["install"], { cwd: pkgName });
-    //   },
-    // },
-    // {
-    //   title: "Generate Prisma client",
-    //   task: async () => {
-    //     return execa("yarn", ["prisma", "generate"], {
-    //       cwd: pkgName,
-    //     });
-    //   },
-    // },
-    // {
-    //   title: "Generate Nexus types",
-    //   task: async () => {
-    //     return execa("yarn", ["nexus", "build", "--no-bundle"], {
-    //       cwd: pkgName,
-    //     });
-    //   },
-    // },
-    // {
-    //   title: "Git init",
-    //   task: async () => {
-    //     const repo = await nodegit.Repository.init(targetFolder, 0);
-    //     const index = await repo.refreshIndex();
-    //     await index.addAll(".");
-    //     await index.write();
-    //     const id = await index.writeTree();
-    //     await nodegit.Remote.create(repo, "origin", variables.githubRepo);
+    {
+      title: "Install dependencies",
+      task: async () => {
+        return execa("yarn", ["install"], { cwd: pkgName });
+      },
+    },
+    {
+      title: "Generate Prisma client",
+      task: async () => {
+        return execa("yarn", ["prisma", "generate"], {
+          cwd: pkgName,
+        });
+      },
+    },
+    {
+      title: "Generate Nexus types",
+      task: async () => {
+        return execa("yarn", ["nexus", "build", "--no-bundle"], {
+          cwd: pkgName,
+        });
+      },
+    },
+    {
+      title: "Git init",
+      task: async () => {
+        const repo = await nodegit.Repository.init(targetFolder, 0);
+        const index = await repo.refreshIndex();
+        await index.addAll(".");
+        await index.write();
+        const id = await index.writeTree();
+        await nodegit.Remote.create(repo, "origin", variables.githubRepo);
 
-    //     const author = nodegit.Signature.now(
-    //       "Bison Template",
-    //       "hello@echobind.com"
-    //     );
+        const author = nodegit.Signature.now(
+          "Bison Template",
+          "hello@echobind.com"
+        );
 
-    //     const committer = nodegit.Signature.now(
-    //       "Bison Template",
-    //       "hello@echobind.com"
-    //     );
+        const committer = nodegit.Signature.now(
+          "Bison Template",
+          "hello@echobind.com"
+        );
 
-    //     const message = `Initial commit from Bison Template!`;
+        const message = `Initial commit from Bison Template!`;
 
-    //     // Since we're creating an inital commit, it has no parents. Note that unlike
-    //     // normal we don't get the head either, because there isn't one yet.
-    //     return repo.createCommit("HEAD", author, committer, message, id, []);
-    //   },
-    // },
-    // {
-    //   title: `Heroku Setup`,
-    //   enabled: () => variables.host.name === "heroku",
-    //   task: async () => {
-    //     const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
+        // Since we're creating an inital commit, it has no parents. Note that unlike
+        // normal we don't get the head either, because there isn't one yet.
+        return repo.createCommit("HEAD", author, committer, message, id, []);
+      },
+    },
+    {
+      title: `Heroku Setup`,
+      enabled: () =>
+        variables.host.name === "heroku" &&
+        variables.host.createAppsAndPipelines,
+      task: async () => {
+        const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
 
-    //     // create staging app
-    //     await execa(
-    //       "heroku",
-    //       [
-    //         "apps:create",
-    //         variables.host.staging.name,
-    //         "--remote=staging",
-    //         `--addons=${variables.host.staging.db}`,
-    //       ],
-    //       {
-    //         cwd: pkgName,
-    //       }
-    //     );
+        // create staging app
+        await execa(
+          "heroku",
+          [
+            "apps:create",
+            variables.host.staging.name,
+            "--remote=staging",
+            `--addons=${variables.host.staging.db}`,
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
 
-    //     // create prod app
-    //     await execa(
-    //       "heroku",
-    //       [
-    //         "apps:create",
-    //         variables.host.production.name,
-    //         "--remote=production",
-    //         `--addons=${variables.host.production.db}`,
-    //       ],
-    //       {
-    //         cwd: pkgName,
-    //       }
-    //     );
+        // create prod app
+        await execa(
+          "heroku",
+          [
+            "apps:create",
+            variables.host.production.name,
+            "--remote=production",
+            `--addons=${variables.host.production.db}`,
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
 
-    //     // create pipeline
-    //     await execa(
-    //       "heroku",
-    //       [
-    //         "pipelines:create",
-    //         variables.name,
-    //         "--remote=staging",
-    //         "--stage=staging",
-    //       ],
-    //       {
-    //         cwd: pkgName,
-    //       }
-    //     );
+        // create pipeline
+        await execa(
+          "heroku",
+          [
+            "pipelines:create",
+            variables.name,
+            "--remote=staging",
+            "--stage=staging",
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
 
-    //     // add staging app to pipeline
-    //     await execa(
-    //       "heroku",
-    //       [
-    //         "pipelines:add",
-    //         variables.name,
-    //         "--remote=production",
-    //         "--stage=production",
-    //       ],
-    //       {
-    //         cwd: pkgName,
-    //       }
-    //     );
+        // add staging app to pipeline
+        await execa(
+          "heroku",
+          [
+            "pipelines:add",
+            variables.name,
+            "--remote=production",
+            "--stage=production",
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
 
-    //     // connect pipeline to github
-    //     await execa(
-    //       "heroku",
-    //       ["pipelines:connect", variables.name, `--repo=${repoName}`],
-    //       {
-    //         cwd: pkgName,
-    //       }
-    //     );
-    //   },
-    // },
+        // connect pipeline to github
+        await execa(
+          "heroku",
+          ["pipelines:connect", variables.name, `--repo=${repoName}`],
+          {
+            cwd: pkgName,
+          }
+        );
+      },
+    },
   ]);
 
   await tasks.run();
