@@ -15,7 +15,10 @@ To deploy to Vercel:
 * Add values for APP_SECRET and DATABASE_URL ENV vars to the preview and production settings
 <% } else if (host.name === 'heroku') { -%>
 To deploy to Heroku:
-* Enable review apps for your pipeline: <%= color.bold(`heroku pipeline:open ${name}`) %>
+<% if (!host.createAppsAndPipelines) { -%>
+* Create staging and production apps, databases, and a pipeline to manage them.
+<% } -%>
+* Enable review apps for your pipeline: <%= color.bold(`heroku pipelines:open ${name}`) %>
 * Add a value for APP_SECRET. <%= color.bold('heroku config:add APP_SECRET=mysecret -r staging') %>
 * Deploy the app: <%= color.bold('git push staging') %>
 

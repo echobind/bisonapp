@@ -36,7 +36,7 @@ function generateQuestions(appName) {
       name: "host.staging.name",
       type: "input",
       message: "Enter the name for the staging app (must be unique)",
-      when: (answers) => answers.host.name === "heroku",
+      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
       default: `${appName}-staging`,
     },
     {
@@ -44,14 +44,14 @@ function generateQuestions(appName) {
       type: "list",
       message: "What database tier do you want on staging?",
       choices: ["heroku-postgresql:hobby-dev", "heroku-postgresql:standard-0"],
-      when: (answers) => answers.host.name === "heroku",
+      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
       default: "heroku-postgresql:hobby-dev",
     },
     {
       name: "host.production.name",
       type: "input",
       message: "Enter the name for the production app (must be unique)",
-      when: (answers) => answers.host.name === "heroku",
+      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
       default: `${appName}`,
     },
     {
@@ -59,7 +59,7 @@ function generateQuestions(appName) {
       type: "list",
       message: "What database tier do you want on production?",
       choices: ["heroku-postgresql:hobby-dev", "heroku-postgresql:standard-0"],
-      when: (answers) => answers.host.name === "heroku",
+      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
       default: "heroku-postgresql:standard-0",
     },
   ];
