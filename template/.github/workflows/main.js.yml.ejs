@@ -102,16 +102,26 @@ jobs:
   # Deploy!
   ###############
   deployStaging:
-    name: Deploy to Preview
+    name: Deploy to <%= host.name === 'vercel' ? 'Preview' : 'Staging' %>
     runs-on: ubuntu-latest
+<% if (host.name === 'heroku') { -%>
+    needs: tests
+<% } else { -%>
     # To speed up CI builds, we deploy this in parallel
     # needs: tests
+<% } -%>
 
     ## For a typical JAMstack flow, the ref below should be your default branch.
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
+  
+<% if (host.name === 'heroku') { -%>
+    if: github.ref == 'refs/heads/staging' 
+<% } else { -%>
     if: github.ref != 'refs/heads/production' # every branch EXCEPT production
+<% } -%>
     steps:
       - uses: actions/checkout@v2
+<% if (host.name === 'vercel') { -%>
       - uses: ngduc/vercel-deploy-action@master
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -120,6 +130,13 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
+<% } else if (host.name === 'heroku') { -%>
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: <%= host.staging.name %>
+<% } -%>
 
   deployProd:
     name: Deploy to Production
@@ -131,12 +148,20 @@ jobs:
     if: github.ref == 'refs/heads/production'
     steps:
       - uses: actions/checkout@v2
+<% if (host.name === 'vercel') { -%>
       - uses: ngduc/vercel-deploy-action@master
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-          # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
+          # SET THIS👇 OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
           # scope: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-args: '--prod'
+<% } else if (host.name === 'heroku') { -%>
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: <%= host.production.name %>
+<% } -%>

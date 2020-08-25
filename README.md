@@ -73,13 +73,13 @@ npx create-bison-app MyApp
 
 ## Setup the database
 
+1. Setup a database locally (Postgres is the only type fully supported right now)
+1. Make sure your database user has permission to create schemas and databases. We recommend using a superuser account locally to keep things easy.
 1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
 
 ![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
 
-If you'd like to change the database name or schema, change the DATABASE_URL in `prisma/.env`.
-
-# Run the app locally
+## Run the app locally
 
 From the root, run `yarn dev`. This:
 
@@ -87,101 +87,31 @@ From the root, run `yarn dev`. This:
 - starts a watcher to generate the Prisma client on schema changes
 - starts a watcher to generate TypeScript types for GraphQL files
 
-# Recommended Dev Workflow
+## Next Steps
 
-You're not required to follow this exact workflow, but we've found it gives a good developer experience.
+After the app is running locally, you'll want to [set up deployment](./docs/deployment) and [CI](./docs/ci)
 
-## API
+# Docs
 
-1. Generate a new GraphQL module using `yarn g:graphql`.
-1. Write a type, query, input, or mutation using [Nexus](https://nexusjs.org/guides/schema)
-1. Create a new request test using `yarn g:test:request`
-1. Run `yarn test` to start the test watcher
-1. Add tests cases and update schema code accordingly
-1. The GraphQL playground (localhost:3000/api/graphql) can be helpful to form the proper queries to use in tests.
-1. `types.ts` and `api.graphql` should update automatically as you change files. Sometimes it's helpful to open these as a sanity check before moving on to the frontend code.
+- [Recommended Dev Workflow](./docs/devWorkflow.md)
+- [Deployment](./docs/deployment.md)
+- [CI Setup](./docs/ci.md)
+- [FAQ](./docs/faq.md)
 
-## Frontend
+Have an idea to improve Bison? [Let us know!](https://github.com/echobind/bisonapp/issues/new)
 
-1. Generate a new page using `yarn g:page`
-1. Generate a new component using `yarn g:component`
-1. If you need to fetch data in your component, use a cell. Generate one using `yarn g:cell` (TODO)
-1. To generate a typed GraphQL query, simply add it to the component or page:
+<hr style="margin-top: 120px" />
 
-```ts
-export const SIGNUP_MUTATION = gql`
-  mutation signup($data: SignupInput!) {
-    signup(data: $data) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
-```
+### About Echobind
 
-5. Use the newly generated types from codegen instead of the typical `useQuery` or `useMutation` hook. For the example above, that would be `useSignupMutation`. You'll now have a fully typed response to work with!
+Echobind is a full-service digital agency that creates web and mobile apps for clients across a variety of industries.
 
-```tsx
-import { User, useMeQuery } from './types';
+We're experts in React, React Native, Node, GraphQL, and Rails.
 
-// adding this will auto-generate a custom hook in ./types
-export const ME_QUERY = gql`
-  query me {
-    me {
-      id
-      email
-    }
-  }
-`;
+If you're building a new app, your team is tackling a hard problem, or you just need help getting over the finish line, we'd love to work with you. [Say hello](https://echobind.com/contact) and tell us what you're working on.
 
-// an example of taking a user as an argument with optional attributes
-function noIdea(user: Partial<User>) {
-  console.log(user.email);
-}
-
-function fakeComponent() {
-  // use the generated hook
-  const { data, loading, error } = useMeQuery();
-
-  if (loading) return <Loading />;
-
-  // data.user will be fully typed
-  return <Success user={data.user}>
-}
-```
-
-# Set up CI
-
-This project uses GitHub Actions for CI and should work out of the box. As you add ENV vars to your app, you'll want to also add them in GitHub Secrets.
-
-Easiest CI configuration ever, right?
-
-# Setup Preview / Production Deployments
-
-To ensure your project can be deployed using GitHub Actions, you need to add a few ENV vars to GitHub Secrets:
-
-![ENV Vars](https://user-images.githubusercontent.com/14339/89292945-228fab00-d62b-11ea-90c2-4198dfcf30f1.png)
-
-The Vercel project and org id, can be copied from `.vercel/project.json`. You can generate a token from https://vercel.com/account/tokens.
-
-After tests pass, the app will deploy to Vercel. By default, every push creates a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production.
-
-If you'd like to change these configurations, update the section below:
-
-```
-## For a typical JAMstack flow, this should be your default branch.
-## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
-if: github.ref != 'refs/heads/production' # every branch EXCEPT production
-```
-
-# FAQ
-
-## Where are the generated types?
-
-TypeScript Types for GraphQL types, queries, and mutations are generated automatically and placed in `./types.ts`.
-
-## VSCode can't find new types, even though they are in ./types.ts
-
-Try reopening VSCode.
+<p align="center" style="margin-top:40px">
+  <a href="https://echobind.com" target="_blank">
+    <img src="https://user-images.githubusercontent.com/14339/80931246-808bc880-8d86-11ea-9de5-39203d3ed5f5.png" alt="Echobind Logo">
+  </a>
+</p>

@@ -6,8 +6,4 @@ require('../../graphql/schema');
 
 app.assemble();
 
-async function handler(req, res) {
-  return app.server.handlers.graphql(req, res);
-}
-
-export default handler;
+export default app.server.handlers.graphql;

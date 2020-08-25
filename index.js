@@ -2,54 +2,64 @@
 const { promisify } = require("util");
 const path = require("path");
 const fs = require("fs");
-const replaceString = require("replace-string");
 const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
 const cpy = require("cpy");
 const nodegit = require("nodegit");
-const Logo = require("./logo");
-const postInstallText = require("./postInstallText");
+const ejs = require("ejs");
+const color = require("chalk");
 
-const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
-const deleteFile = promisify(fs.unlink);
+const mkdir = promisify(fs.mkdir);
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
 
-const TEMPLATE_NAME_TOKEN = "%NAME%";
-
+/**
+ * Copies a file to a different location, running it through an optional ejs template
+ * @param {*} from The source file
+ * @param {*} to The path to write
+ * @param {*} variables Variables to pass to the template
+ */
 async function copyWithTemplate(from, to, variables) {
-  const source = await readFile(from, "utf8");
-  let generatedSource = source;
+  const generatedSource = await ejs.renderFile(
+    from,
+    { ...variables, color },
+    {
+      async: true,
+    }
+  );
 
-  if (typeof variables === "object") {
-    generatedSource = replaceString(
-      source,
-      TEMPLATE_NAME_TOKEN,
-      variables.name
-    );
-  }
+  try {
+    await mkdir(path.dirname(to), { recursive: true });
+  } catch (e) {}
 
   await writeFile(to, generatedSource);
 }
 
-async function moveWithTemplate(from, to, variables) {
-  await copyWithTemplate(from, to, variables);
-  await deleteFile(from);
-}
-
-module.exports = (name) => {
+module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);
   const targetFolder = path.join(process.cwd(), pkgName);
+  const variables = {
+    name: pkgName,
+    ...answers,
+  };
 
+  const isHeroku = answers.host.name === "heroku";
+
+  /**
+   * Appends file to the targetFolder path
+   * @param {*} file the file path
+   */
   function toPath(file) {
     return path.join(targetFolder, file);
   }
 
-  const variables = {
-    name: pkgName,
-  };
+  // Files to render when using Heroku
+  const herokuFiles = () =>
+    !isHeroku
+      ? []
+      : [copyWithTemplate(fromPath("app.json"), toPath("app.json"), variables)];
 
   const tasks = new Listr([
     {
@@ -59,34 +69,67 @@ module.exports = (name) => {
           execa("mkdir", ["-p", pkgName]),
 
           copyWithTemplate(
-            fromPath("_package.json"),
+            fromPath("package.json.ejs"),
             toPath("package.json"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("README.md"),
+            fromPath("README.md.ejs"),
             toPath("README.md"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("_.env.local"),
+            fromPath("_.env.local.ejs"),
             toPath(".env.local"),
             variables
           ),
 
           copyWithTemplate(
-            fromPath("_.env.test"),
+            fromPath("_.env.test.ejs"),
             toPath(".env.test"),
             variables
           ),
 
+          copyWithTemplate(
+            fromPath(".github/workflows/main.js.yml.ejs"),
+            toPath(".github/workflows/main.js.yml"),
+            variables
+          ),
+
+          copyWithTemplate(
+            fromPath(".github/PULL_REQUEST_TEMPLATE.md"),
+            toPath(".github/PULL_REQUEST_TEMPLATE.md"),
+            variables
+          ),
+
+          copyWithTemplate(
+            fromPath("pages/api/graphql.ts.ejs"),
+            toPath("pages/api/graphql.ts"),
+            variables
+          ),
+
+          copyWithTemplate(
+            fromPath("prisma/_.env.ejs"),
+            toPath("prisma/.env"),
+            variables
+          ),
+
+          copyWithTemplate(
+            fromPath("tests/jest.setup.js.ejs"),
+            toPath("tests/jest.setup.js"),
+            variables
+          ),
+
+          ...herokuFiles(),
+
           cpy(
             [
               "_templates",
-              ".github",
               ".vscode",
+              ".github",
+              "!.github/workflows/main*",
               "chakra",
               "components",
               "context",
@@ -95,11 +138,14 @@ module.exports = (name) => {
               "layouts",
               "lib",
               "pages",
+              "!pages/api/graphql*",
               "prisma",
+              "!prisma/_.env*",
               "public",
               "scripts",
               "services",
               "tests",
+              "!tests/jest.setup*",
               "utils",
               ".eslintrc.js",
               ".gitignore",
@@ -148,18 +194,6 @@ module.exports = (name) => {
       },
     },
     {
-      title: "Cleanup",
-      task: async () => {
-        return Promise.all([
-          moveWithTemplate(
-            toPath("prisma/_.env"),
-            toPath("prisma/.env"),
-            variables
-          ),
-        ]);
-      },
-    },
-    {
       title: "Git init",
       task: async () => {
         const repo = await nodegit.Repository.init(targetFolder, 0);
@@ -167,6 +201,7 @@ module.exports = (name) => {
         await index.addAll(".");
         await index.write();
         const id = await index.writeTree();
+        await nodegit.Remote.create(repo, "origin", variables.githubRepo);
 
         const author = nodegit.Signature.now(
           "Bison Template",
@@ -185,12 +220,86 @@ module.exports = (name) => {
         return repo.createCommit("HEAD", author, committer, message, id, []);
       },
     },
+    {
+      title: `Heroku Setup`,
+      enabled: () =>
+        variables.host.name === "heroku" &&
+        variables.host.createAppsAndPipelines,
+      task: async () => {
+        const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
+
+        // create staging app
+        await execa(
+          "heroku",
+          [
+            "apps:create",
+            variables.host.staging.name,
+            "--remote=staging",
+            `--addons=${variables.host.staging.db}`,
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
+
+        // create prod app
+        await execa(
+          "heroku",
+          [
+            "apps:create",
+            variables.host.production.name,
+            "--remote=production",
+            `--addons=${variables.host.production.db}`,
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
+
+        // create pipeline
+        await execa(
+          "heroku",
+          [
+            "pipelines:create",
+            variables.name,
+            "--remote=staging",
+            "--stage=staging",
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
+
+        // add staging app to pipeline
+        await execa(
+          "heroku",
+          [
+            "pipelines:add",
+            variables.name,
+            "--remote=production",
+            "--stage=production",
+          ],
+          {
+            cwd: pkgName,
+          }
+        );
+
+        // connect pipeline to github
+        await execa(
+          "heroku",
+          ["pipelines:connect", variables.name, `--repo=${repoName}`],
+          {
+            cwd: pkgName,
+          }
+        );
+      },
+    },
   ]);
 
-  console.log(Logo);
+  await tasks.run();
 
-  return tasks.run().then(() => {
-    const text = replaceString(postInstallText, TEMPLATE_NAME_TOKEN, pkgName);
-    console.log(text);
-  });
+  // Show the post install instructions
+  const postInstallPath = path.join(__dirname, "postInstallText.ejs");
+  const text = await ejs.renderFile(postInstallPath, { ...variables, color });
+  console.log(text);
 };
