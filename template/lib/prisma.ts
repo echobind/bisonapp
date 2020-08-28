@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 export async function disconnect() {
-  await prisma.disconnect();
+  await prisma.$disconnect();
 
   return true;
 }
