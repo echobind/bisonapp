@@ -12,6 +12,9 @@
 .next/
 out/
 
+# nexus
+.nexus
+
 # production
 /build
 
