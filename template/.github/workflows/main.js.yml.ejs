@@ -69,6 +69,9 @@ jobs:
 
       # Jest Tests (API/Frontend)
       - name: Run Jest Tests (API & Frontend)
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
         run: yarn test:ci
 
       # E2E Tests via Cypress
