@@ -21,7 +21,7 @@
     "index.js",
     "cli.js",
     "template",
-    "postInstallText.js"
+    "postInstallText.ejs"
   ],
   "keywords": [
     "bison",
