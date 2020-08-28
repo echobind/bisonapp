@@ -9,6 +9,7 @@ generates:
     documents:
       - 'pages/**/*.{ts,tsx}'
       - 'components/**/*.{ts,tsx}'
+      - 'cells/**/*.{ts,tsx}'
       - 'layouts/**/*.{ts,tsx}'
       - 'context/**/*.{ts,tsx}'
       - '!pages/api*'
