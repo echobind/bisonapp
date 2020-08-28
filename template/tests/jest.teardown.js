@@ -10,7 +10,7 @@ const exec = util.promisify(childProcess.exec);
 module.exports = async () => {
   // Drop the schema after the tests have completed
   const client = new Client({
-    connectionString: global.databaseUrl,
+    connectionString: global.databaseUrl.href,
   });
 
   await client.connect();
