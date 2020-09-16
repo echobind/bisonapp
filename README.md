@@ -89,7 +89,7 @@ From the root, run `yarn dev`. This:
 
 ## Next Steps
 
-After the app is running locally, you'll want to [set up deployment](./docs/deployment) and [CI](./docs/ci)
+After the app is running locally, you'll want to [set up deployment](./docs/deployment.md) and [CI](./docs/ci.md)
 
 # Docs
 
