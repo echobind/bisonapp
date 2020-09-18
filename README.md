@@ -57,7 +57,7 @@ Think of Bison as a bit closer to the metal and preconfigured for maximum DX and
 
 # Getting Started
 
-Create a new repo fom the Bison template.
+Create a new repo from the Bison template.
 
 Using yarn:
 
