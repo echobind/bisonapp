@@ -1,4 +1,4 @@
-import { ErrorOption } from 'react-hook-form/dist/types/form';
+import ErrorOption from 'react-hook-form/dist/types/form';
 
 /**
  * Sets errors on the frontend from a GraphQL Response. Assumes react-hook-form.
@@ -12,7 +12,7 @@ export function setErrorsFromGraphQLErrors(setError: SetErrorFn, errors: ErrorRe
   });
 }
 
-type SetErrorFn = (e: string, obj: ErrorOption) => void;
+type SetErrorFn = (e: string, obj: typeof ErrorOption) => void;
 
 interface ErrorResponse {
   extensions: {
