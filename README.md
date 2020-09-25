@@ -44,10 +44,10 @@ We're always improving on this, and we welcome suggestions from the community!
 A few other projects that are rapidly maturing in the Full Stack JAMStack space.
 
 **RedwoodJS**
-Redwood is a very promising framework that we're watching. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!)
+[Redwood](https://github.com/redwoodjs/redwood) is a very promising framework that we're watching. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!)
 
 **Blitz.js**
-Blitz is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to remove the API layer using conventions provided by Next.js.
+[Blitz](https://github.com/blitz-js/blitz) is also very promising. Blitz is built on Next.js (which we love!) and takes a very different approach by attempting to remove the API layer using conventions provided by Next.js.
 
 We may borrow concepts from Redwood and Blitz over time or even switch to one as they continue to mature.
 
