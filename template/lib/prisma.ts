@@ -19,7 +19,7 @@ export async function disconnect() {
 }
 
 export async function connect() {
-  await prisma.connect();
+  await prisma.$connect();
 
   return true;
 }
