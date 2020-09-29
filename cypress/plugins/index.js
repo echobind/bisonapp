@@ -20,19 +20,11 @@ const psTree = promisify(require("ps-tree"));
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-function objectToCliOptions(obj) {
-  return Object.keys(options).reduce((prev, key) => {
-    prev.push(`--${key}=${options[key]}`);
-    return prev;
-  }, []);
-}
 
 /**
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
-  let server;
-  let serverStopped = true;
 
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config

@@ -226,7 +226,6 @@ require("yargs").usage(
 
     const { name, ...cliAnswers } = yargs;
     const answers = await fetchAnswers(cliAnswers);
-    console.log("final answers", answers);
     const hostName = answers.host.name;
 
     if (hostName !== "heroku") {
