@@ -174,7 +174,7 @@ module.exports = async ({ name, ...answers }) => {
     {
       title: "Install dependencies",
       task: async () => {
-        return execa("yarn", ["install"], { cwd: pkgName });
+        return execa("yarn", ["install", "-s"], { cwd: pkgName });
       },
     },
     {
@@ -201,7 +201,10 @@ module.exports = async ({ name, ...answers }) => {
         await index.addAll(".");
         await index.write();
         const id = await index.writeTree();
-        await nodegit.Remote.create(repo, "origin", variables.githubRepo);
+
+        if (variables.githubRepo) {
+          await nodegit.Remote.create(repo, "origin", variables.githubRepo);
+        }
 
         const author = nodegit.Signature.now(
           "Bison Template",
