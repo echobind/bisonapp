@@ -1,12 +1,4 @@
 /// <reference types="cypress" />
-const { promisify } = require("util");
-const os = require("os");
-const path = require("path");
-const mkdtemp = promisify(require("fs").mkdtemp);
-const childProcess = require("child_process");
-const execa = require("execa");
-const waitOn = require("wait-on");
-const psTree = promisify(require("ps-tree"));
 
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
