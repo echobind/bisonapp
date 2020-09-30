@@ -1,5 +1,14 @@
 import React from 'react';
-import { Link, Stack, useBreakpoint, MenuButton, Menu, MenuList, MenuItem } from '@chakra-ui/core';
+import {
+  Link,
+  Stack,
+  useBreakpoint,
+  Button,
+  MenuButton,
+  Menu,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/core';
 import NextLink from 'next/link';
 
 export function Nav() {
@@ -8,7 +17,7 @@ export function Nav() {
 
   return isMobile ? (
     <Menu>
-      <MenuButton variant="outline" colorScheme="lightPurple" ml="auto">
+      <MenuButton as={Button} variant="outline" colorScheme="lightPurple" ml="auto">
         =
       </MenuButton>
 
