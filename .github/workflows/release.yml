@@ -36,7 +36,7 @@ jobs:
         with:
           start: node ./scripts/createAppAndStartServer foo --acceptDefaults
           wait-on: "http://localhost:3001"
-          wait-on-timeout: 120
+          wait-on-timeout: 180
           spec: cypress/integration/createBisonAppWithDefaults.test.js
         env:
           NODE_ENV: test
