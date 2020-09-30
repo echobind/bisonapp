@@ -50,13 +50,10 @@
   },
   "release": {
     "branches": [
+      "main",
       {
-        "name": "main",
-        "channel": "canary",
-        "prerelease": "canary"
-      },
-      {
-        "name": "release"
+        "name": "canary",
+        "prerelease": true
       }
     ],
     "plugins": [
