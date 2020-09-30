@@ -8,6 +8,8 @@ We start from the API and then create the frontend. The reason for this is that 
 
 ### Generate a new GraphQL module
 
+To generate a new GraphQL module we can run the command `yarn g:graphql MODULE_NAME`, replacing MODULE_NAME with the name of your module. In our example, we'll be using the concept of an `Organization`.
+
 ```shell
 yarn g:graphql organization
 ```
