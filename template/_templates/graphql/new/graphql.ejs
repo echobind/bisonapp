@@ -27,7 +27,8 @@ export const CallPreference = enumType({
 });
 
 // Queries
-schema.queryType({
+schema.extendType({
+  type: 'Query',
   definition: (t) => {
     // List <%= plural %> Query (admin only)
     t.crud.<%= plural.toLowerCase() %>({
