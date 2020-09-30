@@ -46,7 +46,7 @@
     "ejs-lint": "^1.1.0",
     "prettier": "^2.0.5",
     "semantic-release": "^17.1.1",
-    "start-server-and-test": "^1.11.3",
+    "start-server-and-test": "^1.11.3"
   },
   "release": {
     "branches": [
