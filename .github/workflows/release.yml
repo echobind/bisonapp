@@ -1,9 +1,11 @@
 name: Release
 on:
-  push:
-    branches:
-      - main
-      - next
+  [push]
+  # we should always run tests
+  # push:
+  #   branches:
+  #     - main
+  #     - release
 
 jobs:
   release:
@@ -29,6 +31,17 @@ jobs:
       - name: Install packages
         run: |
           yarn install --frozen-lockfile
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: node ./scripts/createAppAndStartServer foo --acceptDefaults
+          wait-on: "http://localhost:3001"
+          wait-on-timeout: 120
+          spec: cypress/integration/createBisonAppWithDefaults.test.js
+        env:
+          NODE_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
