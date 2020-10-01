@@ -14,6 +14,8 @@ async function init() {
 async function createTmpDir() {
   const tmpDir = await mkdtemp(`${os.tmpdir()}${path.sep}`);
 
+  await fs.promises.mkdir("./tmp");
+
   fs.writeFile("./tmp/tmpDir", tmpDir, () => {
     console.log("tmpDir location stored.");
   });
