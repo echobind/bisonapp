@@ -31,6 +31,14 @@ jobs:
       - name: Install packages
         run: |
           yarn install --frozen-lockfile
+      - name: Run Unit Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: node ./scripts/createApp foo --acceptDefaults
+          spec: test/prisma.js
+        env:
+          NODE_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2
         with:
