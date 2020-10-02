@@ -8,8 +8,7 @@ module.exports = {};
 
 async function init() {
   const args = process.argv.slice(2);
-  const appDir = await createApp(args);
-  return startServer(appDir);
+  return await createApp(args);
 }
 
 async function createTmpDir() {
@@ -45,14 +44,6 @@ async function createApp(args) {
   });
 
   return path.join(tmpdir, name);
-}
-
-function startServer(cwd) {
-  return execa(`yarn next dev --port 3001`, {
-    cwd,
-    stdio: "inherit",
-    shell: true,
-  });
 }
 
 init();
