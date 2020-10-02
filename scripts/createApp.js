@@ -12,7 +12,17 @@ async function init() {
 }
 
 async function createTmpDir() {
-  return await mkdtemp(`${os.tmpdir()}${path.sep}`);
+  const tmpDir = await mkdtemp(`${os.tmpdir()}${path.sep}`);
+
+  if (!fs.existsSync("./tmp")) {
+    await fs.promises.mkdir("./tmp");
+  }
+
+  fs.writeFile("./tmp/tmpDir", tmpDir, () => {
+    console.log("tmpDir location stored.");
+  });
+
+  return tmpDir;
 }
 
 async function createApp(args) {

@@ -19,8 +19,10 @@ beforeEach(async () => {
 
 describe("Prisma", () => {
   describe("Environment Variables", () => {
-    it("defines a DATABASE_NAME env var", () => {
-      expect(process.env.DATABASE_NAME).toBe("foo_dev");
+    it("correctly defines a DATABASE_URL env var", () => {
+      expect(process.env.DATABASE_URL).toBe(
+        "postgresql://postgres@localhost:5432/foo_dev?schema=public"
+      );
     });
   });
 });
