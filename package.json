@@ -16,7 +16,7 @@
   "scripts": {
     "semantic-release": "semantic-release",
     "test:e2e": "start-server-and-test 'node ./scripts/createAppAndStartServer foo --acceptDefaults' 3001 'cypress run --spec cypress/integration/createBisonAppWithDefaults.test.js'",
-    "test:prisma": "node ./scripts/createApp foo --acceptDefaults 3001 && yarn mocha"
+    "test:unit": "node ./scripts/createApp foo --acceptDefaults 3001 && yarn jest"
   },
   "files": [
     "logo.js",
@@ -45,7 +45,7 @@
     "@semantic-release/git": "^9.0.0",
     "cypress": "^5.1.0",
     "ejs-lint": "^1.1.0",
-    "mocha": "^8.1.3",
+    "jest": "^26.4.2",
     "prettier": "^2.0.5",
     "semantic-release": "^17.1.1",
     "start-server-and-test": "^1.11.3"
@@ -72,5 +72,8 @@
       ],
       "@semantic-release/github"
     ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["node_modules", "cypress", "template"]
   }
 }

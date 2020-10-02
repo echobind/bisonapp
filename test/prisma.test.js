@@ -1,6 +1,5 @@
 const { promisify } = require("util");
 const fs = require("fs");
-var assert = require("assert");
 
 async function getTmpDir() {
   const readFile = promisify(fs.readFile);
@@ -21,7 +20,7 @@ beforeEach(async () => {
 describe("Prisma", () => {
   describe("Environment Variables", () => {
     it("defines a DATABASE_NAME env var", () => {
-      assert.strictEqual(process.env.DATABASE_NAME, "foo_dev");
+      expect(process.env.DATABASE_NAME).toBe("foo_dev");
     });
   });
 });
