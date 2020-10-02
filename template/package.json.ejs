@@ -11,7 +11,7 @@
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
     "db:setup": "yarn db:migrate && yarn prisma generate",
-    "db:drop": "source prisma/.env && dropdb $(echo $DATABASE_NAME)",
+    "db:drop": "DOTENV_CONFIG_PATH=./prisma/.env ts-node -r dotenv/config ./scripts/dropDatabase",
     "dev": "concurrently -n \"WATCHERS,NEXT\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"next dev\"",
     "g:cell": "hygen cell new --name",
     "g:component": "hygen component new --name",
