@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "0.0.0-development",
+  "version": "1.7.0-canary.1",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
@@ -74,6 +74,10 @@
     ]
   },
   "jest": {
-    "testPathIgnorePatterns": ["node_modules", "cypress", "template"]
+    "testPathIgnorePatterns": [
+      "node_modules",
+      "cypress",
+      "template"
+    ]
   }
 }
