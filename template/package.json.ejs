@@ -31,11 +31,9 @@
     "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test test:server http://localhost:3001 cypress:run",
     "test:server": "next start --port 3001",
     "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
-    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN\" -c \"black.bgGreen.dim,black.bgBlue.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\"",
-    "watch:nexus": "yarn nexus dev --reflection --entrypoint pages/api/graphql.ts",
-    "watch:codegen": "graphql-codegen --config codegen.yml --watch"
-    "watch:nexus": "ts-node-dev -P tsconfig.cjs.json --transpile-only --respawn --watch graphql/schema.ts,prisma/schema.prisma graphql/schema.ts",
+    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN,TYPESCRIPT\" -c \"black.bgGreen.dim,black.bgBlue.dim,white.bgMagenta.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\" \"yarn watch:ts\"",
     "watch:codegen": "graphql-codegen --config codegen.yml --watch",
+    "watch:nexus": "ts-node-dev -P tsconfig.cjs.json --transpile-only --respawn --watch graphql/schema.ts,prisma/schema.prisma graphql/schema.ts",
     "watch:ts": "yarn dev:typecheck --watch"
   },
   "dependencies": {
@@ -49,7 +47,7 @@
     "bcryptjs": "^2.4.3",
     "cross-fetch": "^3.0.5",
     "graphql": "^15.3.0",
-    "graphql-iso-date": "^3.6.1",
+    "graphql-scalars": "^1.3.0",
     "graphql-type-json": "^0.3.1",
     "jsonwebtoken": "^8.5.1",
     "next": "9.5.3",
@@ -66,7 +64,7 @@
     "@graphql-codegen/typescript-operations": "^1.17.6",
     "@graphql-codegen/typescript-react-apollo": "1.17.6",
     "@graphql-codegen/typescript-resolvers": "1.17.4",
-    "@prisma/cli": "2.7.0"
+    "@prisma/cli": "2.7.0",
     "@testing-library/cypress": "^6.0.0",
     "@testing-library/dom": "^7.21.7",
     "@testing-library/jest-dom": "^5.11.2",
