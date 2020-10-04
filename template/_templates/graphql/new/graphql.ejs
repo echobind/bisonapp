@@ -1,15 +1,15 @@
 ---
-to: graphql/<%= name %>.ts
+to: graphql/modules/<%= name %>.ts
 ---
 <% camelized = h.inflection.camelize(name) -%>
 <% plural = h.inflection.pluralize(camelized) -%>
-import { schema } from 'nexus';
+import { objectType, extendType } from '@nexus/schema';
 import { AuthenticationError, UserInputError, /*ForbiddenError*/ } from 'apollo-server-errors';
 
 // import { isAdmin } from '../services/permissions';
 
 // <%= camelized %> Type
-schema.objectType({
+export const <%= camelized %> = objectType({
   name: '<%= camelized %>',
   description: 'A <%= camelized %>',
   definition(t) {
@@ -27,7 +27,7 @@ export const CallPreference = enumType({
 });
 
 // Queries
-schema.extendType({
+export const <%= camelized %>Queries = extendType({
   type: 'Query',
   definition: (t) => {
     // List <%= plural %> Query (admin only)
@@ -58,7 +58,8 @@ schema.extendType({
 });
 
 // Mutations
-schema.mutationType({
+export const <%= camelized %>Mutations = extendType({
+  type: 'Mutation',
   definition: (t) => {
   },
 });

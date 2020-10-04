@@ -1,7 +1,7 @@
 ---
 inject: true
-to: graphql/schema.ts
-after: import './context'
-skip_if: import './<%= name %>'
+to: graphql/modules/index.ts
+after: export * from './scalars'
+skip_if: export * from './<%= name %>'
 ---
-import './<%= name %>';
+export * from './<%= name %>';

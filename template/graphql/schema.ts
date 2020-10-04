@@ -1,22 +1,39 @@
-import { settings, use } from 'nexus';
-import { prisma } from 'nexus-plugin-prisma';
+import path from 'path';
 
-import { prisma as instance } from '../lib/prisma';
-import './context';
-import './user';
-import './profile';
+import { fieldAuthorizePlugin, makeSchema } from '@nexus/schema';
+import { nexusPrisma } from 'nexus-plugin-prisma';
 
-export const GRAPHQL_PATH = '/api/graphql';
+import * as types from './modules';
 
-// Enable nexus prisma plugin with crud features
-use(prisma({ migrations: true, features: { crud: true }, client: { instance } }));
-
-// Nexus Settings
-// see: https://nexusjs.org/api/nexus/settings
-settings.change({
-  server: {
-    playground: process.env.NODE_ENV !== 'production',
-    path: '/api/graphql',
-    cors: false,
+export const schema = makeSchema({
+  types,
+  plugins: [
+    fieldAuthorizePlugin(),
+    nexusPrisma({
+      experimentalCRUD: true,
+      outputs: {
+        typegen: path.join(
+          __dirname,
+          '../node_modules/@types/typegen-nexus-plugin-prisma/index.d.ts'
+        ),
+      },
+    }),
+  ],
+  outputs: {
+    schema: path.join(__dirname, '../api.graphql'),
+    typegen: path.join(__dirname, '../node_modules/@types/nexus-typegen/index.d.ts'),
+  },
+  typegenAutoConfig: {
+    sources: [
+      {
+        source: path.join(__dirname, '../node_modules/.prisma/client/index.d.ts'),
+        alias: 'db',
+      },
+      {
+        source: path.join(__dirname, './context.ts'),
+        alias: 'ContextModule',
+      },
+    ],
+    contextType: 'ContextModule.Context',
   },
 });

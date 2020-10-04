@@ -5,8 +5,7 @@ import request from 'supertest';
 import { User } from '@prisma/client';
 import { Client } from 'pg';
 
-import { GRAPHQL_PATH } from '../graphql/schema';
-import server from '../pages/api/graphql';
+import server, { GRAPHQL_PATH } from '../pages/api/graphql';
 import { appJwtForUser } from '../services/auth';
 import { prisma, connect, disconnect } from '../lib/prisma';
 
