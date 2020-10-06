@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const execa = require("execa");
-const makeTempDir = require("../utils/makeTempDir");
+const { makeTempDir } = require("../utils/makeTempDir");
 module.exports = {};
 
 async function init() {

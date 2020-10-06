@@ -7,6 +7,10 @@ const cpy = require("cpy");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
+const { copyWithTemplate } = require("./utils/copyWithTemplate");
+const {
+  copyDirectoryWithTemplate,
+} = require("./utils/copyDirectoryWithTemplate");
 
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
