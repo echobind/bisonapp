@@ -9,6 +9,7 @@ const cpy = require("cpy");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
+const globby = require("globby");
 
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
@@ -35,6 +36,19 @@ async function copyWithTemplate(from, to, variables) {
   } catch (e) {}
 
   await writeFile(to, generatedSource);
+}
+
+async function copyDirectoryWithTemplate(from, to, variables) {
+  try {
+    await mkdir(path.dirname(to), { recursive: true });
+  } catch (e) {}
+
+  const files = await globby([`${from}/**`], { expandDirectories: true });
+
+  files.forEach(async (file) => {
+    const toFile = file.replace(from, to).replace(/\.ejs/, "");
+    await copyWithTemplate(file, toFile, variables);
+  });
 }
 
 module.exports = async ({ name, ...answers }) => {
@@ -92,21 +106,15 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
-          copyWithTemplate(
-            fromPath(".github/workflows/main.js.yml.ejs"),
-            toPath(".github/workflows/main.js.yml"),
+          copyDirectoryWithTemplate(
+            fromPath(".github"),
+            toPath(".github"),
             variables
           ),
 
-          copyWithTemplate(
-            fromPath(".github/PULL_REQUEST_TEMPLATE.md"),
-            toPath(".github/PULL_REQUEST_TEMPLATE.md"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("pages/api/graphql.ts.ejs"),
-            toPath("pages/api/graphql.ts"),
+          copyDirectoryWithTemplate(
+            fromPath("pages"),
+            toPath("pages"),
             variables
           ),
 
@@ -116,9 +124,15 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
-          copyWithTemplate(
-            fromPath("tests/jest.setup.js.ejs"),
-            toPath("tests/jest.setup.js"),
+          copyDirectoryWithTemplate(
+            fromPath("graphql"),
+            toPath("graphql"),
+            variables
+          ),
+
+          copyDirectoryWithTemplate(
+            fromPath("tests"),
+            toPath("tests"),
             variables
           ),
 
@@ -134,18 +148,13 @@ module.exports = async ({ name, ...answers }) => {
               "components",
               "context",
               "cypress",
-              "graphql",
               "layouts",
               "lib",
-              "pages",
-              "!pages/api/graphql*",
               "prisma",
               "!prisma/_.env*",
               "public",
               "scripts",
               "services",
-              "tests",
-              "!tests/jest.setup*",
               "utils",
               ".eslintrc.js",
               ".gitignore",

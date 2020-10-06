@@ -1,6 +1,11 @@
 import { objectType, extendType, inputObjectType, stringArg, arg } from '@nexus/schema';
 import { Role } from '@prisma/client';
+<% if (host.name === 'vercel') { -%>
 import { UserInputError, ForbiddenError } from 'apollo-server-micro';
+<% } -%>
+<% if (host.name === 'heroku') { -%>
+import { UserInputError, ForbiddenError } from 'apollo-server-express';
+<% } -%>
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
 import { isAdmin, canAccess } from '../../services/permissions';
