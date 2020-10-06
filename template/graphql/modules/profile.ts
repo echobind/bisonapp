@@ -1,7 +1,7 @@
-import { schema } from 'nexus';
+import { objectType } from '@nexus/schema';
 
 // Profile Type
-schema.objectType({
+export const Profile = objectType({
   name: 'Profile',
   description: 'A User Profile',
   definition(t) {

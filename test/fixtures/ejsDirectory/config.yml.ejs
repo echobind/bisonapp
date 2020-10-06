@@ -1,0 +1,7 @@
+version: 2
+<% if (host.name === 'vercel') { -%>
+host: vercel
+<% } -%>
+<% if (host.name === 'heroku') { -%>
+host: heroku
+<% } -%>

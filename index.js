@@ -1,7 +1,5 @@
 "use strict";
-const { promisify } = require("util");
 const path = require("path");
-const fs = require("fs");
 const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
@@ -9,33 +7,13 @@ const cpy = require("cpy");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
+const { copyWithTemplate } = require("./utils/copyWithTemplate");
+const {
+  copyDirectoryWithTemplate,
+} = require("./utils/copyDirectoryWithTemplate");
 
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
-
-/**
- * Copies a file to a different location, running it through an optional ejs template
- * @param {*} from The source file
- * @param {*} to The path to write
- * @param {*} variables Variables to pass to the template
- */
-async function copyWithTemplate(from, to, variables) {
-  const generatedSource = await ejs.renderFile(
-    from,
-    { ...variables, color },
-    {
-      async: true,
-    }
-  );
-
-  try {
-    await mkdir(path.dirname(to), { recursive: true });
-  } catch (e) {}
-
-  await writeFile(to, generatedSource);
-}
 
 module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);
@@ -92,21 +70,15 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
-          copyWithTemplate(
-            fromPath(".github/workflows/main.js.yml.ejs"),
-            toPath(".github/workflows/main.js.yml"),
+          copyDirectoryWithTemplate(
+            fromPath(".github"),
+            toPath(".github"),
             variables
           ),
 
-          copyWithTemplate(
-            fromPath(".github/PULL_REQUEST_TEMPLATE.md"),
-            toPath(".github/PULL_REQUEST_TEMPLATE.md"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("pages/api/graphql.ts.ejs"),
-            toPath("pages/api/graphql.ts"),
+          copyDirectoryWithTemplate(
+            fromPath("pages"),
+            toPath("pages"),
             variables
           ),
 
@@ -116,9 +88,15 @@ module.exports = async ({ name, ...answers }) => {
             variables
           ),
 
-          copyWithTemplate(
-            fromPath("tests/jest.setup.js.ejs"),
-            toPath("tests/jest.setup.js"),
+          copyDirectoryWithTemplate(
+            fromPath("graphql"),
+            toPath("graphql"),
+            variables
+          ),
+
+          copyDirectoryWithTemplate(
+            fromPath("tests"),
+            toPath("tests"),
             variables
           ),
 
@@ -134,18 +112,13 @@ module.exports = async ({ name, ...answers }) => {
               "components",
               "context",
               "cypress",
-              "graphql",
               "layouts",
               "lib",
-              "pages",
-              "!pages/api/graphql*",
               "prisma",
               "!prisma/_.env*",
               "public",
               "scripts",
               "services",
-              "tests",
-              "!tests/jest.setup*",
               "utils",
               ".eslintrc.js",
               ".gitignore",
@@ -159,6 +132,7 @@ module.exports = async ({ name, ...answers }) => {
               "next-env.d.ts",
               "prettier.config.js",
               "tsconfig.json",
+              "tsconfig.cjs.json",
               "types.ts",
             ],
             targetFolder,
@@ -181,14 +155,6 @@ module.exports = async ({ name, ...answers }) => {
       title: "Generate Prisma client",
       task: async () => {
         return execa("yarn", ["prisma", "generate"], {
-          cwd: pkgName,
-        });
-      },
-    },
-    {
-      title: "Generate Nexus types",
-      task: async () => {
-        return execa("yarn", ["nexus", "build", "--no-bundle"], {
           cwd: pkgName,
         });
       },
