@@ -1,7 +1,5 @@
 "use strict";
-const { promisify } = require("util");
 const path = require("path");
-const fs = require("fs");
 const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
@@ -9,47 +7,9 @@ const cpy = require("cpy");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
-const globby = require("globby");
 
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
 const templateFolder = path.join(__dirname, "template");
 const fromPath = (file) => path.join(templateFolder, file);
-
-/**
- * Copies a file to a different location, running it through an optional ejs template
- * @param {*} from The source file
- * @param {*} to The path to write
- * @param {*} variables Variables to pass to the template
- */
-async function copyWithTemplate(from, to, variables) {
-  const generatedSource = await ejs.renderFile(
-    from,
-    { ...variables, color },
-    {
-      async: true,
-    }
-  );
-
-  try {
-    await mkdir(path.dirname(to), { recursive: true });
-  } catch (e) {}
-
-  await writeFile(to, generatedSource);
-}
-
-async function copyDirectoryWithTemplate(from, to, variables) {
-  try {
-    await mkdir(path.dirname(to), { recursive: true });
-  } catch (e) {}
-
-  const files = await globby([`${from}/**`], { expandDirectories: true });
-
-  files.forEach(async (file) => {
-    const toFile = file.replace(from, to).replace(/\.ejs/, "");
-    await copyWithTemplate(file, toFile, variables);
-  });
-}
 
 module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);

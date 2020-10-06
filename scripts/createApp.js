@@ -1,9 +1,7 @@
-const { promisify } = require("util");
 const fs = require("fs");
-const os = require("os");
 const path = require("path");
-const mkdtemp = promisify(fs.mkdtemp);
 const execa = require("execa");
+const makeTempDir = require("../utils/makeTempDir");
 module.exports = {};
 
 async function init() {
@@ -12,7 +10,7 @@ async function init() {
 }
 
 async function createTmpDir() {
-  const tmpDir = await mkdtemp(`${os.tmpdir()}${path.sep}`);
+  const tmpDir = await makeTempDir();
 
   if (!fs.existsSync("./tmp")) {
     await fs.promises.mkdir("./tmp");
