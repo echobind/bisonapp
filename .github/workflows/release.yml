@@ -30,20 +30,26 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install packages
         run: yarn install --frozen-lockfile
+      - name: Create new App
+        id: create-app
+        run: echo "::set-output name=dir::$(node ./scripts/createApp foo --acceptDefaults)"
       - name: Check Build Command
-        run: yarn build
+        run: |
+          cd {{steps.create-app.outputs.dir}}
+          yarn build
       - name: Run Unit Tests
         run: yarn test:unit
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2
         with:
-          start: node ./scripts/createAppAndStartServer foo --acceptDefaults
+          start: node ./scripts/startServer ${{steps.create-app.outputs.dir}} 3001
           wait-on: "http://localhost:3001"
           wait-on-timeout: 180
           spec: cypress/integration/createBisonAppWithDefaults.test.js
         env:
           NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_DIR: ${{steps.create-app.outputs.dir}}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

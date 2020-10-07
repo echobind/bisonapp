@@ -16,7 +16,7 @@
   "scripts": {
     "semantic-release": "semantic-release",
     "test:e2e": "start-server-and-test 'node ./scripts/createAppAndStartServer foo --acceptDefaults' 3001 'cypress run --spec cypress/integration/createBisonAppWithDefaults.test.js'",
-    "test:unit": "node ./scripts/createApp foo --acceptDefaults 3001 && yarn jest"
+    "test:unit": "yarn jest"
   },
   "files": [
     "logo.js",
