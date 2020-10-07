@@ -29,11 +29,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install packages
-        run: |
-          yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
+      - name: Check Build Command
+        run: yarn build
       - name: Run Unit Tests
-        run: |
-          yarn test:unit
+        run: yarn test:unit
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2
         with:
