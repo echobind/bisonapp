@@ -6,7 +6,10 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "build": "next build",
+    "build": "yarn build:nexus && yarn build:prisma && yarn build:next",
+    "build:prisma": "prisma generate",
+    "build:next": "next build",
+    "build:nexus": "ts-node -P tsconfig.cjs.json --transpile-only graphql/schema.ts",
     "cypress:run": "cypress run",
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
