@@ -23,6 +23,7 @@
     "index.js",
     "cli.js",
     "template",
+    "utils",
     "postInstallText.ejs"
   ],
   "keywords": [
