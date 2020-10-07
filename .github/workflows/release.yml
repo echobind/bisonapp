@@ -35,7 +35,7 @@ jobs:
         run: echo "::set-output name=dir::$(node ./scripts/createApp foo --acceptDefaults)"
       - name: Check Build Command
         run: |
-          cd {{steps.create-app.outputs.dir}}
+          cd ${{steps.create-app.outputs.dir}}
           yarn build
       - name: Run Unit Tests
         run: yarn test:unit
