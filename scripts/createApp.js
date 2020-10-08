@@ -24,17 +24,11 @@ async function createTmpDir() {
 }
 
 async function createApp(args) {
-  console.log("my args are", args);
   const tmpdir = await createTmpDir();
   const cliPath = path.join(__dirname, "..", "cli.js");
 
   const cliOptions = args.length ? args : ["myapp", "--acceptDefaults"];
   const name = cliOptions.splice(0, 1)[0];
-
-  console.log("cli options are", cliOptions);
-  console.log("cli path", cliPath);
-  console.log("installing to:", tmpdir);
-  console.log("nodeargs", [cliPath, name, ...cliOptions]);
 
   await execa("node", [cliPath, name, ...cliOptions], {
     cwd: tmpdir,
