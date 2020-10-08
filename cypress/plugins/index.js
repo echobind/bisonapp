@@ -30,7 +30,6 @@ module.exports = (on, config) => {
     },
     // reads app name from ENV
     getAppName() {
-      console.log("what", process.env);
       return process.env.APP_NAME;
     },
   });
