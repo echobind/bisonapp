@@ -36,7 +36,7 @@ jobs:
         run: node ./scripts/createApp foo --acceptDefaults
       - name: Check Build Command
         run: |
-          cd ${{steps.create-app.outputs.dir}}
+          cd ${{steps.create-app.outputs.appPath}}
           yarn build
       - name: Run Unit Tests
         run: yarn test:unit
