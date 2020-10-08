@@ -33,7 +33,12 @@ async function createApp(args) {
     stdio: "inherit",
   });
 
-  return path.join(tmpdir, name);
+  const appPath = path.join(tmpdir, name);
+  const core = require("@actions/core");
+  core.debug(`app path: ${appPath}`);
+  core.setOutput("appPath", appPath);
+
+  return appPath;
 }
 
 init();
