@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 /// <reference types="cypress" />
 
 // ***********************************************************
@@ -17,8 +19,18 @@
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
-
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  on("task", {});
+  on("task", {
+    // reads contents of a file based on relative path
+    async readProjectFile(filePath) {
+      const fullPath = path.join(process.env.APP_PATH, filePath);
+      const file = await fs.promises.readFile(fullPath);
+      return file.toString();
+    },
+    // reads app name from ENV
+    getAppName() {
+      return process.env.APP_NAME;
+    },
+  });
 };

@@ -51,6 +51,7 @@ jobs:
           NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APP_PATH: ${{steps.create-app.outputs.appPath}}
+          APP_NAME: ${{steps.create-app.outputs.appName}}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

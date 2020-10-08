@@ -1,4 +1,3 @@
-const fs = require("fs");
 const path = require("path");
 const execa = require("execa");
 const core = require("@actions/core");
@@ -23,6 +22,8 @@ async function createApp(args) {
   });
 
   const appPath = path.join(tmpdir, name);
+  core.debug(`app name: ${name}`);
+  core.setOutput("appName", name);
   core.debug(`app path: ${appPath}`);
   core.setOutput("appPath", appPath);
 

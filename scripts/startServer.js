@@ -1,6 +1,9 @@
+const execa = require("execa");
+
 async function init() {
-  const args = process.argv.slice(1);
-  return startServer(args);
+  const args = process.argv.slice(2);
+  const [cwd, port] = args;
+  return startServer(cwd, port);
 }
 
 function startServer(cwd, port = "3001") {
