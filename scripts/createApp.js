@@ -16,9 +16,7 @@ async function createTmpDir() {
     await fs.promises.mkdir("./tmp");
   }
 
-  fs.writeFile("./tmp/tmpDir", tmpDir, () => {
-    console.log("tmpDir location stored.");
-  });
+  await fs.promises.writeFile("./tmp/tmpDir", tmpDir);
 
   return tmpDir;
 }
