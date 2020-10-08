@@ -32,7 +32,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Create new App
         id: create-app
-        run: echo "::set-output name=dir::$(node ./scripts/createApp foo --acceptDefaults)"
+        run: echo "::set-output name=dir::$(echo node ./scripts/createApp foo --acceptDefaults)"
       - name: Check Build Command
         run: |
           cd ${{steps.create-app.outputs.dir}}

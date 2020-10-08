@@ -33,7 +33,6 @@ async function createApp(args) {
     stdio: "inherit",
   });
 
-  echo(path.join(tmpdir, name));
   return path.join(tmpdir, name);
 }
 
