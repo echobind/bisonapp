@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const execa = require("execa");
+const core = require("@actions/core");
 const { makeTempDir } = require("../utils/makeTempDir");
 module.exports = {};
 
@@ -9,20 +10,8 @@ async function init() {
   return await createApp(args);
 }
 
-async function createTmpDir() {
-  const tmpDir = await makeTempDir();
-
-  if (!fs.existsSync("./tmp")) {
-    await fs.promises.mkdir("./tmp");
-  }
-
-  await fs.promises.writeFile("./tmp/tmpDir", tmpDir);
-
-  return tmpDir;
-}
-
 async function createApp(args) {
-  const tmpdir = await createTmpDir();
+  const tmpdir = await makeTempDir();
   const cliPath = path.join(__dirname, "..", "cli.js");
 
   const cliOptions = args.length ? args : ["myapp", "--acceptDefaults"];
@@ -34,7 +23,6 @@ async function createApp(args) {
   });
 
   const appPath = path.join(tmpdir, name);
-  const core = require("@actions/core");
   core.debug(`app path: ${appPath}`);
   core.setOutput("appPath", appPath);
 
