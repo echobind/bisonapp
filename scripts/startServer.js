@@ -7,12 +7,22 @@ async function init() {
 }
 
 function startServer(cwd, port = "3001") {
-  console.log("my args are ", cwd, port);
+  const { APP_NAME, APP_PATH } = process.env;
   return execa(`yarn next dev --port ${port}`, {
     cwd,
     stdio: "inherit",
     shell: true,
+    env: {
+      APP_NAME,
+      APP_PATH,
+    },
   });
 }
 
-init();
+if (require.main === module) {
+  init();
+}
+
+module.exports = {
+  startServer,
+};

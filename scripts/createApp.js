@@ -2,10 +2,11 @@ const path = require("path");
 const execa = require("execa");
 const core = require("@actions/core");
 const { makeTempDir } = require("../utils/makeTempDir");
-module.exports = {};
 
 async function init() {
   const args = process.argv.slice(2);
+  if (!args.length) return;
+
   return await createApp(args);
 }
 
@@ -27,7 +28,11 @@ async function createApp(args) {
   core.debug(`app path: ${appPath}`);
   core.setOutput("appPath", appPath);
 
-  return appPath;
+  return { appPath, appName: name };
 }
 
-init();
+if (require.main === module) {
+  init();
+}
+
+module.exports = { createApp };
