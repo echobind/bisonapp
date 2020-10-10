@@ -3,6 +3,8 @@ import path from 'path';
 import { fieldAuthorizePlugin, makeSchema } from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 
+import prettierConfig from '../prettier.config';
+
 import * as types from './modules';
 
 export const schema = makeSchema({
@@ -36,4 +38,5 @@ export const schema = makeSchema({
     ],
     contextType: 'ContextModule.Context',
   },
+  prettierConfig,
 });
