@@ -46,12 +46,11 @@
     "@chakra-ui/theme-tools": "^1.0.0-rc.0",
     "@nexus/schema": "^0.16.0",
     "@prisma/client": "2.7.0",
-  <% if (host.name === 'vercel') { -%>
+<% if (host.name === 'vercel') { -%>
     "apollo-server-micro": "^2.18.1",
-  <% } -%>  
-  <% if (host.name === 'heroku') { -%>
+<% } else if (host.name === 'heroku') { -%>
     "apollo-server-express": "^2.18.1",
-  <% } -%>  
+<% } -%>
     "bcryptjs": "^2.4.3",
     "cross-fetch": "^3.0.5",
     "graphql": "^15.3.0",
