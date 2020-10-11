@@ -48,7 +48,8 @@
     "@prisma/client": "2.7.0",
 <% if (host.name === 'vercel') { -%>
     "apollo-server-micro": "^2.18.1",
-<% } else if (host.name === 'heroku') { -%>
+<% } -%>
+<% if (host.name === 'heroku') { -%>
     "apollo-server-express": "^2.18.1",
 <% } -%>
     "bcryptjs": "^2.4.3",
