@@ -1,6 +1,8 @@
 export {};
 
+// eslint-disable-next-line
 const url = require('url');
+
 const Client = require('pg').Client;
 
 const connectionString = process.env.DATABASE_URL;
