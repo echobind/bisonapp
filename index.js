@@ -3,17 +3,10 @@ const path = require("path");
 const slugify = require("slugify");
 const execa = require("execa");
 const Listr = require("listr");
-const cpy = require("cpy");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
-const { copyWithTemplate } = require("./utils/copyWithTemplate");
-const {
-  copyDirectoryWithTemplate,
-} = require("./utils/copyDirectoryWithTemplate");
-
-const templateFolder = path.join(__dirname, "template");
-const fromPath = (file) => path.join(templateFolder, file);
+const { copyFiles } = require("./tasks/copyFiles");
 
 module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);
@@ -23,130 +16,10 @@ module.exports = async ({ name, ...answers }) => {
     ...answers,
   };
 
-  const isHeroku = answers.host.name === "heroku";
-
-  /**
-   * Appends file to the targetFolder path
-   * @param {*} file the file path
-   */
-  function toPath(file) {
-    return path.join(targetFolder, file);
-  }
-
-  // Files to render when using Heroku
-  const herokuFiles = () =>
-    !isHeroku
-      ? []
-      : [copyWithTemplate(fromPath("app.json"), toPath("app.json"), variables)];
-
   const tasks = new Listr([
     {
       title: "Copy files",
-      task: async () => {
-        return Promise.all([
-          execa("mkdir", ["-p", pkgName]),
-
-          copyWithTemplate(
-            fromPath("package.json.ejs"),
-            toPath("package.json"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("README.md.ejs"),
-            toPath("README.md"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("_.gitignore"),
-            toPath(".gitignore"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("_.env.local.ejs"),
-            toPath(".env.local"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("_.env.test.ejs"),
-            toPath(".env.test"),
-            variables
-          ),
-
-          copyDirectoryWithTemplate(
-            fromPath(".github"),
-            toPath(".github"),
-            variables
-          ),
-
-          copyDirectoryWithTemplate(
-            fromPath("pages"),
-            toPath("pages"),
-            variables
-          ),
-
-          copyWithTemplate(
-            fromPath("prisma/_.env.ejs"),
-            toPath("prisma/.env"),
-            variables
-          ),
-
-          copyDirectoryWithTemplate(
-            fromPath("graphql"),
-            toPath("graphql"),
-            variables
-          ),
-
-          copyDirectoryWithTemplate(
-            fromPath("tests"),
-            toPath("tests"),
-            variables
-          ),
-
-          ...herokuFiles(),
-
-          cpy(
-            [
-              "_templates",
-              ".vscode",
-              "chakra",
-              "components",
-              "context",
-              "cypress",
-              "layouts",
-              "lib",
-              "prisma",
-              "!prisma/_.env*",
-              "public",
-              "scripts",
-              "services",
-              "utils",
-              ".eslintrc.js",
-              ".hygen.js",
-              ".tool-versions",
-              "api.graphql",
-              "codegen.yml",
-              "constants.ts",
-              "cypress.json",
-              "jest.config.js",
-              "next-env.d.ts",
-              "prettier.config.js",
-              "tsconfig.json",
-              "tsconfig.cjs.json",
-              "types.ts",
-            ],
-            targetFolder,
-            {
-              cwd: templateFolder,
-              // preserve path
-              parents: true,
-            }
-          ),
-        ]);
-      },
+      task: copyFiles({ variables, targetFolder }),
     },
     {
       title: "Install dependencies",
