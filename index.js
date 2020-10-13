@@ -59,6 +59,12 @@ module.exports = async ({ name, ...answers }) => {
           ),
 
           copyWithTemplate(
+            fromPath("_.gitignore"),
+            toPath(".gitignore"),
+            variables
+          ),
+
+          copyWithTemplate(
             fromPath("_.env.local.ejs"),
             toPath(".env.local"),
             variables
@@ -106,8 +112,6 @@ module.exports = async ({ name, ...answers }) => {
             [
               "_templates",
               ".vscode",
-              ".github",
-              "!.github/workflows/main*",
               "chakra",
               "components",
               "context",
@@ -121,7 +125,7 @@ module.exports = async ({ name, ...answers }) => {
               "services",
               "utils",
               ".eslintrc.js",
-              ".gitignore",
+              // ".gitignore",
               ".hygen.js",
               ".tool-versions",
               "api.graphql",
