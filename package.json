@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "1.7.2",
+  "version": "1.7.3-canary.4",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
@@ -16,7 +16,7 @@
   "scripts": {
     "semantic-release": "semantic-release",
     "test:e2e": "start-server-and-test 'node ./scripts/createAppAndStartServer foo --acceptDefaults' 3001 'cypress run --spec cypress/integration/createBisonAppWithDefaults.test.js'",
-    "test:unit": "node ./scripts/createApp foo --acceptDefaults 3001 && yarn jest"
+    "test:unit": "yarn jest"
   },
   "files": [
     "logo.js",
@@ -24,6 +24,7 @@
     "cli.js",
     "template",
     "utils",
+    "tasks",
     "postInstallText.ejs"
   ],
   "keywords": [
@@ -43,6 +44,7 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
+    "@actions/core": "1.2.6",
     "@semantic-release/git": "^9.0.0",
     "cypress": "^5.1.0",
     "ejs-lint": "^1.1.0",

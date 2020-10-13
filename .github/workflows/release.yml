@@ -29,21 +29,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install packages
+        run: yarn install --frozen-lockfile
+      - name: Create new App
+        id: create-app
+        # Sets outputs.appPath to the created directory
+        run: node ./scripts/createApp foo --acceptDefaults
+      - name: Check Build Command
         run: |
-          yarn install --frozen-lockfile
+          cd ${{steps.create-app.outputs.appPath}}
+          yarn build
       - name: Run Unit Tests
-        run: |
-          yarn test:unit
+        run: yarn test:unit
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2
         with:
-          start: node ./scripts/createAppAndStartServer foo --acceptDefaults
+          start: node ./scripts/startServer ${{steps.create-app.outputs.appPath}} 3001
           wait-on: "http://localhost:3001"
           wait-on-timeout: 180
           spec: cypress/integration/createBisonAppWithDefaults.test.js
         env:
           NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_PATH: ${{steps.create-app.outputs.appPath}}
+          APP_NAME: ${{steps.create-app.outputs.appName}}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

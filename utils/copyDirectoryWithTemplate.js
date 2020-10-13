@@ -20,7 +20,11 @@ async function copyDirectoryWithTemplate(from, to, variables) {
 
   return await Promise.all(
     files.map(async (file) => {
-      const toFile = file.replace(from, to).replace(/\.ejs/, "");
+      const toFile = file
+        .replace(from, to)
+        .replace(/_\./, ".")
+        .replace(/\.ejs$/, "");
+
       return copyWithTemplate(file, toFile, variables);
     })
   );
