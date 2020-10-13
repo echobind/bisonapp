@@ -125,7 +125,6 @@ module.exports = async ({ name, ...answers }) => {
               "services",
               "utils",
               ".eslintrc.js",
-              // ".gitignore",
               ".hygen.js",
               ".tool-versions",
               "api.graphql",
