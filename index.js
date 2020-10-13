@@ -152,14 +152,6 @@ module.exports = async ({ name, ...answers }) => {
       },
     },
     {
-      title: "Generate Prisma client",
-      task: async () => {
-        return execa("yarn", ["prisma", "generate"], {
-          cwd: pkgName,
-        });
-      },
-    },
-    {
       title: "Git init",
       task: async () => {
         const repo = await nodegit.Repository.init(targetFolder, 0);
