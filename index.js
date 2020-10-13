@@ -19,7 +19,7 @@ module.exports = async ({ name, ...answers }) => {
   const tasks = new Listr([
     {
       title: "Copy files",
-      task: copyFiles({ variables, targetFolder }),
+      task: async () => copyFiles({ variables, targetFolder }),
     },
     {
       title: "Install dependencies",
