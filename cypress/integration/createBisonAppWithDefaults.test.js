@@ -6,6 +6,11 @@ describe("Creating a new app", () => {
     cy.get("h2").contains(/home page/i);
   });
 
+  it("properly renders the playground", () => {
+    cy.visit("/api/graphql");
+    cy.title().should("include", "Playground");
+  });
+
   describe("prisma .env", () => {
     it("contains the proper database URL", () => {
       cy.task("getAppName").then((appName) => {
