@@ -1,0 +1,16 @@
+{
+  "version": "1.10.3",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "packages": ["packages/*"],
+  "command": {
+    "version": {
+      "message": "chore(release): publish %s"
+    },
+    "publish": {
+      "allowBranch": ["main", "canary"],
+      "conventionalCommits": true,
+      "createRelease": "github"
+    }
+  }
+}
