@@ -7,6 +7,8 @@ import prettierConfig from '../prettier.config';
 
 import * as types from './modules';
 
+const currentDirectory = process.cwd();
+
 export const schema = makeSchema({
   types,
   plugins: [
@@ -15,24 +17,24 @@ export const schema = makeSchema({
       experimentalCRUD: true,
       outputs: {
         typegen: path.join(
-          __dirname,
-          '../node_modules/@types/typegen-nexus-plugin-prisma/index.d.ts'
+          currentDirectory,
+          'node_modules/@types/typegen-nexus-plugin-prisma/index.d.ts'
         ),
       },
     }),
   ],
   outputs: {
-    schema: path.join(__dirname, '../api.graphql'),
-    typegen: path.join(__dirname, '../node_modules/@types/nexus-typegen/index.d.ts'),
+    schema: path.join(currentDirectory, 'api.graphql'),
+    typegen: path.join(currentDirectory, 'node_modules/@types/nexus-typegen/index.d.ts'),
   },
   typegenAutoConfig: {
     sources: [
       {
-        source: path.join(__dirname, '../node_modules/.prisma/client/index.d.ts'),
+        source: path.join(currentDirectory, 'node_modules/.prisma/client/index.d.ts'),
         alias: 'db',
       },
       {
-        source: path.join(__dirname, './context.ts'),
+        source: path.join(currentDirectory, 'graphql', 'context.ts'),
         alias: 'ContextModule',
       },
     ],
