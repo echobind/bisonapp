@@ -28,23 +28,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install packages
-        run: yarn install --frozen-lockfile
-      - name: Create new App
+        run: yarn lerna bootstrap
+        - name: Create new App
         id: create-app
         # Sets outputs.appPath to the created directory
-        run: node ./scripts/createApp foo --acceptDefaults
+        run: node ./packages/create-bison-app/scripts/createApp foo --acceptDefaults
       - name: Check Build Command
         run: |
           cd ${{steps.create-app.outputs.appPath}}
           yarn build
       - name: Run Unit Tests
-        run: yarn test:unit
+        run: yarn test
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2
         with:
           start: node ./scripts/startServer ${{steps.create-app.outputs.appPath}} 3001
           wait-on: "http://localhost:3001"
           wait-on-timeout: 180
+          project: ./packages/create-bison-app
           spec: cypress/integration/createBisonAppWithDefaults.test.js
         env:
           NODE_ENV: test

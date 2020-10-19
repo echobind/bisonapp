@@ -15,9 +15,11 @@
   },
   "scripts": {
     "publish:canary": "yarn lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary",
-    "publish": "yarn lerna publish --conventional-graduate"
+    "publish": "yarn lerna publish --conventional-graduate",
+    "test": "yarn lerna test --stream"
   },
   "devDependencies": {
+    "conventional-changelog-conventionalcommits": "^4.4.0",
     "lerna": "^3.22.1"
   }
 }
