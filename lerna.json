@@ -1,5 +1,5 @@
 {
-  "version": "1.7.3",
+  "version": "1.7.4",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "packages": ["packages/*"],
@@ -14,9 +14,7 @@
       "changelogPreset": {
         "name": "conventionalcommits",
         "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
-        "issuePrefixes": [
-          "#"
-        ],
+        "issuePrefixes": ["#"],
         "types": [
           {
             "type": "feat",
