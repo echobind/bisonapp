@@ -56,7 +56,7 @@ describe('User signup mutation', () => {
 
       expect(errors).toMatchInlineSnapshot(`
         Array [
-          "Variable \\"$data\\" got invalid value { email: \\"hello@wee.net\\", password: \\"fake\\", roles: { set: [Array] } }; Field \\"roles\\" is not defined by type SignupInput.",
+          "Variable \\"$data\\" got invalid value { email: \\"hello@wee.net\\", password: \\"fake\\", roles: { set: [Array] } }; Field \\"roles\\" is not defined by type \\"SignupInput\\".",
         ]
       `);
     });
