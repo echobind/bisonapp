@@ -21,6 +21,7 @@ export async function createContext(context: ApolloApiContext): Promise<Context>
 
   return {
     db: prisma,
+    prisma,
     user,
   };
 }
@@ -29,5 +30,6 @@ type ApolloApiContext = ApolloContext<{ req: IncomingMessage }>;
 
 export type Context = {
   db: PrismaClient;
+  prisma: PrismaClient;
   user: User;
 };
