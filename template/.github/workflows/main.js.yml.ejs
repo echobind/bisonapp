@@ -138,7 +138,7 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          heroku_app_name: <%= host.staging?.name %>
+          heroku_app_name: <%= host.staging ? host.staging.name : '' %>
 <% } -%>
 
   deployProd:
@@ -166,5 +166,5 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          heroku_app_name: <%= host.production?.name %>
+          heroku_app_name: <%= host.production ? host.production.name : '' %>
 <% } -%>
