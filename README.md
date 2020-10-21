@@ -108,7 +108,7 @@ Echobind is a full-service digital agency that creates web and mobile apps for c
 
 We're experts in React, React Native, Node, GraphQL, and Rails.
 
-If you're building a new app, your team is tackling a hard problem, or you just need help getting over the finish line, we'd love to work with you. [Say hello](https://echobind.com/contact) and tell us what you're working on.
+If you're building a new app, your team is tackling a hard problem, or you just need help getting over the finish line, we'd love to work with you. [Say hello](https://echobind.com/contact) and tell us what you're working on!
 
 <p align="center" style="margin-top:40px">
   <a href="https://echobind.com" target="_blank">
