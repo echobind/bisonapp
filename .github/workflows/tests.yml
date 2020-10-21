@@ -1,0 +1,53 @@
+name: Run Tests
+on: [push]
+
+jobs:
+  release:
+    name: Run
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: JS package cache
+        uses: actions/cache@v2.1.0
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+      - name: Create new App
+        id: create-app
+        # Sets outputs.appPath to the created directory
+        run: node ./scripts/createApp foo --acceptDefaults
+      - name: Check Build Command
+        run: |
+          cd ${{steps.create-app.outputs.appPath}}
+          yarn build
+      - name: Run Unit Tests
+        run: yarn test:unit
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: node ./scripts/startServer ${{steps.create-app.outputs.appPath}} 3001
+          wait-on: "http://localhost:3001"
+          wait-on-timeout: 180
+          spec: cypress/integration/createBisonAppWithDefaults.test.js
+        env:
+          NODE_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_PATH: ${{steps.create-app.outputs.appPath}}
+          APP_NAME: ${{steps.create-app.outputs.appName}}
