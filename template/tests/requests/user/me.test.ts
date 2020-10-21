@@ -18,12 +18,25 @@ describe('me query', () => {
       const response = await graphQLRequest({ query });
 
       expect(response.body).toMatchInlineSnapshot(`
-              Object {
-                "data": Object {
-                  "me": null,
+        Object {
+          "data": Object {
+            "me": null,
+          },
+          "extensions": Object {
+            "cacheControl": Object {
+              "hints": Array [
+                Object {
+                  "maxAge": 0,
+                  "path": Array [
+                    "me",
+                  ],
                 },
-              }
-          `);
+              ],
+              "version": 1,
+            },
+          },
+        }
+      `);
     });
   });
 
@@ -45,16 +58,29 @@ describe('me query', () => {
       const response = await graphQLRequestAsUser(user, { query });
 
       expect(response.body).toMatchInlineSnapshot(`
-          Object {
-            "data": Object {
-              "me": Object {
-                "email": "foo@wee.net",
-                "roles": Array [
-                  "USER",
-                ],
-              },
+        Object {
+          "data": Object {
+            "me": Object {
+              "email": "foo@wee.net",
+              "roles": Array [
+                "USER",
+              ],
             },
-          }
+          },
+          "extensions": Object {
+            "cacheControl": Object {
+              "hints": Array [
+                Object {
+                  "maxAge": 0,
+                  "path": Array [
+                    "me",
+                  ],
+                },
+              ],
+              "version": 1,
+            },
+          },
+        }
       `);
     });
   });

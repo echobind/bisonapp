@@ -68,6 +68,26 @@ describe('login mutation', () => {
               },
             },
           },
+          "extensions": Object {
+            "cacheControl": Object {
+              "hints": Array [
+                Object {
+                  "maxAge": 0,
+                  "path": Array [
+                    "login",
+                  ],
+                },
+                Object {
+                  "maxAge": 0,
+                  "path": Array [
+                    "login",
+                    "user",
+                  ],
+                },
+              ],
+              "version": 1,
+            },
+          },
         }
       `);
     });

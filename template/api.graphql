@@ -25,11 +25,15 @@ input DateTimeFilter {
   equals: DateTime
   gt: DateTime
   gte: DateTime
-  in: [DateTime]
+  in: [DateTime!]
   lt: DateTime
   lte: DateTime
   not: NestedDateTimeFilter
-  notIn: [DateTime]
+  notIn: [DateTime!]
+}
+
+input EnumRoleNullableListFilter {
+  equals: [Role!]
 }
 
 """
@@ -55,11 +59,11 @@ input NestedDateTimeFilter {
   equals: DateTime
   gt: DateTime
   gte: DateTime
-  in: [DateTime]
+  in: [DateTime!]
   lt: DateTime
   lte: DateTime
   not: NestedDateTimeFilter
-  notIn: [DateTime]
+  notIn: [DateTime!]
 }
 
 input NestedStringFilter {
@@ -68,11 +72,11 @@ input NestedStringFilter {
   equals: String
   gt: String
   gte: String
-  in: [String]
+  in: [String!]
   lt: String
   lte: String
   not: NestedStringFilter
-  notIn: [String]
+  notIn: [String!]
   startsWith: String
 }
 
@@ -107,13 +111,13 @@ input ProfileCreateWithoutUserInput {
 }
 
 input ProfileWhereInput {
-  AND: [ProfileWhereInput]
+  AND: [ProfileWhereInput!]
   createdAt: DateTimeFilter
   firstName: StringFilter
   id: StringFilter
   lastName: StringFilter
-  NOT: [ProfileWhereInput]
-  OR: [ProfileWhereInput]
+  NOT: [ProfileWhereInput!]
+  OR: [ProfileWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -134,9 +138,14 @@ type Query {
     before: UserWhereUniqueInput
     first: Int
     last: Int
-    orderBy: [UserOrderByInput]
+    orderBy: [UserOrderByInput!]
     where: UserWhereInput
   ): [User!]!
+}
+
+enum QueryMode {
+  default
+  insensitive
 }
 
 enum Role {
@@ -161,11 +170,12 @@ input StringFilter {
   equals: String
   gt: String
   gte: String
-  in: [String]
+  in: [String!]
   lt: String
   lte: String
+  mode: QueryMode
   not: NestedStringFilter
-  notIn: [String]
+  notIn: [String!]
   startsWith: String
 }
 
@@ -192,7 +202,7 @@ input UserCreateInput {
 }
 
 input UserCreaterolesInput {
-  set: [Role]
+  set: [Role!]!
 }
 
 input UserOrderByInput {
@@ -205,15 +215,15 @@ input UserOrderByInput {
 }
 
 input UserWhereInput {
-  AND: [UserWhereInput]
+  AND: [UserWhereInput!]
   createdAt: DateTimeFilter
   email: StringFilter
   id: StringFilter
-  NOT: [UserWhereInput]
-  OR: [UserWhereInput]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
   password: StringFilter
   profile: ProfileWhereInput
-  roles: [Role]
+  roles: EnumRoleNullableListFilter
   updatedAt: DateTimeFilter
 }
 
