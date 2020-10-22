@@ -118,9 +118,9 @@ jobs:
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
   
 <% if (host.name === 'heroku') { -%>
-    if: github.ref == 'refs/heads/staging' 
+    if: github.ref == 'refs/heads/<%= repo.stagingBranch %>' 
 <% } else { -%>
-    if: github.ref != 'refs/heads/production' # every branch EXCEPT production
+    if: github.ref != 'refs/heads/<%= repo.productionBranch %>' # every branch EXCEPT production
 <% } -%>
     steps:
       - uses: actions/checkout@v2
@@ -148,7 +148,7 @@ jobs:
     needs: tests
     ## For a typical JAMstack flow, the ref below should be your default branch.
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
-    if: github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/<%= repo.productionBranch %>'
     steps:
       - uses: actions/checkout@v2
 <% if (host.name === 'vercel') { -%>
