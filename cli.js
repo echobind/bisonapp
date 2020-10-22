@@ -35,6 +35,23 @@ function generateQuestions(appName) {
       when: (answers) => answers.repo.addRemote,
     },
     {
+      name: "repo.stagingBranch",
+      type: "input",
+      message:
+        "What branch would you like to use for staging deploys? (migrates staging db on build)",
+      description: "The Staging Branch Name",
+      default: "dev",
+      when: (answers) => answers.repo.addRemote,
+    },
+    {
+      name: "repo.productionBranch",
+      type: "input",
+      message: "What branch would you like to use for production deploys?",
+      description: "The Production Branch Name",
+      default: "main",
+      when: (answers) => answers.repo.addRemote,
+    },
+    {
       name: "db.dev.name",
       type: "input",
       message: "What is the local database name?",
