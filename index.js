@@ -7,12 +7,14 @@ const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
 const { copyFiles } = require("./tasks/copyFiles");
+const { version: bisonVersion } = require("./package.json");
 
 module.exports = async ({ name, ...answers }) => {
   const pkgName = slugify(name);
   const targetFolder = path.join(process.cwd(), pkgName);
   const variables = {
     name: pkgName,
+    bisonVersion,
     ...answers,
   };
 

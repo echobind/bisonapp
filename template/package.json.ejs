@@ -6,10 +6,10 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "build": "yarn build:nexus && yarn build:prisma && yarn build:next",
+    "build": "ts-node ./scripts/buildProd",
     "build:prisma": "prisma generate",
     "build:next": "next build",
-    "build:nexus": "ts-node -P tsconfig.cjs.json --transpile-only graphql/schema.ts",
+    "build:nexus": "NODE_ENV=development ts-node -P tsconfig.cjs.json --transpile-only graphql/schema.ts",
     "cypress:run": "cypress run",
     "cypress:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress",
     "db:migrate": "yarn -s prisma migrate up --experimental",
@@ -107,6 +107,13 @@
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.63",
     "typescript": "^3.9.7"
+  },
+  "bison": {
+    "version": "<%= bisonVersion %>",
+    "branches": {
+      "staging": "<%= repo.stagingBranch %>",
+      "production": "<%= repo.productionBranch %>"
+    }
   },
   "husky": {
     "hooks": {

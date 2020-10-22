@@ -1,7 +1,9 @@
-const { makeTempDir } = require("../../utils/makeTempDir");
 const fs = require("fs");
 const path = require("path");
+
+const { makeTempDir } = require("../../utils/makeTempDir");
 const { copyFiles } = require("../../tasks/copyFiles");
+const { version: bisonVersion } = require("../../package.json");
 
 const DEFAULT_VARS = {
   host: {
@@ -19,6 +21,11 @@ const DEFAULT_VARS = {
       name: "testdb",
     },
   },
+  repo: {
+    stagingBranch: "dev",
+    productionBranch: "main",
+  },
+  bisonVersion,
 };
 
 describe("copyFiles", () => {
@@ -81,7 +88,6 @@ describe("copyFiles", () => {
         "cypress.json",
         "jest.config.js",
         "next-env.d.ts",
-        "package.json",
         "prettier.config.js",
         "README.md",
         "tsconfig.cjs.json",
@@ -94,6 +100,19 @@ describe("copyFiles", () => {
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
+    });
+
+    it("copies package.json with the expected content", async () => {
+      const filePath = path.join(targetFolder, "package.json");
+      const contents = require(filePath);
+      const { bison: bisonConfig } = contents;
+
+      expect(bisonConfig.version).toBe(bisonVersion);
+      expect(bisonConfig.branches.staging).toBe(variables.repo.stagingBranch);
+
+      expect(bisonConfig.branches.production).toBe(
+        variables.repo.productionBranch
+      );
     });
 
     it("copies pages", async () => {
