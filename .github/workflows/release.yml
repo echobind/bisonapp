@@ -1,5 +1,6 @@
 name: Release
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Run Tests"]
     branches: [main, canary]
@@ -10,6 +11,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-18.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
