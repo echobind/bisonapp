@@ -5,7 +5,10 @@
     "target": "es2015",
     "lib": ["es5", "dom"],
     "types": ["cypress", "@types/testing-library__cypress", "node"],
-    "module": "commonjs"
+    "module": "commonjs",
+    "sourceMap": false,
+    "inlineSourceMap": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": []
 }

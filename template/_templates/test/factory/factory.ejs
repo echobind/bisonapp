@@ -5,7 +5,7 @@ to: tests/factories/<%= name %>.ts
 <% upper = h.inflection.camelize(single, false) -%>
 import Chance from 'chance';
 import { <%= upper %> } from '@prisma/client';
-import { prisma } from '../helpers';
+import { buildPrismaIncludeFromAttrs, prisma } from '../helpers';
 
 const chance = new Chance();
 
@@ -19,9 +19,13 @@ export const <%= upper %>Factory = {
 
   create: async (attrs: Partial<<%= upper %>> = {}) => {
     const <%= single %> = <%= upper %>Factory.build(attrs);
+    const options: Record<string, any> = {};
+    const includes = buildPrismaIncludeFromAttrs(attrs);
+    if (includes) options.include = includes;
 
     return await prisma.<%= single %>.create({
       data: { ...<%= single %> },
+      ...options
     });
   },
 };
