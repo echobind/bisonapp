@@ -1,80 +1,287 @@
 <p align="center" style="text-align:center">
-  <img alt="Bison Logo" src="https://user-images.githubusercontent.com/14339/89243835-f47e7c80-d5d2-11ea-8d8d-36202227d0ec.png" />
   <h1><%= name %></h1>
   <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/workflows/main/badge.svg"/></p>
 </p>
 
-## Conventions
+# Getting Started Tutorial
+This checklist and mini-tutorial will make sure you make the most of your shiny new Bison app.
 
-- Don't copy/paste files, use generators and Hygen templates.
-- Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend.
-- Don't manually type GraphQL responses... use the generated query hooks from GraphQL Codegen.
-- All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in a any Next app.
+## Migrate your database and start the dev server
+- [ ] Run `yarn db:migrate` to prep and migrate your local database. If this fails, make sure you have Postgres running and the generated `DATABASE_URL` values are correct in your `.env` files.
+- [ ] Run `yarn dev` to start your development server
 
-## Tradeoffs
+## Complete a Bison workflow
+While not a requirement, Bison works best when you start development with the database and API layer. We will illustrate how to use this by adding the concept of an organization to our app.
 
-- To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app more like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more "intermingled" than your used to.
+### The Database
+Bison uses Prisma for database operations. We've added a few conveniences around the default Prisma setup, but if you're familiar with Prisma, you're familiar with databases in Bison.
 
----
+- [ ] Define the new table in `prisma/schema.prisma`. 
 
-# Getting Started
+We suggest copying the `id`, `createdAt` and `updatedAt` fields from the `User` model.
+```
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
 
-Clone this repo.
+If you use VSCode and have the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) installed, saving the file should automatically add the inverse relationship to the `User` model!
 
-## Configure Vercel
+```
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  password       String
+  roles          Role[]
+  profile        Profile?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+}
+```
 
-Make sure you have a Vercel account.
+- [ ] Generate a migration with `yarn g:migration`.
 
-To run the app locally:
+You should see a new folder in `prisma/migrations`. We recommend opening the `README.md` file within the new migration folder to double check the sql that was generated for you.
+- [ ] Migrate the database with `yarn db:migrate`
 
-1. Run `vercel` or `vc`
-1. Choose the appropriate scope / organization. If you don't see the organization, ask someone to invite you.
-1. If this is a new project, keep all the build defaults. If this is an existing project, choose "link to an existing project" when prompted.
-1. If setting up an existing project, run `vc env pull`. This will sync your dev env vars and save them to .env.
+For more on Prisma, [view the docs](https://www.prisma.io/docs/).
 
-## Setup the database
+### The GraphQL API
+With the database changes complete, we need to decide what types, queries, and mutations to expose in our GraphQL API.
 
-1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
+Bison uses [Nexus Schema](https://nexusjs.org/docs/) to create the GraphQL API. Nexus provides a strongly-typed, concise way of defining GraphQL types and operations.
 
-![Prisma DB Create Prompt](https://user-images.githubusercontent.com/14339/88480536-7e1fb180-cf24-11ea-85c9-9bed43c9dfe4.png)
+- [ ] Create a new GraphQL module using `yarn g:graphql organization`
+- [ ] Edit the new module to reflect what you want to expose via the API. In the following Mutation example, we alias the Mutation name, require a user to be logged in, and force the new Organization to be owned by the logged in user. All in about 10 lines of code!
 
-If you'd like to change the database name or schema, change the DATABASE_URL in `prisma/.env`.
+Because Nexus is strongly typed, all of the `crud`  methods should autocomplete in your editor.
+ 
+```ts
+// Organization Type
+export const Organization = objectType({
+  name: 'Organization',
+  description: 'A Organization',
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
 
-# Run the app
+// Mutatations
+export const OrganizationMutations = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.crud.createOneOrganization({
+      alias: 'createOrganization',
+      authorize: (_root, _args, ctx) => !!ctx.user,
+      computedInputs: {
+        owner: ({ ctx }) => ({
+          connect: {
+            id: ctx.user.id,
+          },
+        }),
+      },
+    });
+  },
+});
+```
 
-From the root, run `yarn dev`. This:
+### Understanding the GraphQL API and TypeScript types
+- [ ] Open `api.graphql` and look at our the new definitions that were generated for you:
 
-- runs `next dev` to run the frontend and serverless functions locally
-- starts a watcher to generate the Prisma client on schema changes
-- starts a watcher to generate TypeScript types for GraphQL files
+```graphql
+"""
+An Organization
+"""
+type Organization {
+  createdAt: DateTime!
+  id: String!
+  updatedAt: DateTime!
+}
 
-# Recommended Dev Workflow
+input OrganizationCreateOneWithoutUsersInput {
+  connect: OrganizationWhereUniqueInput
+  create: OrganizationCreateWithoutUsersInput
+}
 
-You're not required to follow this exact workflow, but we've found it gives a good developer experience.
+input OrganizationCreateWithoutUsersInput {
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
+}
 
-## API
+input OrganizationWhereInput {
+  AND: [OrganizationWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [OrganizationWhereInput!]
+  OR: [OrganizationWhereInput!]
+  updatedAt: DateTimeFilter
+  users: UserListRelationFilter
+}
 
-1. Generate a new GraphQL module using `yarn g:graphql`.
-1. Write a type, query, input, or mutation using [Nexus](https://nexusjs.org/guides/schema)
-1. Create a new request test using `yarn g:test:request`
-1. Run `yarn test` to start the test watcher
-1. Add tests cases and update schema code accordingly
-1. The GraphQL playground (localhost:3000/api/graphql) can be helpful to form the proper queries to use in tests.
-1. `types.ts` and `api.graphql` should update automatically as you change files. Sometimes it's helpful to open these as a sanity check before moving on to the frontend code.
+input OrganizationWhereUniqueInput {
+  id: String
+}
+```
 
-## Frontend
+- [ ] Open up `types.ts` to see the generated TypeScript types that correspond with the graphql changes.
 
-1. Generate a new page using `yarn g:page`
-1. Generate a new component using `yarn g:component`
-1. If you need to fetch data in your component, use a cell. Generate one using `yarn g:cell` (TODO)
-1. To generate a typed GraphQL query, simply add it to the component or page:
+### API Request Tests
+Let's confirm the API changes using a request test. To do this:
+- [ ] Generate a new factory: `yarn g:test:factory organization`
+- [ ] Add a default value for organization name in the build function. You can use any of the methods from the `chance` library.
 
 ```ts
-export const SIGNUP_MUTATION = gql`
-  mutation signup($data: SignupInput!) {
-    signup(data: $data) {
-      token
-      user {
+export const OrganizationFactory = {
+  build: (attrs: Partial<Organization> = {}) => {
+    return {
+      id: chance.guid(),
+      name: chance.company(), // <-- add this
+      ...attrs,
+    };
+  },
+// ...
+```
+
+- [ ] Generate a new api request test: `yarn g:test:request createOrganization`
+- [ ] Update the API request test to call the new mutation and ensure that we get an error if not logged in. If you are curious what the `Input` type should be, check `api.graphql`.
+
+Here we use inline snapshots to confirm the error message content, but you can also manually assert the content.
+
+```ts
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
+import { OrganizationFactory } from '../factories/organization';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('createOrganization mutation', () => {
+  it('returns an error if not logged in', async () => {
+    const query = `
+    mutation createOrganization($data: OrganizationCreateInput!) {
+      createOrganization(data: $data) {
+        id
+        name
+        user {
+          email
+        }
+      }
+    }
+  `;
+
+    const variables = { data: { name: 'Cool Company' } };
+    const response = await graphQLRequest({ query, variables });
+    const errorMessages = response.body.errors.map((e) => e.message);
+
+    expect(errorMessages).toMatchInlineSnapshot(`
+        Array [
+          "Not authorized",
+        ]
+      `);
+  });
+});
+```
+
+- [ ] add a new test to confirm that the organization user is set to the current user
+
+```ts
+it('sets the user to the logged in user', async () => {
+    const query = `
+    mutation createOrganization($data: OrganizationCreateInput!) {
+      createOrganization(data: $data) {
+        id
+        name
+        users {
+          id
+        }
+      }
+    }
+  `;
+
+    const user = await UserFactory.create();
+    const variables = { data: { name: 'Cool Company', users: { connect: { id: 'notmyid' } } } };
+    const response = await graphQLRequestAsUser(user, { query, variables });
+    const organization = response.body.data.createOrganization;
+    const [organizationUser] = organization.users;
+
+    expect(organizationUser.id).toEqual(user.id);
+  });
+```
+
+### Add a Frontend page and form that creates an organization
+Now that we have the API finished, we can move to the frontend changes.
+
+- [ ] Create a new page to create organizations: `yarn g:page organizations/new`
+- [ ] Create an OrganizationForm component: `yarn g:component OrganizationForm`
+- [ ] Add a simple form with a name input. See the [React Hook Form docs](https://react-hook-form.com) for detailed information.
+
+```tsx
+import React from 'react';
+import { useForm } from 'react-hook-form';
+
+
+export function OrganizationForm() {
+  const { register, handleSubmit, errors } = useForm();
+
+  async function onSubmit(data) {
+    console.log(data)
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input name="name" ref={register({ required: true })} />
+      {errors.name && <span>This field is required</span>}
+      
+      <input type="submit" />
+    </form>
+  );
+}
+```
+
+- [ ] Update the form to use Chakra components
+
+```tsx
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormControl id="name">
+        <FormLabel htmlFor="name">Name</FormLabel>
+        <Input
+          type="text"
+          name="name"
+          ref={register({ required: true })}
+          isInvalid={errors.name}
+        />
+        <ErrorText>{errors.name && errors.name.message}</ErrorText>
+      </FormControl>
+
+      <Button type="submit" marginTop={8} width="full">
+        Signup
+      </Button>
+    </form>
+  );
+}
+```
+
+- [ ] Add a graphql mutation to create an organization (use the same code from the API request test to keep it easy!)
+- [ ] Make sure you import gql from @apollo/client since we are working in the frontend.
+
+```tsx
+// add the mutation and save the file
+export const CREATE_ORGANIZATION_MUTATION = gql`
+  mutation createOrganization($data: OrganizationCreateInput!) {
+    createOrganization(data: $data) {
+      id
+      name
+      users {
         id
       }
     }
@@ -82,65 +289,201 @@ export const SIGNUP_MUTATION = gql`
 `;
 ```
 
-5. Use the newly generated types from codegen instead of the typical `useQuery` or `useMutation` hook. For the example above, that would be `useSignupMutation`. You'll now have a fully typed response to work with!
+- [ ] Save the file. You should see GraphQL Codegen pickup on the changes.
+- [ ] Open `types.ts`. Codegen should have created a new hook called `useCreateOrganizationMutation`, which we can use to get fully typed graphql operations!
 
 ```tsx
-import { User, useMeQuery } from './types';
+// types.ts - search for the following function:
 
-// adding this will auto-generate a custom hook in ./types
-export const ME_QUERY = gql`
-  query me {
-    me {
-      id
-      email
+export function useCreateOrganizationMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateOrganizationMutation,
+    CreateOrganizationMutationVariables
+  >
+)
+```
+
+- [ ] Use the newly generated hook to save the results of the form:
+
+```tsx
+export function OrganizationForm() {
+  const { register, handleSubmit, errors } = useForm();
+  const [createOrganization, { data, loading, error }] = useCreateOrganizationMutation();
+
+  async function onSubmit(data) {
+    createOrganization(data);
+  }
+}
+```
+
+- [ ] Attach the mutations loading state to the button loading state
+
+```tsx
+<Button type="submit" marginTop={8} width="full" isLoading={loading}>
+  Signup
+</Button>
+```
+
+You should now have a fully working form that creates a new database entry on submit!
+
+### Adding a new page that shows the organization
+
+- [ ] Generate a new page: `yarn g:page organizations/[:id]`. This uses the dynamic page capability of Next.js.
+- [ ] Add a new "cell" to fetch data. While not required, it keeps things clean. `yarn g:cell Organization`
+- [ ] Add a query to the cell that fetches organization data
+
+```jsx
+import React from 'react';
+import gql from 'graphql-tag';
+import { Spinner, Text } from '@chakra-ui/core';
+
+export const QUERY = gql`
+  query organization {
+    organization {
+      name
     }
   }
 `;
 
-// an example of taking a user as an argument with optional attributes
-function noIdea(user: Partial<User>) {
-  console.log(user.email);
-}
+export const Loading = () => <Spinner />;
+export const Error = () => <Text>Error. See dev tools.</Text>;
+export const Empty = () => <Text>No data.</Text>;
 
-function fakeComponent() {
-  // use the generated hook
-  const { data, loading, error } = useMeQuery();
+export const Success = () => {
+  return <Text>Awesome!</Text>;
+};
 
-  if (loading) return <Loading />;
+export const OrganizationCell = () => {
+  return <Empty />;
+};
+```
 
-  // data.user will be fully typed
-  return <Success user={data.user}>
+- [ ] Verify we get an error about querying for organizations in the dev server console.
+
+```
+[WATCHERS] [GQLCODEGEN]     GraphQLDocumentError: Cannot query field "organization" on type "Query".
+```
+
+- [ ] Fix this by allowing users to query by organization. Update the `graphql/modules/organzization` file.
+
+```ts
+// add this
+export const OrganizationQueries = extendType({
+  type: 'Query',
+  definition(t) {
+    t.crud.organization();
+  },
+});
+```
+
+Going back to our dev console, we should see a new error.
+
+```
+[WATCHERS] [GQLCODEGEN]     GraphQLDocumentError: Field "organization" argument "where" of type "OrganizationWhereUniqueInput!" is required, but it was not provided.
+```
+
+We forgot to add a where clause to our organization query that's in the cell. Let's do that now.
+
+- [ ] Open `api.graphql` to see the parameters we can pass to the organization query.
+- [ ] Copy the `where` parameter and use it in our cell.
+
+```graphql
+type Query {
+  '''
+  organization(where: OrganizationWhereUniqueInput!): Organization
+  '''
 }
 ```
 
-# Set up CI
+- [ ] Update the organization query to take a parameter and use the where query
 
-This project uses GitHub actions for CI.
+```tsx
+export const QUERY = gql`
+  query organization($where: OrganizationWhereUniqueInput!) {
+    organization(where: $where) {
+      name
+    }
+  }
+`;
+```
 
-To ensure your project can run on CI for E2E tests, you need to add a few ENV vars to GitHub Secrets.
+- [ ] Use the newly generated hook from `types.ts` to fetch data in the cell.
+- [ ] Add a prop to the cell for organizationId and pass the value to the query.
+- [ ] Udate the Success component to take the proper return type for the query
+- [ ] Only render the Success component if `data.organization` is present.
 
-![ENV Vars](https://user-images.githubusercontent.com/14339/89292945-228fab00-d62b-11ea-90c2-4198dfcf30f1.png)
+```tsx
+import React from 'react';
+import gql from 'graphql-tag';
+import { Spinner, Text } from '@chakra-ui/core';
 
-The Vercel project and org id, can be copied from `.vercel/project.json`. You can generate a token from https://vercel.com/account/tokens.
+import { OrganizationQuery, useOrganizationQuery } from '../types';
 
-# Setup Preview / Production Deployments
+export const QUERY = gql`
+  query organization($where: OrganizationWhereUniqueInput!) {
+    organization(where: $where) {
+      name
+    }
+  }
+`;
 
-After tests pass, the app will deploy to Vercel. By default, every push creates a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production. To configure deployments:
+export const Loading = () => <Spinner />;
+export const Error = () => <Text>Error. See dev tools.</Text>;
+export const Empty = () => <Text>No data.</Text>;
 
-- Make sure you've set the variables above
-- Configure the branches in the workflow:
-  ```
-  ## For a typical JAMstack flow, this should be your default branch.
-  ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
-  if: github.ref != 'refs/heads/production' # every branch EXCEPT production
-  ```
+export const Success = ({ organization }: OrganizationQuery) => {
+  return <Text>Awesome! {organization.name}</Text>;
+};
 
-# FAQ
+export const OrganizationCell = ({ organizationId }) => {
+  const { data, loading, error } = useOrganizationQuery({
+    variables: {
+      where: { id: organizationId },
+    },
+  });
 
-## Where are the generated types?
+  if (loading) return <Loading />;
+  if (error) return <Error />;
+  if (data.organization) return <Success {...data} />;
 
-TypeScript Types for GraphQL types, queries, and mutations are generated automatically and placed in `./types.ts`. To use these in your code, import like so:
+  return <Empty />;
+};
+```
 
-## My types aren't working, even though they are in ./types.ts
+- [ ] Add the Cell to the organization page:
 
-Try reopening VSCode.
+```tsx
+import React from 'react';
+import Head from 'next/head';
+import { Flex } from '@chakra-ui/core';
+import { useRouter } from 'next/router';
+
+import { OrganizationCell } from '../../cells/OrganizationCell';
+
+function OrganizationPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  return (
+    <>
+      <Head>
+        <title>An organization</title>
+      </Head>
+
+      <Flex direction={{ base: 'column', lg: 'row' }}>
+        <OrganizationCell organizationId={id} />
+      </Flex>
+    </>
+  );
+}
+
+export default OrganizationPage;
+```
+
+## Congrats!
+
+Outside of e2e tests, you've used just about every feature in Bison. But don't worry. We've got your back there too.
+
+Bonus:
+
+- [ ] View the login and logout e2e tests
