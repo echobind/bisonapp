@@ -14,7 +14,6 @@
     "node": ">=8"
   },
   "scripts": {
-    "semantic-release": "semantic-release",
     "test:e2e": "start-server-and-test 'node ./scripts/createAppAndStartServer foo --acceptDefaults' 3001 'cypress run --spec cypress/integration/createBisonAppWithDefaults.test.js'",
     "test:unit": "yarn jest",
     "test": "yarn test:unit"
@@ -46,36 +45,11 @@
   },
   "devDependencies": {
     "@actions/core": "1.2.6",
-    "@semantic-release/git": "^9.0.0",
     "cypress": "^5.1.0",
     "ejs-lint": "^1.1.0",
     "jest": "^26.4.2",
     "prettier": "^2.0.5",
-    "semantic-release": "^17.1.1",
     "start-server-and-test": "^1.11.3"
-  },
-  "release": {
-    "branches": [
-      "main",
-      {
-        "name": "canary",
-        "prerelease": true
-      }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "package.json"
-          ]
-        }
-      ],
-      "@semantic-release/github"
-    ]
   },
   "jest": {
     "testPathIgnorePatterns": [
