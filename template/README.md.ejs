@@ -16,7 +16,7 @@ While not a requirement, Bison works best when you start development with the da
 ### The Database
 Bison uses Prisma for database operations. We've added a few conveniences around the default Prisma setup, but if you're familiar with Prisma, you're familiar with databases in Bison.
 
-- [ ] Define the new table in `prisma/schema.prisma`. 
+- [ ] Define an Organization table in `prisma/schema.prisma`. 
 
 We suggest copying the `id`, `createdAt` and `updatedAt` fields from the `User` model.
 ```
@@ -60,7 +60,7 @@ Bison uses [Nexus Schema](https://nexusjs.org/docs/) to create the GraphQL API. 
 - [ ] Create a new GraphQL module using `yarn g:graphql organization`
 - [ ] Edit the new module to reflect what you want to expose via the API. In the following Mutation example, we alias the Mutation name, require a user to be logged in, and force the new Organization to be owned by the logged in user. All in about 10 lines of code!
 
-Because Nexus is strongly typed, all of the `crud`  methods should autocomplete in your editor.
+Because Nexus is strongly typed, all of the `t.` operations should autocomplete in your editor. Bison uses the [Prisma plugin](https://nexusjs.org/docs/pluginss/prisma/api) for Nexus, which enables the `t.model` and `t.crud` functions.
  
 ```ts
 // Organization Type
@@ -83,10 +83,8 @@ export const OrganizationMutations = extendType({
       alias: 'createOrganization',
       authorize: (_root, _args, ctx) => !!ctx.user,
       computedInputs: {
-        owner: ({ ctx }) => ({
-          connect: {
-            id: ctx.user.id,
-          },
+        users: ({ ctx }) => ({
+          connect: [{ id: ctx.user.id }],
         }),
       },
     });
@@ -171,7 +169,7 @@ describe('createOrganization mutation', () => {
       createOrganization(data: $data) {
         id
         name
-        user {
+        users {
           email
         }
       }
@@ -208,7 +206,7 @@ it('sets the user to the logged in user', async () => {
   `;
 
     const user = await UserFactory.create();
-    const variables = { data: { name: 'Cool Company', users: { connect: { id: 'notmyid' } } } };
+    const variables = { data: { name: 'Cool Company', users: { connect: [{ id: 'notmyid' }] } } };
     const response = await graphQLRequestAsUser(user, { query, variables });
     const organization = response.body.data.createOrganization;
     const [organizationUser] = organization.users;
