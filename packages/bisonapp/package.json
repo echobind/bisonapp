@@ -1,0 +1,50 @@
+{
+  "name": "bisonapp",
+  "version": "1.8.0",
+  "description": "The main Bison CLI",
+  "bin": {
+    "bisonapp": "./lib/bisonapp.ts",
+    "b": "./lib/bisonapp.ts"
+  },
+  "keywords": [
+    "cli",
+    "bison",
+    "jamstack"
+  ],
+  "author": "Chris Ball <chris@echobind.com>",
+  "homepage": "https://github.com/echobind/bisonapp",
+  "license": "MIT",
+  "main": "lib/bisonapp.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/echobind/bisonapp.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/echobind/bisonapp/issues"
+  },
+  "devDependencies": {
+    "@types/listr": "^0.14.2",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "execa": "^4.1.0",
+    "listr": "^0.14.3",
+    "terminal-link": "^2.1.1",
+    "ts-node": "^9.0.0",
+    "yargs": "^16.1.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "baseUrl": "./",
+    "module": "commonjs",
+    "rootDir": ".",
+    "outDir": "lib",
+    "declaration": false,
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "types": [],
+    "noEmit": false,
+    "lib": ["dom", "dom.iterable", "ES2018"]
+  },
+  "include": ["src/**/*", "types"],
+  "exclude": ["node_modules"]
+}
