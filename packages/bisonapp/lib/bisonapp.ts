@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+import yargs from "yargs";
+
+// eslint-disable-next-line no-unused-expressions
+yargs
+  .commandDir("../commands", {
+    extensions: ["js", "ts"],
+  })
+  .scriptName("bison")
+  .example(
+    "yarn bison g page posts/new",
+    '"Create a new page at pages/posts/new"'
+  )
+  .demandCommand()
+  .wrap(Math.min(100, yargs.terminalWidth()))
+  .help()
+  .strict().argv;

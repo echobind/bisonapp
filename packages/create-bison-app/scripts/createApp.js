@@ -11,18 +11,18 @@ async function init() {
 }
 
 async function createApp(args) {
-  const tmpdir = await makeTempDir();
+  const packagesDir = path.join(__dirname, "..", "..");
   const cliPath = path.join(__dirname, "..", "cli.js");
 
   const cliOptions = args.length ? args : ["myapp", "--acceptDefaults"];
   const name = cliOptions.splice(0, 1)[0];
 
   await execa("node", [cliPath, name, ...cliOptions], {
-    cwd: tmpdir,
+    cwd: packagesDir,
     stdio: "inherit",
   });
 
-  const appPath = path.join(tmpdir, name);
+  const appPath = path.join(packagesDir, name);
   core.debug(`app name: ${name}`);
   core.setOutput("appName", name);
   core.debug(`app path: ${appPath}`);
