@@ -14,9 +14,15 @@
     "node": ">=10"
   },
   "scripts": {
+    "build": "lerna run build --no-private --stream",
+    "dev": "lerna run dev --no-private --stream --parallel",
     "publish:canary": "yarn lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary --yes",
     "publish:latest": "yarn lerna publish --conventional-graduate --yes",
     "test": "yarn lerna run test --stream"
+  },
+  "dependencies": {
+    "create-bison-app": "*",
+    "bisonapp": "*"
   },
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^4.4.0",

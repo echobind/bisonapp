@@ -5,6 +5,6 @@ export const description = "Build scripts";
 
 export const builder = (yargs: yargslib.Argv<{}>) =>
   yargs.commandDir("./buildCommands", {
-    extensions: ["ts"],
+    extensions: ["js", "ts"],
   });
 // .demandCommand();

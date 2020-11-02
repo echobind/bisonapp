@@ -4,7 +4,7 @@ import yargs from "yargs";
 // eslint-disable-next-line no-unused-expressions
 yargs
   .commandDir("../commands", {
-    extensions: ["ts"],
+    extensions: ["js", "ts"],
   })
   .scriptName("bison")
   .example(

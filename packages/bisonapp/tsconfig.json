@@ -5,7 +5,7 @@
     "baseUrl": "./",
     "module": "commonjs",
     "rootDir": ".",
-    "outDir": "lib",
+    "outDir": "dist",
     "declaration": false,
     "sourceMap": false,
     "esModuleInterop": true,
@@ -13,6 +13,6 @@
     "noEmit": false,
     "lib": ["dom", "dom.iterable", "ES2018"]
   },
-  "include": ["src/**/*", "types"],
+  "include": ["lib/**/*", "commands/**/*"],
   "exclude": ["node_modules"]
 }

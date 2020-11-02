@@ -3,8 +3,13 @@
   "version": "1.8.0",
   "description": "The main Bison CLI",
   "bin": {
-    "bison": "./lib/bisonapp.ts",
-    "ba": "./lib/bisonapp.ts"
+    "bison": "./dist/lib/bisonapp.js",
+    "ba": "./dist/lib/bisonapp.js"
+  },
+  "scripts": {
+    "dev": "tsc --watch --preserveWatchOutput",
+    "build": "tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "keywords": [
     "cli",
@@ -20,7 +25,7 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "publishConfig": {
     "registry": "https://registry.yarnpkg.com"
@@ -28,9 +33,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/echobind/bisonapp.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/echobind/bisonapp/issues"

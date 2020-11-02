@@ -8,7 +8,7 @@ export const description = "Database scripts";
 export const builder = (yargs: yargslib.Argv<{}>) =>
   yargs
     .commandDir("./dbCommands", {
-      extensions: ["ts"],
+      extensions: ["js", "ts"],
     })
     .demandCommand()
     .epilogue(
