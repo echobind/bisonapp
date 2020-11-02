@@ -2,7 +2,7 @@ export {};
 const spawn = require('child_process').spawn;
 
 const bisonConfig = require('../package.json').bison;
-const DEFAULT_BUILD_COMMAND = `yarn build:nexus && yarn build:prisma && yarn build:next`;
+const DEFAULT_BUILD_COMMAND = `yarn bison build`;
 
 /**
  * This builds the production app.
@@ -24,7 +24,7 @@ function buildProd() {
   let buildCommand = DEFAULT_BUILD_COMMAND;
 
   if (shouldMigrate) {
-    buildCommand = `yarn db:migrate && ${buildCommand}`;
+    buildCommand = `yarn bison db migrate && ${buildCommand}`;
   }
 
   const child = spawn(buildCommand, {

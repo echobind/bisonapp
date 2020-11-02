@@ -2,13 +2,23 @@ import yargslib from "yargs";
 import { runCLICommands } from "../../lib/helpers";
 import { handler as generatePrismaClient } from "../buildCommands/prisma";
 
-export const command = "migrate";
+export const command = "test";
 export const description = "Migrate the database";
 
 export const builder = (yargs: yargslib.Argv<{}>) => {
-  yargs.option("dbClient", {
-    default: true,
-    description: "Generate the Prisma client",
+  yargs.option("request", {
+    default: false,
+    description: "Generate an API request test",
+    type: "boolean",
+  });
+  yargs.option("component", {
+    default: false,
+    description: "Generate a component unit test",
+    type: "boolean",
+  });
+  yargs.option("util", {
+    default: false,
+    description: "Generate a util unit test",
     type: "boolean",
   });
 };

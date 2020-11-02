@@ -6,7 +6,7 @@ yargs
   .commandDir("../commands", {
     extensions: ["ts"],
   })
-  .scriptName("bisonapp")
+  .scriptName("bison")
   .example(
     "yarn bison g page posts/new",
     '"Create a new page at pages/posts/new"'

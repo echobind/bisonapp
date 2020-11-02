@@ -2,21 +2,25 @@ import yargslib from "yargs";
 import { runCLICommands } from "../../lib/helpers";
 
 interface Options {
-  schemaPath: string;
+  schemaPath?: string;
 }
 
 export const command = "nexus";
 export const description = "Builds the GraphQL schema and generates types.";
 
+const DEFAULT_SCHEMA_PATH = "graphql/schema.ts";
+
 export const builder = (yargs: yargslib.Argv<{}>) => {
   yargs.option("schemaPath", {
-    default: "graphql/schema.ts",
+    default: DEFAULT_SCHEMA_PATH,
     description: "The path to the graphql schema",
     type: "string",
   });
 };
 
-export const handler = async ({ schemaPath }: Options) => {
+export const handler = async ({
+  schemaPath = DEFAULT_SCHEMA_PATH,
+}: Options = {}) => {
   await runCLICommands([
     {
       title: "Generating GraphQL schema and types",

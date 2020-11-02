@@ -21,5 +21,12 @@
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^4.4.0",
     "lerna": "^3.22.1"
+  },
+  "bison": {
+    "version": "23",
+    "branches": {
+      "staging": "staging",
+      "production": "prod"
+    }
   }
 }

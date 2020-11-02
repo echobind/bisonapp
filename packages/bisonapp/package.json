@@ -3,8 +3,8 @@
   "version": "1.8.0",
   "description": "The main Bison CLI",
   "bin": {
-    "bisonapp": "./lib/bisonapp.ts",
-    "b": "./lib/bisonapp.ts"
+    "bison": "./lib/bisonapp.ts",
+    "ba": "./lib/bisonapp.ts"
   },
   "keywords": [
     "cli",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@types/listr": "^0.14.2",
+    "@types/update-notifier": "^5.0.0",
     "typescript": "^4.0.5"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
     "listr": "^0.14.3",
     "terminal-link": "^2.1.1",
     "ts-node": "^9.0.0",
+    "update-notifier": "^5.0.1",
     "yargs": "^16.1.0"
   }
 }

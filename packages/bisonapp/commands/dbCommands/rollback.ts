@@ -2,8 +2,8 @@ import yargslib from "yargs";
 import { runCLICommands } from "../../lib/helpers";
 import { handler as generatePrismaClient } from "../buildCommands/prisma";
 
-export const command = "migrate";
-export const description = "Migrate the database";
+export const command = "rollback";
+export const description = "Rollback recent database migrations";
 
 export const builder = (yargs: yargslib.Argv<{}>) => {
   yargs.option("dbClient", {
@@ -16,9 +16,9 @@ export const builder = (yargs: yargslib.Argv<{}>) => {
 export const handler = async ({ dbClient = true }) => {
   const success = await runCLICommands([
     {
-      title: "Migrate database up...",
+      title: "Migrate database down...",
       cmd: "yarn prisma",
-      args: ["migrate up", "--experimental"].filter(Boolean),
+      args: ["migrate down", "--experimental"].filter(Boolean),
     },
   ]);
 
