@@ -18,9 +18,9 @@
     "dev": "lerna run dev --no-private --stream --parallel",
     "publish:canary": "lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary --yes",
     "publish:latest": "lerna publish --conventional-graduate --yes",
-    "local-publish": "lerna publish --no-git-tag-version --no-push --registry=\"http://localhost:4873/\"",
-    "local-unpublish": "lerna exec -- yarn unpublish --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}@\\$(npm view \\$LERNA_PACKAGE_NAME version)\"",
-    "local-unpublish-all": "lerna exec -- yarn unpublish -f --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}\"",
+    "local:publish": "lerna publish --no-git-tag-version --no-push --registry=\"http://localhost:4873/\"",
+    "local:unpublish": "lerna exec -- yarn unpublish --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}@\\$(npm view \\$LERNA_PACKAGE_NAME version)\"",
+    "local:unpublish:all": "lerna exec -- yarn unpublish -f --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}\"",
     "test": "lerna run test --stream"
   },
   "dependencies": {
