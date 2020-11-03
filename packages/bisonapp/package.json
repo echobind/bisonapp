@@ -20,10 +20,6 @@
   "homepage": "https://github.com/echobind/bisonapp",
   "license": "MIT",
   "main": "lib/bisonapp.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
   "files": [
     "dist"
   ],
@@ -43,11 +39,35 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "@apollo/client": "^3.0.2",
+    "@graphql-codegen/cli": "1.17.6",
+    "@graphql-codegen/typescript-operations": "^1.17.6",
+    "@graphql-codegen/typescript-react-apollo": "1.17.6",
+    "@graphql-codegen/typescript-resolvers": "1.17.4",
+    "@graphql-codegen/typescript": "1.17.6",
+    "@nexus/schema": "^0.16.0",
+    "@prisma/cli": "2.8.1",
+    "@prisma/client": "2.8.1",
+    "@testing-library/cypress": "^6.0.0",
+    "@testing-library/dom": "^7.21.7",
+    "@testing-library/jest-dom": "^5.11.2",
+    "@testing-library/react": "^10.4.7",
+    "@testing-library/user-event": "^12.0.17",
+    "bcryptjs": "^2.4.3",
     "chalk": "^4.1.0",
+    "cross-fetch": "^3.0.5",
     "execa": "^4.1.0",
+    "graphql-scalars": "^1.3.0",
+    "graphql-type-json": "^0.3.1",
+    "graphql-tag": "^2.11.0",
+    "graphql": "^15.3.0",
+    "hygen": "^6.0.4",
+    "jsonwebtoken": "^8.5.1",
     "listr": "^0.14.3",
+    "nexus-plugin-prisma": "^0.21.0",
     "terminal-link": "^2.1.1",
     "ts-node": "^9.0.0",
+    "universal-cookie": "^4.0.3",
     "update-notifier": "^5.0.1",
     "yargs": "^16.1.0"
   }
