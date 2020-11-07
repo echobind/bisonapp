@@ -14,8 +14,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "publish:canary": "yarn lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary",
-    "publish": "yarn lerna publish --conventional-graduate",
+    "publish:canary": "yarn lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary --yes",
+    "publish": "yarn lerna publish --conventional-graduate --yes",
     "test": "yarn lerna run test --stream"
   },
   "devDependencies": {

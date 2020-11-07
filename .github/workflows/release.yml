@@ -19,6 +19,10 @@ jobs:
         uses: actions/setup-node@v2.1.1
         with:
           node-version: 14.6.0
+      - name: Setup Git User
+        run: |
+          git config --global user.name 'EB CI'
+          git config --global user.email 'ci@echobind.com'
       - name: Find yarn cache location
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
