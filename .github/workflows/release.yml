@@ -19,6 +19,9 @@ jobs:
         uses: actions/setup-node@v2.1.1
         with:
           node-version: 14.6.0
+          registry-url: https://registry.npmjs.org
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Git User
         run: |
           git config --global user.name 'EB CI'
