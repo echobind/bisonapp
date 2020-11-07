@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "1.9.0-canary.4",
+  "version": "1.9.0",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
@@ -57,5 +57,6 @@
       "cypress",
       "template"
     ]
-  }
+  },
+  "gitHead": "77560a4db64e3730027230acf71dfc7cdfafefb4"
 }
