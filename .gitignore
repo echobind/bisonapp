@@ -11,3 +11,5 @@ yarn-debug.log*
 yarn-error.log*
 
 tmp
+lerna-debug.log
+.env

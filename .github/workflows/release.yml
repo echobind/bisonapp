@@ -30,9 +30,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install packages
-        run: yarn install --frozen-lockfile
-      - name: Release
+        run: yarn && yarn lerna bootstrap
+      - name: Release Canary
+        if: github.ref == 'refs/heads/canary'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn semantic-release
+        run: yarn publish:canary
+      - name: Release Latest
+        if: github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn publish
