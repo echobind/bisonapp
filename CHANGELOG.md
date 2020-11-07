@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [1.9.13](https://github.com/echobind/bisonapp/compare/v1.9.12...v1.9.13) (2020-11-07)
+
+**Note:** Version bump only for package root
+
+
+
+
+
 ### [1.9.12](https://github.com/echobind/bisonapp/compare/v1.9.11...v1.9.12) (2020-11-07)
 
 **Note:** Version bump only for package root
