@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "1.8.0-canary.2",
+  "version": "1.8.0",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
