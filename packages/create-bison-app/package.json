@@ -1,6 +1,6 @@
 {
   "name": "create-bison-app",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "Creates a production-ready full-stack JAMstack app",
   "license": "MIT",
   "repository": "echobind/bisonapp",
@@ -58,5 +58,5 @@
       "template"
     ]
   },
-  "gitHead": "be00b9a58ee35e6f904d82d41b804793ddd7c3cd"
+  "gitHead": "fa6bf2219afecbd6fae709735b6f8d5e13a008ee"
 }
