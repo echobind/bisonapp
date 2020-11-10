@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.9.14-canary.2 (2020-11-10)
+
+**Note:** Version bump only for package create-bison-app
+
+
+
+
+
 ### 1.9.14-canary.1 (2020-11-10)
 
 **Note:** Version bump only for package create-bison-app
