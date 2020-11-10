@@ -3980,9 +3980,9 @@ cpy@^7.2.0:
     nested-error-stacks "^2.1.0"
 
 create-bison-app@*:
-  version "1.9.15"
-  resolved "https://registry.yarnpkg.com/create-bison-app/-/create-bison-app-1.9.15.tgz#e2a6fa487b11f77f29114f546ff99946fc62cdb0"
-  integrity sha512-5UmQfF/nX4MscYG5apx2b10oiU6Z00LQlyLGTvRcalPzJECCQYAx19CJeqvzMiGymseJe+QVrgycmY6t2TUV7A==
+  version "1.9.12"
+  resolved "https://registry.yarnpkg.com/create-bison-app/-/create-bison-app-1.9.12.tgz#66feda23370d929c1d90670a692226354b41f8b6"
+  integrity sha512-gCtuDipZqpnNY+IyxQHn4Uw516bUfImrh4a+Cx7iNO4oQ6qME3w/vN2NAVXP/HCWNc0cR7/nevl+BRdAikeKpg==
   dependencies:
     cpy "^7.2.0"
     ejs "^3.1.5"

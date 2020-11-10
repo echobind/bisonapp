@@ -41,7 +41,7 @@
     "listr": "^0.14.3",
     "nodegit": "^0.27.0",
     "slugify": "^1.3.4",
-    "yargs": "^15.4.1"
+    "yargs": "^16.1.0"
   },
   "devDependencies": {
     "@actions/core": "1.2.6",
