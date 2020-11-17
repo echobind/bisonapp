@@ -1,0 +1,27 @@
+---
+to: pages/<%= name %>.tsx
+---
+<% formattedPath = h.camelizedPathName(name).replace('/','') -%>
+<% pageName = `${formattedPath}Page` -%>
+<% base = h.camelizedBaseName(name) -%>
+import React from 'react';
+import Head from 'next/head';
+import { Heading, Center, Flex } from '@chakra-ui/react';
+
+function <%= pageName %>() {
+  return (
+    <>
+      <Head>
+        <title><%= pageName %></title>
+      </Head>
+
+      <Flex direction={{ base: 'column', lg: 'row'}}>
+        <Center>
+          <Heading size="lg">I am <%= name %> page</Heading>
+        </Center>
+      </Flex>
+    </>
+  );
+}
+
+export default <%= pageName %>;
