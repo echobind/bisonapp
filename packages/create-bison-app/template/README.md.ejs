@@ -333,7 +333,7 @@ You should now have a fully working form that creates a new database entry on su
 ```jsx
 import React from 'react';
 import gql from 'graphql-tag';
-import { Spinner, Text } from '@chakra-ui/core';
+import { Spinner, Text } from '@chakra-ui/react';
 
 export const QUERY = gql`
   query organization {
@@ -413,7 +413,7 @@ export const QUERY = gql`
 ```tsx
 import React from 'react';
 import gql from 'graphql-tag';
-import { Spinner, Text } from '@chakra-ui/core';
+import { Spinner, Text } from '@chakra-ui/react';
 
 import { OrganizationQuery, useOrganizationQuery } from '../types';
 
@@ -453,7 +453,7 @@ export const OrganizationCell = ({ organizationId }) => {
 ```tsx
 import React from 'react';
 import Head from 'next/head';
-import { Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { OrganizationCell } from '../../cells/OrganizationCell';
