@@ -126,6 +126,7 @@ jobs:
       - uses: actions/checkout@v2
 <% if (host.name === 'vercel') { -%>
       - uses: ngduc/vercel-deploy-action@master
+        #current vercel action will need you to enable ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
