@@ -14,10 +14,10 @@ The Vercel project and org id, can be copied from `.vercel/project.json`. You ca
 
 After tests pass, the app will deploy. Every push will create a preview deployment. Merging to the main branch will deploy to staging, and pushing to the production branch will deploy to production.
 
-If you'd like to change these configurations to a more typical JAMstack flow (where merging to the main branch deploys to production), update the section below in `..github/workflows/main.js.yml`:
+If you'd like to change these configurations to a more typical Jamstack flow (where merging to the main branch deploys to production), update the section below in `..github/workflows/main.js.yml`:
 
 ```
-## For a typical JAMstack flow, this should be your default branch.
+## For a typical Jamstack flow, this should be your default branch.
 ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
 if: github.ref != 'refs/heads/production' # every branch EXCEPT production
 ```
