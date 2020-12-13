@@ -125,14 +125,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 <% if (host.name === 'vercel') { -%>
-      - uses: ngduc/vercel-deploy-action@master
+      - uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
-          # scope: ${{ secrets.VERCEL_TEAM_ID }}
+          # scope: ${{ secrets.VERCEL_ORG_ID }}
 <% } else if (host.name === 'heroku') { -%>
       - uses: akhileshns/heroku-deploy@v3.4.6
         with:
