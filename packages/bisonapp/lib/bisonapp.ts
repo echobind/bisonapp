@@ -12,4 +12,5 @@ yargs
     '"Create a new page at pages/posts/new"'
   )
   .demandCommand()
+  .help()
   .strict().argv;

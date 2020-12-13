@@ -6,27 +6,9 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "build": "ts-node ./scripts/buildProd",
-    "build:prisma": "prisma generate",
-    "build:next": "next build",
-    "build:nexus": "NODE_ENV=development ts-node -P tsconfig.cjs.json --transpile-only graphql/schema.ts",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "db:migrate": "yarn -s prisma migrate up --experimental && yarn build:prisma",
-    "db:rollback": "yarn prisma migrate down --experimental && yarn build:prisma",
-    "db:setup": "yarn db:migrate && yarn prisma generate",
-    "db:drop": "DOTENV_CONFIG_PATH=./prisma/.env ts-node -r dotenv/config ./scripts/dropDatabase",
     "dev": "concurrently -n \"WATCHERS,NEXT\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"next dev\"",
     "dev:typecheck": "tsc --noEmit",
-    "g:cell": "hygen cell new --name",
-    "g:component": "hygen component new --name",
-    "g:graphql": "hygen graphql new --name",
-    "g:page": "hygen page new --name",
-    "g:migration": "yarn -s prisma migrate save --experimental",
-    "g:test:component": "hygen test component --name",
-    "g:test:factory": "hygen test factory --name",
-    "g:test:request": "hygen test request --name",
-    "g:test:util": "hygen test util --name",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
@@ -62,8 +44,7 @@
 <% if (host.name === 'vercel') { -%>
     "@vercel/node": "^1.7.3",
 <% } -%> 
-<% // TODO bison version -%>
-    "bisonapp": "^1.8.0"
+    "bisonapp": "^<%= bisonVersion %>"
     "concurrently": "^5.2.0",
     "cypress": "^6.1.0",
     "eslint": "^7.5.0",
@@ -82,7 +63,7 @@
     "typescript": "^3.9.7"
   },
   "bison": {
-    "version": "<%= bisonVersion %>",
+    "templateDirectory": "_templates",
     "branches": {
       "staging": "<%= repo.stagingBranch %>",
       "production": "<%= repo.productionBranch %>"

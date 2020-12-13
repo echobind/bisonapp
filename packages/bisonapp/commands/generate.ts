@@ -21,15 +21,21 @@ const DEFAULT_SUBCOMMAND = "new";
 
 export const builder = (yargs: yargslib.Argv<{}>) => {
   yargs
+    .commandDir("./generateCommands", {
+      extensions: ["js", "ts"],
+    })
     .option("command", {
       description: "The generator to run",
       type: "string",
+      hidden: true,
     })
     .option("subcommand", {
       description: "The subcommand",
       type: "string",
       default: DEFAULT_SUBCOMMAND,
-    });
+      hidden: true,
+    })
+    .demandCommand();
 };
 
 export const handler = async ({

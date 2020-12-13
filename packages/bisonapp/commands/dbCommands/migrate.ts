@@ -14,11 +14,14 @@ export const builder = (yargs: yargslib.Argv<{}>) => {
 };
 
 export const handler = async ({ dbClient = true }) => {
+  let args = ["migrate up", "--experimental"];
+  if (process.env.CI) args.push("--auto-approve");
+
   const success = await runCLICommands([
     {
       title: "Migrate database up...",
       cmd: "yarn prisma",
-      args: ["migrate up", "--experimental"].filter(Boolean),
+      args: args.filter(Boolean),
     },
   ]);
 
