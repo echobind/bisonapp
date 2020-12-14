@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "tsc --watch --preserveWatchOutput",
     "build": "tsc",
+    "prepare": "tsc && chmod +x ./dist/lib/bisonapp.js",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "keywords": [

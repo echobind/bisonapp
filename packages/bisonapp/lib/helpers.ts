@@ -9,16 +9,15 @@ interface Command {
   opts?: Options<string>;
 }
 
+export const DEFAULT_EXECA_ARGS = {};
+
 export const runCLICommands = async (commands: Command[] = []) => {
   const tasks = new Listr(
     commands.map(({ title, cmd, args, opts = {} }) => ({
       title,
       task: async () => {
         return execa(cmd, args, {
-          shell: true,
-          stdio: "inherit",
-          extendEnv: true,
-          cleanup: true,
+          ...DEFAULT_EXECA_ARGS,
           ...opts,
         });
       },

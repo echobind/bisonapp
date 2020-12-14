@@ -6,21 +6,12 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "cypress:open": "cypress open",
-    "dev": "concurrently -n \"WATCHERS,NEXT\" -c \"black.bgYellow.dim,black.bgCyan.dim\" \"yarn watch:all\" \"next dev\"",
-    "dev:typecheck": "tsc --noEmit",
+    "dev": "bison dev",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
     "start": "next start -p $PORT",
-    "test": "yarn withEnv:test jest --runInBand --watch",
-    "test:ci": "yarn withEnv:test jest --runInBand",
-    "test:e2e": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test 'yarn test:server' http://localhost:3001 'yarn cypress:run'",
-    "test:e2e:local": "CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress open",
-    "test:server": "next start --port 3001",
-    "withEnv:test": "DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config ./scripts/yarnWithEnv",
-    "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN,TYPESCRIPT\" -c \"black.bgGreen.dim,black.bgBlue.dim,white.bgMagenta.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\" \"yarn watch:ts\"",
-    "watch:codegen": "graphql-codegen --config codegen.yml --watch",
-    "watch:nexus": "ts-node-dev -P tsconfig.cjs.json --transpile-only --respawn --watch graphql/schema.ts,prisma/schema.prisma graphql/schema.ts",
-    "watch:ts": "yarn dev:typecheck --watch"
+    "test": "bison test --watch",
+    "test:e2e": "bison test e2e",
+    "watch": "bison watch",
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.5",
@@ -44,7 +35,7 @@
 <% if (host.name === 'vercel') { -%>
     "@vercel/node": "^1.7.3",
 <% } -%> 
-    "bisonapp": "^<%= bisonVersion %>"
+    "bisonapp": "^<%= bisonVersion %>",
     "concurrently": "^5.2.0",
     "cypress": "^6.1.0",
     "eslint": "^7.5.0",
@@ -63,7 +54,6 @@
     "typescript": "^3.9.7"
   },
   "bison": {
-    "templateDirectory": "_templates",
     "branches": {
       "staging": "<%= repo.stagingBranch %>",
       "production": "<%= repo.productionBranch %>"

@@ -12,5 +12,6 @@ yargs
     '"Create a new page at pages/posts/new"'
   )
   .demandCommand()
+  .wrap(Math.min(100, yargs.terminalWidth()))
   .help()
   .strict().argv;

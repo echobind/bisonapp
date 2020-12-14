@@ -1,4 +1,4 @@
-import { runCLICommands } from "lib/helpers";
+import { runCLICommands } from "../../lib/helpers";
 import yargslib from "yargs";
 
 export const command = "migration <name>";

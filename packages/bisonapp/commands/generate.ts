@@ -5,13 +5,6 @@ export const command = "generate <command> [subcommand] <name>";
 export const aliases = ["g"];
 export const description = "Generate app code";
 
-// export const builder = (yargs: yargslib.Argv<{}>) =>
-//   yargs
-//   .commandDir("./generateCommands", {
-//     extensions: ["ts"],
-//   })
-//   .demandCommand();
-
 interface Options {
   command: string;
   subcommand?: string;
