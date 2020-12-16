@@ -9,7 +9,12 @@ interface Command {
   opts?: Options<string>;
 }
 
-export const DEFAULT_EXECA_ARGS = {};
+export const DEFAULT_EXECA_ARGS: Options<string> = {
+  shell: true,
+  stdio: "inherit",
+  extendEnv: true,
+  cleanup: true,
+};
 
 export const runCLICommands = async (commands: Command[] = []) => {
   const tasks = new Listr(
