@@ -24,9 +24,6 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://registry.yarnpkg.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/echobind/bisonapp.git"
@@ -57,6 +54,7 @@
     "@testing-library/user-event": "^12.0.17",
     "bcryptjs": "^2.4.3",
     "chalk": "^4.1.0",
+    "chance": "^1.1.6",
     "cross-fetch": "^3.0.5",
     "execa": "^4.1.0",
     "graphql": "^15.3.0",
@@ -67,6 +65,7 @@
     "jsonwebtoken": "^8.5.1",
     "listr": "^0.14.3",
     "nexus-plugin-prisma": "^0.21.0",
+    "supertest": "^4.0.2",
     "terminal-link": "^2.1.1",
     "ts-node": "^9.0.0",
     "universal-cookie": "^4.0.3",
