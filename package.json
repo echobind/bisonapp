@@ -19,8 +19,11 @@
     "publish:canary": "lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary --yes",
     "publish:latest": "lerna publish --conventional-graduate --yes",
     "publish:local": "lerna publish --no-git-tag-version --no-push --registry=\"http://localhost:4873/\"",
-    "unpublish:local": "lerna exec -- yarn unpublish --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}@\\$(npm view \\$LERNA_PACKAGE_NAME version)\"",
-    "unpublish:local:all": "lerna exec -- yarn unpublish -f --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}\"",
+    "publish:local:dev": "yarn publish:local --dist-tag=dev --allow-branch=*",
+    "unpublish:local": "lerna exec -- npm unpublish --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}@\\$(npm view \\$LERNA_PACKAGE_NAME version)\"",
+    "unpublish:local:all": "lerna exec -- npm unpublish -f --registry=\"http://localhost:4873/\" \"\\${LERNA_PACKAGE_NAME}\"",
+    "unpublish:local:dev": "lerna exec -- npm unpublish --tag=dev --registry=\"http://localhost:4873\" --force",
+    "local:npm": "verdaccio --config ./verdaccio.yml",
     "test": "lerna run test --stream"
   },
   "dependencies": {
