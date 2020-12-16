@@ -10,7 +10,7 @@ export const builder = (_yargs: yargslib.Argv<{}>) => {};
 export const handler = async () => {
   // use execa directly due to watch mode
   await execa(
-    "concurrently",
+    "yarn concurrently",
     [
       '-n "NEXUS,GQLCODEGEN,TYPESCRIPT"',
       '-c "black.bgGreen.dim,black.bgBlue.dim,white.bgMagenta.dim"',
