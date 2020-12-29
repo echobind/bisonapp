@@ -1,6 +1,6 @@
 <p align="center" style="text-align:center">
   <img alt="Bison Logo" src="https://user-images.githubusercontent.com/14339/89243835-f47e7c80-d5d2-11ea-8d8d-36202227d0ec.png" />
-  <h1 align="center">The Full Stack JAMstack in-a-box.</h1>
+  <h1 align="center">The Full Stack Jamstack in-a-box.</h1>
 </p>
 
 Bison is a starter repository created out of real-world apps at [Echobind](https://echobind.com). It represents our team's "Greenfield Web Stack" that we use when creating web apps for clients.
@@ -41,7 +41,7 @@ We're always improving on this, and we welcome suggestions from the community!
 
 ## Alternatives
 
-A few other projects that are rapidly maturing in the Full Stack JAMStack space.
+A few other projects that are rapidly maturing in the Full Stack Jamstack space.
 
 **RedwoodJS**
 [Redwood](https://github.com/redwoodjs/redwood) is a very promising framework that we're watching. We took the concept of "Cells" directly from Redwood (though admittedly our version takes a bit more code!)

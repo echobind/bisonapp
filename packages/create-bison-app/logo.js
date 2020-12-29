@@ -13,6 +13,6 @@ module.exports = `
 @@@@@@%@@@@@@&%%%%%%%%&&&@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&%%%%%%%%&@@@@@@%%@@@@@
 @@@@@@%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%@@@@@
 
-        The Full Stack JAMstack in-a-box. Make something awesome with it!
+        The Full Stack Jamstack in-a-box. Make something awesome with it!
                                    ♥️  Echobind
 `;

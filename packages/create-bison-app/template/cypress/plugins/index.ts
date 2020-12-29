@@ -1,9 +1,22 @@
+// import 'cypress';
 import path from 'path';
 
-import { resetDB, disconnect, setupDB } from '../../tests/helpers';
+import { User } from '@prisma/client';
+
+import { cookies } from '../../lib/cookies';
+import { LOGIN_TOKEN_KEY } from '../../constants';
+import { resetDB, disconnect, setupDB, graphQLRequest } from '../../tests/helpers';
 import * as Factories from '../../tests/factories';
 
-/// <reference types="cypress" />
+declare global {
+  // eslint-disable-next-line
+  namespace Cypress {
+    interface Chainable<Subject = any> {
+      task<T>(event: string, arg?: any, options?: Partial<Loggable & Timeoutable>): Chainable<T>;
+    }
+  }
+}
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -20,11 +33,9 @@ import * as Factories from '../../tests/factories';
 if (process.env.CYPRESS_LOCAL) {
   console.log('--- WARNING --- RUNNING CYPRESS IN LOCAL MODE... database will not be cleaned');
 
-  // if DATABASE_URL isn't already defined, source local .env.test
-  if (!process.env.DATABASE_URL) {
-    const envPath = path.resolve(process.cwd(), '.env.local');
-    require('dotenv').config({ path: envPath });
-  }
+  // make sure we source env.local
+  const envPath = path.resolve(process.cwd(), '.env.local');
+  require('dotenv').config({ path: envPath });
 } else if (!process.env.DATABASE_URL) {
   const envPath = path.resolve(process.cwd(), '.env.test');
   require('dotenv').config({ path: envPath });
@@ -36,6 +47,7 @@ if (process.env.CYPRESS_LOCAL) {
 export default (on, _config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+
   on('task', {
     resetDB: () => {
       if (process.env.CYPRESS_LOCAL) return false;
@@ -43,7 +55,7 @@ export default (on, _config) => {
       return resetDB();
     },
     setupDB: () => {
-      console.log('DB', process.env.DATABASE_URL);
+      console.log('Setting up DB', process.env.DATABASE_URL);
 
       return setupDB();
     },
@@ -54,5 +66,29 @@ export default (on, _config) => {
       const Factory = Factories[`${name}Factory`];
       return Factory.create(attrs);
     },
+    login: (attrs: Pick<User, 'email' | 'password'>): Promise<LoginTaskObject> => {
+      const { email, password } = attrs;
+      const variables = { email, password };
+
+      const query = `
+        mutation login($email: String!, $password: String!) {
+          login(email: $email, password: $password) {
+            token
+          }
+        }
+      `;
+
+      return graphQLRequest({ query, variables }).then((response) => {
+        const { token } = response.body.data.login;
+
+        cookies().set(LOGIN_TOKEN_KEY, token);
+
+        return { token };
+      });
+    },
   });
 };
+
+export interface LoginTaskObject {
+  token: string;
+}

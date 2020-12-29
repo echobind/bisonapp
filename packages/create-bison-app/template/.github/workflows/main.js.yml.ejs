@@ -32,7 +32,7 @@ jobs:
 
       # Node
       - name: Setup Node
-        uses: actions/setup-node@v2.1.1
+        uses: actions/setup-node@v2.1.2
         with:
           node-version: 14.6.0
 
@@ -114,7 +114,7 @@ jobs:
     # needs: tests
 <% } -%>
 
-    ## For a typical JAMstack flow, the ref below should be your default branch.
+    ## For a typical Jamstack flow, the ref below should be your default branch.
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
   
 <% if (host.name === 'heroku') { -%>
@@ -125,14 +125,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 <% if (host.name === 'vercel') { -%>
-      - uses: ngduc/vercel-deploy-action@master
+      - uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           # SET THIS OR YOU WILL DEPLOY TO YOUR PERSONAL VERCEL NAMESPACE
-          # scope: ${{ secrets.VERCEL_TEAM_ID }}
+          # scope: ${{ secrets.VERCEL_ORG_ID }}
 <% } else if (host.name === 'heroku') { -%>
       - uses: akhileshns/heroku-deploy@v3.4.6
         with:
@@ -146,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     # For production deploys, make sure tests pass first
     needs: tests
-    ## For a typical JAMstack flow, the ref below should be your default branch.
+    ## For a typical Jamstack flow, the ref below should be your default branch.
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
     if: github.ref == 'refs/heads/<%= repo.productionBranch %>'
     steps:
