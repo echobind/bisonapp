@@ -1,6 +1,5 @@
 import yargslib from "yargs";
 import { handler as generateHandler } from "../../generate";
-// import { runCLICommands } from "../../lib/helpers";
 
 export const command = "component <name>";
 export const description = "Generate a component test file";
