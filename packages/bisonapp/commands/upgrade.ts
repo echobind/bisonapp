@@ -4,8 +4,6 @@ import updateNotifier from "update-notifier";
 import boxen from "boxen";
 import terminalLink from "terminal-link";
 
-// const spawn = promisify(childSpawn);
-
 export const command = "upgrade";
 export const aliases = ["u"];
 export const description = "Helps upgrade a Bison app";

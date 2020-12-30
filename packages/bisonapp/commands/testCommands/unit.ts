@@ -1,7 +1,7 @@
 import yargslib from "yargs";
 import path from "path";
 import execa from "execa";
-import { DEFAULT_EXECA_ARGS } from "lib/helpers";
+import { DEFAULT_EXECA_ARGS } from "../../lib/helpers";
 
 const envPath = path.resolve(process.cwd(), ".env.test");
 
