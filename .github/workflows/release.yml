@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Run Tests"]
-    branches: [main, canary, fix-gh-action-release]
+    branches: [main, canary]
     types:
       - completed
 
