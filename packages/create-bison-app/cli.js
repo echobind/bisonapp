@@ -51,6 +51,39 @@ function generateQuestions(appName) {
       default: "main",
       when: (answers) => answers.repo.addRemote,
     },
+    //Prompt user for database type - list - save information to a variable (this is the name of the hash)
+    {
+      name: "db.dev.databaseType",
+      type: "list",
+      message: "What type of database would you like to use?",
+      description: "The database type",
+      choices: [
+        { name: "Postgres", value: "postgres" },
+        { name: "MySQL", value: "MySQL" },
+        { name: "MariaDB", value: "MariaDB" },
+        { name: "SQLite", value: "SQLite" },
+        { name: "AWS Aurora", value: "AWS Aurora" },
+        { name: "AWS Aurora Serverless", value: "AWS Aurora Serverless" }
+      ],
+      default: "postgres",
+    },
+    //Ask user if they have it setup? - save information to a variable (this is the name of the hash)
+    {
+      name: "db.dev.isLocalDBDefined",
+      type: "confirm",
+      message: "Do you have it setup?",
+      description: "Find if user has a database setup",
+      default: false
+    },
+    //If no inform the user of the link will teach them how to add the database (postgres for now)
+    {
+      name: "db.dev.dbMarkdown",
+      type: "input",
+      message: "Please use <link goes here> to setup a postgres database with the following credentials.",
+      description: "Link to database instructions.",
+      when: (answers) => answers.db.dev.isLocalDBDefined == false,
+    },
+    //Else proceed to current setup
     {
       name: "db.dev.name",
       type: "input",
@@ -59,6 +92,7 @@ function generateQuestions(appName) {
       default: `${appName}_dev`,
     },
     {
+      //TODO: Save all information and show the user after all prompts are finished that it is the credentials they will use to complete database setup
       name: "db.dev.user",
       type: "input",
       message: "What is the local database username?",
