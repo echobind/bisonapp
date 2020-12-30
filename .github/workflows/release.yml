@@ -38,8 +38,6 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install packages
         run: yarn && yarn lerna bootstrap
-      - name: Log workflow event
-        run: echo "${{ toJSON(github.event.workflow_run) }}"
       - name: Release Canary
         if: github.event.workflow_run.head_branch == 'canary'
         env:
