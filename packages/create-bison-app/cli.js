@@ -52,7 +52,6 @@ function generateQuestions(appName) {
       default: "main",
       when: (answers) => answers.repo.addRemote,
     },
-    //Prompt user for database type - list - save information to a variable (this is the name of the hash)
     {
       name: "db.dev.databaseType",
       type: "list",
@@ -61,14 +60,10 @@ function generateQuestions(appName) {
       choices: [
         { name: "Postgres", value: "postgres" },
         { name: "MySQL", value: "MySQL" },
-        { name: "MariaDB", value: "MariaDB" },
         { name: "SQLite", value: "SQLite" },
-        { name: "AWS Aurora", value: "AWS Aurora" },
-        { name: "AWS Aurora Serverless", value: "AWS Aurora Serverless" }
       ],
       default: "postgres",
     },
-    //Ask user if they have it setup? - save information to a variable (this is the name of the hash)
     {
       name: "db.dev.isLocalDBDefined",
       type: "confirm",
@@ -76,15 +71,6 @@ function generateQuestions(appName) {
       description: "Find if user has a database setup",
       default: false
     },
-    //If no inform the user of the link will teach them how to add the database (postgres for now)
-    {
-      name: "db.dev.dbMarkdown",
-      type: "input",
-      message: "Please use <link goes here> to setup a postgres database with the following credentials.",
-      description: "Link to database instructions.",
-      when: (answers) => answers.db.dev.isLocalDBDefined == false,
-    },
-    //Else proceed to current setup
     {
       name: "db.dev.name",
       type: "input",
@@ -94,7 +80,6 @@ function generateQuestions(appName) {
       default: `${appName}_dev`,
     },
     {
-      //TODO: Save all information and show the user after all prompts are finished that it is the credentials they will use to complete database setup
       name: "db.dev.user",
       type: "input",
       prefix: "The username you will use for the new database (or current).\n",
@@ -124,7 +109,21 @@ function generateQuestions(appName) {
       prefix: "The port you will use for the new database (or current).\n",
       message: `${chalk.green("\b?")} Local database port`,
       description: "The database port",
-      default: "5432",
+      default: (answers) => {
+        switch (answers.db.dev.databaseType) {
+          case "postgres":
+            return 5432;
+            break;
+          case "SQLite":
+            return "file:./dev.db";
+            break;
+          case "MySQL":
+            return 3306;
+            break;
+          default: 5432;
+            break;
+        }
+      },
     },
     {
       name: "db.test.name",
