@@ -3,6 +3,7 @@ const createBisonApp = require(".");
 const inquirer = require("inquirer");
 const Logo = require("./logo");
 const execa = require("execa");
+const chalk = require('chalk');
 
 const TYPE_MAPPING = {
   input: "string",
@@ -87,7 +88,8 @@ function generateQuestions(appName) {
     {
       name: "db.dev.name",
       type: "input",
-      message: "What is the local database name?",
+      prefix: "The following link <link> will help you setup a new Postgres database if needed.\n\bThe name you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")}  Local database name`,
       description: "The database to use in development",
       default: `${appName}_dev`,
     },
@@ -95,28 +97,32 @@ function generateQuestions(appName) {
       //TODO: Save all information and show the user after all prompts are finished that it is the credentials they will use to complete database setup
       name: "db.dev.user",
       type: "input",
-      message: "What is the local database username?",
+      prefix: "The username you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database username`,
       description: "The database user",
       default: "postgres",
     },
     {
       name: "db.dev.password",
       type: "input",
-      message: "What is the local database password?",
+      prefix: "The password you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database password`,
       description: "The database password",
       default: "",
     },
     {
       name: "db.dev.host",
       type: "input",
-      message: "What is the local database host?",
+      prefix: "The host you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database host`,
       description: "The database host",
       default: "localhost",
     },
     {
       name: "db.dev.port",
       type: "input",
-      message: "What is the local database port?",
+      prefix: "The port you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database port`,
       description: "The database port",
       default: "5432",
     },
