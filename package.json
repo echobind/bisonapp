@@ -26,10 +26,6 @@
     "local:npm": "verdaccio --config ./verdaccio.yml",
     "test": "lerna run test --stream"
   },
-  "dependencies": {
-    "create-bison-app": "*",
-    "bisonapp": "*"
-  },
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^4.4.0",
     "lerna": "^3.22.1"
