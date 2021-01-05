@@ -68,8 +68,16 @@ function generateQuestions(appName) {
       name: "db.dev.isLocalDBDefined",
       type: "confirm",
       message: "Do you have it setup?",
-      description: "Find if user has a database setup",
-      default: false
+      description: "Verify user has a db setup",
+      default: true,
+    },
+    {
+      name: "db.dev.continue",
+      type: "confirm",
+      message: "Visit https://github.com/echobind/bisonapp/blob/main/docs/postgres.md for intructions to setup a new database.\n\bContinue? Press [Enter] for YES",
+      description: "Provide link to help install Postgres",
+      when: (answers) => answers.db.dev.localDatabasePrompt == false && answers.db.dev.databaseType == "postgres",
+      default: true,
     },
     {
       name: "db.dev.name",
