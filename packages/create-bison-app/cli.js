@@ -74,7 +74,7 @@ function generateQuestions(appName) {
     {
       name: "db.dev.name",
       type: "input",
-      prefix: "The following link <link> will help you setup a new Postgres database if needed.\n\bThe name you will use for the new database (or current).\n",
+      prefix: "The name you will use for the new database (or current).\n",
       message: `${chalk.green("\b?")}  Local database name`,
       description: "The database to use in development",
       default: `${appName}_dev`,
