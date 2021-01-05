@@ -65,7 +65,7 @@ function generateQuestions(appName) {
       default: "postgres",
     },
     {
-      name: "db.dev.isLocalDBDefined",
+      name: "db.dev.localDatabasePrompt",
       type: "confirm",
       message: "Do you have it setup?",
       description: "Verify user has a db setup",
