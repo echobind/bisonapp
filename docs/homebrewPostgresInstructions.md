@@ -1,9 +1,8 @@
 # Homebrew - (Mac Only)
 ## Installing PostgreSQL
 
-```
-$ brew install postgresql && createuser postgres --superuser
-```
+1. Install using hombrew: `brew install postgres`
+2. Add a local user (we recommend creating as a superuser to keep setup simple):  `create user postgres --superuser`
 
 ## Start Server and Login
 
