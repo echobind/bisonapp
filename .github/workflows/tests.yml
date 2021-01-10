@@ -28,7 +28,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install packages
-        run: yarn && yarn lerna bootstrap
+        run: yarn lerna bootstrap && yarn lerna exec yarn && yarn lerna link
       - name: Create new App
         id: create-app
         # Sets outputs.appPath to the created directory
