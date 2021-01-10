@@ -5,7 +5,8 @@
   "packages": ["packages/*"],
   "command": {
     "version": {
-      "message": "chore(release): publish %s [skip ci]"
+      "message": "chore(release): publish %s [skip ci]",
+      "exact": true
     },
     "publish": {
       "allowBranch": ["main", "canary"],
