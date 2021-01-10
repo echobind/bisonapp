@@ -1,0 +1,11 @@
+import yargslib from "yargs";
+import { handler as generateHandler } from "../../generate";
+
+export const command = "util <name>";
+export const description = "Generate a util test file";
+
+export const builder = (_yargs: yargslib.Argv<{}>) => {};
+
+export const handler = async () => {
+  await generateHandler({ command: "test", subcommand: "util" });
+};
