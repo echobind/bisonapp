@@ -16,7 +16,7 @@ export async function createContext(context: ApolloApiContext): Promise<Context>
   let user: User | null = null;
 
   if (authHeader) {
-    user = await prisma.user.findOne({ where: { id: authHeader.userId } });
+    user = await prisma.user.findUnique({ where: { id: authHeader.userId } });
   }
 
   return {
