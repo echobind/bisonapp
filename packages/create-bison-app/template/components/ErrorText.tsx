@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextProps } from '@chakra-ui/core';
+import { Text, TextProps } from '@chakra-ui/react';
 
 /** Renders error text under form inputs */
 export function ErrorText({ children, ...textProps }: TextProps) {

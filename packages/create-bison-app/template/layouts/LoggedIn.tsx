@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Box, Center, Flex, Text, Button } from '@chakra-ui/core';
+import { Box, Center, Flex, Text, Button } from '@chakra-ui/react';
 
 import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
