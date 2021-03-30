@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 
 /** A form with a centered box. Ex: Login, Signup */
 export function CenteredBoxForm({ children }) {

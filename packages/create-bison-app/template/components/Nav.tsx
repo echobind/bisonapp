@@ -8,7 +8,7 @@ import {
   Menu,
   MenuList,
   MenuItem,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export function Nav() {

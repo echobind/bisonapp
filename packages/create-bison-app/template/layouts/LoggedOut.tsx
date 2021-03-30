@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Center, Flex, Text, Button } from '@chakra-ui/core';
+import { Box, Center, Flex, Text, Button } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 import { Logo } from '../components/Logo';
