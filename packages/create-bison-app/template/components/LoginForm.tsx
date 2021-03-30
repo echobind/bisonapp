@@ -11,7 +11,7 @@ import {
   Stack,
   Button,
   Circle,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { gql } from '@apollo/client';
 

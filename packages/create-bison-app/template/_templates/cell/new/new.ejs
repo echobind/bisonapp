@@ -5,7 +5,7 @@ to: cells/<%= [h.inflection.camelize(h.dirName(name)), h.camelizedBaseName(name)
 <% component = h.camelizedBaseName(name) -%>
 import React from 'react';
 import gql from 'graphql-tag';
-import { Spinner, Text } from '@chakra-ui/core';
+import { Spinner, Text } from '@chakra-ui/react';
 
 import { useMyProfileQuery, MyProfileQuery } from '../types';
 

@@ -10,7 +10,7 @@ import {
   Stack,
   Button,
   Circle,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
