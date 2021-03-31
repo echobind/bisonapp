@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.10.0-canary.0 (2021-03-30)
+
+
+### Features
+
+* upgrade chakra from RC to stable release ([#131](https://github.com/echobind/bisonapp/issues/131)) ([9ac40bc](https://github.com/echobind/bisonapp/commit/9ac40bca524300f7909baaf0bb946303f0090e8a))
+
+
+
 ### 1.9.16-canary.0 (2020-12-30)
 
 **Note:** Version bump only for package create-bison-app
