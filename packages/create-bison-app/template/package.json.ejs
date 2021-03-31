@@ -6,7 +6,7 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "build": "ts-node ./scripts/buildProd",
+    "build": "node ./scripts/buildProd",
     "build:prisma": "prisma generate",
     "build:next": "next build",
     "build:nexus": "NODE_ENV=development ts-node -P tsconfig.cjs.json --transpile-only graphql/schema.ts",

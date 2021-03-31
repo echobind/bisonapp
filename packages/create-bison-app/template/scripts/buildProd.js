@@ -1,4 +1,4 @@
-export {};
+
 const spawn = require('child_process').spawn;
 
 const bisonConfig = require('../package.json').bison;
