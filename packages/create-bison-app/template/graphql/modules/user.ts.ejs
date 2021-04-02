@@ -1,4 +1,4 @@
-import { objectType, extendType, inputObjectType, stringArg, arg } from '@nexus/schema';
+import { objectType, extendType, inputObjectType, stringArg, arg } from 'nexus';
 import { Role } from '@prisma/client';
 <% if (host.name === 'vercel') { -%>
 import { UserInputError, ForbiddenError } from 'apollo-server-micro';
@@ -84,7 +84,7 @@ export const Mutations = extendType({
       },
       resolve: async (_root, args, ctx) => {
         const { email, password } = args;
-        const user = await ctx.db.user.findOne({ where: { email } });
+        const user = await ctx.db.user.findUnique({ where: { email } });
 
         if (!user) {
           throw new UserInputError(`No user found for email: ${email}`, {
@@ -117,7 +117,7 @@ export const Mutations = extendType({
           throw new ForbiddenError('Not authorized');
         }
 
-        const user = await ctx.db.user.findOne({ where: { email: args.data.email } });
+        const user = await ctx.db.user.findUnique({ where: { email: args.data.email } });
 
         if (user) {
           throw new UserInputError('Email already exists.', {
@@ -144,7 +144,7 @@ export const Mutations = extendType({
         data: arg({ type: 'SignupInput', required: true }),
       },
       resolve: async (_root, args, ctx) => {
-        const existingUser = await ctx.db.user.findOne({ where: { email: args.data.email } });
+        const existingUser = await ctx.db.user.findUnique({ where: { email: args.data.email } });
 
         if (existingUser) {
           throw new UserInputError('Email already exists.', {
@@ -178,6 +178,6 @@ export const SignupInput = inputObjectType({
   definition: (t) => {
     t.string('email', { required: true });
     t.string('password', { required: true });
-    t.field('profile', { type: 'ProfileCreateOneWithoutUserInput' });
+    t.field('profile', { type: 'ProfileCreateNestedOneWithoutUserInput' });
   },
 });

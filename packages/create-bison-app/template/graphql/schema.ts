@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { fieldAuthorizePlugin, makeSchema } from '@nexus/schema';
+import { declarativeWrappingPlugin, fieldAuthorizePlugin, makeSchema } from 'nexus';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 
 import prettierConfig from '../prettier.config';
@@ -13,6 +13,7 @@ export const schema = makeSchema({
   types,
   plugins: [
     fieldAuthorizePlugin(),
+    declarativeWrappingPlugin(),
     nexusPrisma({
       experimentalCRUD: true,
       outputs: {
@@ -27,18 +28,17 @@ export const schema = makeSchema({
     schema: path.join(currentDirectory, 'api.graphql'),
     typegen: path.join(currentDirectory, 'node_modules/@types/nexus-typegen/index.d.ts'),
   },
-  typegenAutoConfig: {
-    sources: [
+  sourceTypes: {
+    modules: [
       {
-        source: path.join(currentDirectory, 'node_modules/.prisma/client/index.d.ts'),
+        module: path.join(currentDirectory, 'node_modules/.prisma/client/index.d.ts'),
         alias: 'db',
       },
       {
-        source: path.join(currentDirectory, 'graphql', 'context.ts'),
+        module: path.join(currentDirectory, 'graphql', 'context.ts'),
         alias: 'ContextModule',
       },
     ],
-    contextType: 'ContextModule.Context',
   },
   prettierConfig,
 });

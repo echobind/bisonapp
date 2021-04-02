@@ -1,12 +1,14 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Latest about migrations:  https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b
+
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
+generator prisma_client {
   provider = "prisma-client-js"
 }
 
