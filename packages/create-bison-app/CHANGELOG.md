@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.10.0-canary.2 (2021-04-02)
+
+
+### Features
+
+* upgrade prisma to 2.19.0 ([#130](https://github.com/echobind/bisonapp/issues/130)) ([ebc68d9](https://github.com/echobind/bisonapp/commit/ebc68d90d310e4520c1e1bd508cd521448d3a7bc))
+
+
+
 ## 1.10.0-canary.1 (2021-03-31)
 
 **Note:** Version bump only for package create-bison-app
