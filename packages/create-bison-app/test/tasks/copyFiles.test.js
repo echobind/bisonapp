@@ -147,7 +147,7 @@ describe("copyFiles", () => {
       const fileString = file.toString();
       const { user, password, host, port, name } = variables.db.dev;
 
-      const databaseUrl = `postgresql://${user}${password}@${host}:${port}`;
+      const databaseUrl = `postgresql://${user}:${password}@${host}:${port}`;
 
       expect(fileString).toContain(databaseUrl);
       expect(fileString).toContain(name);
