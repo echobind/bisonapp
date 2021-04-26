@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.10.0-canary.3 (2021-04-26)
+
+
+### Bug Fixes
+
+* the prisma .env template was missing a colon between the username and password for the postgres url ([#134](https://github.com/echobind/bisonapp/issues/134)) ([71456f1](https://github.com/echobind/bisonapp/commit/71456f1c4836202c44db7f136092ec39ef46f763))
+
+
+
 ## 1.10.0-canary.2 (2021-04-02)
 
 
