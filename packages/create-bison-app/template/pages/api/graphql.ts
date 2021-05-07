@@ -1,26 +1,15 @@
-<% if (host.name === 'heroku') { -%>
- import express from 'express';
-import { ApolloServer } from 'apollo-server-express'
-<% } -%>
-<% if (host.name === 'vercel') { -%>
 import { ApolloServer } from 'apollo-server-micro';
-<% } -%>
-
 import { createContext } from '../../graphql/context';
 import { schema } from '../../graphql/schema';
 
 export const GRAPHQL_PATH = '/api/graphql';
 
-<% if (host.name === 'heroku') { -%>
-<% } -%>
-<% if (host.name === 'vercel') { -%>
 // this config block is REQUIRED on Vercel! It stops the body of incoming HTTP requests from being parsed
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-<% } -%>
 
 export const server = new ApolloServer({
   schema,
@@ -30,14 +19,4 @@ export const server = new ApolloServer({
   cacheControl: true,
 });
 
-<% if (host.name === 'vercel') { -%>
 export default server.createHandler({ path: GRAPHQL_PATH });
-<% } -%>
-<% if (host.name === 'heroku') { -%>
-const app = express();
-server.applyMiddleware({ app });
-
-app.listen({ port: process.env.PORT || 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-);
-<% } -%>

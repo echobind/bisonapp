@@ -66,6 +66,7 @@ module.exports = async ({ name, ...answers }) => {
         variables.host.createAppsAndPipelines,
       task: async () => {
         const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
+        await fsPromises.writeFile("Procfile", "web: yarn db:deploy && yarn start");
 
         // create staging app
         await execa(

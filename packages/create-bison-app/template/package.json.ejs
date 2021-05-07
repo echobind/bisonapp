@@ -13,7 +13,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "db:migrate": "yarn -s prisma migrate dev && yarn build:prisma",
-    "db:deploy": "yarn -s primsa deploy && yarn build:prisma",
+    "db:deploy": "yarn -s prisma migrate deploy && yarn build:prisma",
     "db:reset": "yarn prisma migrate reset && yarn build:prisma",
     "db:setup": "yarn db:migrate && yarn prisma generate",
     "db:drop": "DOTENV_CONFIG_PATH=./prisma/.env ts-node -r dotenv/config ./scripts/dropDatabase",
@@ -46,12 +46,7 @@
     "@chakra-ui/react": "1.3.4",
     "@chakra-ui/theme": "1.7.1",
     "@prisma/client": "^2.19.0",
-<% if (host.name === 'vercel') { -%>
     "apollo-server-micro": "^2.18.1",
-<% } -%>
-<% if (host.name === 'heroku') { -%>
-    "apollo-server-express": "^2.18.1",
-<% } -%>
     "bcryptjs": "^2.4.3",
     "cross-fetch": "3.0.5",
     "@emotion/react": "^11.0.0",
