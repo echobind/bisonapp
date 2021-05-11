@@ -39,13 +39,13 @@ jobs:
       - name: Install packages
         run: yarn && yarn lerna bootstrap
       - name: Release Canary
-        if: github.ref == 'refs/heads/canary'
+        if: github.event.workflow_run.head_branch == 'canary'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: yarn publish:canary
       - name: Release Latest
-        if: github.ref == 'refs/heads/main'
+        if: github.event.workflow_run.head_branch == 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
