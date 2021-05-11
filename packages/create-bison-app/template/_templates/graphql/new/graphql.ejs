@@ -27,7 +27,7 @@ export const <%= camelized %>Queries = extendType({
     // List <%= plural %> Query
     t.list.field('<%= plural.toLowerCase() %>', {
       type: '<%= camelized %>',
-      authorize: () => false,
+      authorize: (_root, _args, ctx) => !!ctx.user,
       args: nonNull(arg({ type: 'SomethingQueryInput' })),
       description: 'Returns available <%= plural.toLowerCase() %>',
     })
@@ -36,8 +36,7 @@ export const <%= camelized %>Queries = extendType({
     t.field('something', {
       type: '<%= camelized %>',
       description: 'Returns a specific <%= camelized %>',
-      // update auth rules
-      authorize: () => false,
+      authorize: (_root, _args, ctx) => !!ctx.user,
       args: nonNull(arg({ type: 'SomethingQueryInput' })),
       resolve: (_root, args, ctx) => {
         // TODO
@@ -56,7 +55,7 @@ export const <%= camelized %>Mutations = extendType({
       args: {
         data: nonNull(arg({ type: 'SomethingMutationInput' })),
       },
-      authorize: () => false,
+      authorize: (_root, _args, ctx) => !!ctx.user,
       resolve: async (_root, args, ctx) => {
         console.log(args.data.hello)
         return args.data.hello
