@@ -1,11 +1,6 @@
 import { objectType, extendType, inputObjectType, stringArg, arg } from 'nexus';
 import { Role } from '@prisma/client';
-<% if (host.name === 'vercel') { -%>
 import { UserInputError, ForbiddenError } from 'apollo-server-micro';
-<% } -%>
-<% if (host.name === 'heroku') { -%>
-import { UserInputError, ForbiddenError } from 'apollo-server-express';
-<% } -%>
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
 import { isAdmin, canAccess } from '../../services/permissions';
@@ -15,16 +10,13 @@ export const User = objectType({
   name: 'User',
   description: 'A User',
   definition(t) {
-    t.model.id();
-    t.model.email();
-    t.model.roles();
-    t.model.createdAt();
-    t.model.updatedAt();
-    t.model.profile();
+    t.nonNull.id('id');
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
+    t.nonNull.list.nonNull.field('roles', { type: 'Role' });
 
     // Show email as null for unauthorized users
     t.string('email', {
-      nullable: true,
       resolve: (profile, _args, ctx) => (canAccess(profile, ctx) ? profile.email : null),
     });
   },
@@ -50,23 +42,8 @@ export const UserQueries = extendType({
     t.field('me', {
       type: 'User',
       description: 'Returns the currently logged in user',
-      nullable: true,
       resolve: (_root, _args, ctx) => ctx.user,
     });
-
-    // List Users Query (admin only)
-    t.crud.users({
-      filtering: true,
-      ordering: true,
-      resolve: async (root, args, ctx, info, originalResolve) => {
-        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
-
-        return await originalResolve(root, args, ctx, info);
-      },
-    });
-
-    // User Query
-    t.crud.user();
   },
 });
 
@@ -79,8 +56,8 @@ export const Mutations = extendType({
       type: 'AuthPayload',
       description: 'Login to an existing account',
       args: {
-        email: stringArg({ required: true }),
-        password: stringArg({ required: true }),
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg()),
       },
       resolve: async (_root, args, ctx) => {
         const { email, password } = args;
@@ -109,41 +86,14 @@ export const Mutations = extendType({
       },
     });
 
-    // User Create (admin only)
-    t.crud.createOneUser({
-      alias: 'createUser',
-      resolve: async (root, args, ctx, info, originalResolve) => {
-        if (!isAdmin(ctx.user)) {
-          throw new ForbiddenError('Not authorized');
-        }
-
-        const user = await ctx.db.user.findUnique({ where: { email: args.data.email } });
-
-        if (user) {
-          throw new UserInputError('Email already exists.', {
-            invalidArgs: { email: 'already exists' },
-          });
-        }
-
-        // force role to user and hash the password
-        const updatedArgs = {
-          data: {
-            ...args.data,
-            password: hashPassword(args.data.password),
-          },
-        };
-
-        return originalResolve(root, updatedArgs, ctx, info);
-      },
-    });
-
     t.field('signup', {
       type: 'AuthPayload',
       description: 'Signup for an account',
       args: {
-        data: arg({ type: 'SignupInput', required: true }),
+        data: nonNull(arg({ type: 'SignupInput' })),
       },
       resolve: async (_root, args, ctx) => {
+        let data;
         const existingUser = await ctx.db.user.findUnique({ where: { email: args.data.email } });
 
         if (existingUser) {
@@ -152,12 +102,20 @@ export const Mutations = extendType({
           });
         }
 
+        try {
+          data = await validateSignupParams(args.data);
+        } catch (e) {
+          throw new UserInputError('Invalid Data', {
+            invalidArgs: formatYupErrorsForApollo(e),
+          });
+        }
+
         // force role to user and hash the password
         const updatedArgs = {
           data: {
-            ...args.data,
+            ...data,
             roles: { set: [Role.USER] },
-            password: hashPassword(args.data.password),
+            password: hashPassword(data.password),
           },
         };
 
@@ -173,11 +131,46 @@ export const Mutations = extendType({
   },
 });
 
+// Inputs
 export const SignupInput = inputObjectType({
   name: 'SignupInput',
+  description: 'Input required for a user to signup',
   definition: (t) => {
-    t.string('email', { required: true });
-    t.string('password', { required: true });
-    t.field('profile', { type: 'ProfileCreateNestedOneWithoutUserInput' });
+    t.nonNull.string('email');
+    t.nonNull.string('password');
+  },
+});
+
+// Manually added types that were previously in the prisma plugin
+export const UserRole = enumType({
+  name: 'Role',
+  members: Object.values(Role),
+});
+
+export const UserOrderByInput = inputObjectType({
+  name: 'UserOrderByInput',
+  description: 'Order users by a specific field',
+  definition(t) {
+    t.field('email', { type: 'SortOrder' });
+    t.field('createdAt', { type: 'SortOrder' });
+    t.field('updatedAt', { type: 'SortOrder' });
+  },
+});
+
+export const UserWhereUniqueInput = inputObjectType({
+  name: 'UserWhereUniqueInput',
+  description: 'Input to find users based on unique fields',
+  definition(t) {
+    t.id('id');
+    t.string('email');
+  },
+});
+
+export const UserWhereInput = inputObjectType({
+  name: 'UserWhereInput',
+  description: 'Input to find users based other fields',
+  definition(t) {
+    t.int('id');
+    t.field('email', { type: 'StringFilter' });
   },
 });

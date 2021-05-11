@@ -3,7 +3,8 @@ to: graphql/modules/<%= name %>.ts
 ---
 <% camelized = h.inflection.camelize(name) -%>
 <% plural = h.inflection.pluralize(camelized) -%>
-import { objectType, extendType } from 'nexus';
+import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType } from 'nexus';
+import { Role } from '@prisma/client';
 import { UserInputError, /*ForbiddenError*/ } from 'apollo-server-micro';
 
 // import { isAdmin } from '../services/permissions';
@@ -13,47 +14,35 @@ export const <%= camelized %> = objectType({
   name: '<%= camelized %>',
   description: 'A <%= camelized %>',
   definition(t) {
-    t.model.id();
-    t.model.createdAt();
-    t.model.updatedAt();
+    t.nonNull.id('id');
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
   },
-});
-
-/*
-// Enums
-export const CallPreference = enumType({
-  name: 'CallPreference',
-  members: ['WEEKDAY', 'WEEKEND', 'WEEKNIGHT'],
 });
 
 // Queries
 export const <%= camelized %>Queries = extendType({
   type: 'Query',
   definition: (t) => {
-    // List <%= plural %> Query (admin only)
-    t.crud.<%= plural.toLowerCase() %>({
-      filtering: true,
-      ordering: true,
-      // use resolve for permission checks or to remove fields
-      resolve: async (root, args, ctx, info, originalResolve) => {
-        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
+    // List <%= plural %> Query
+    t.list.field('<%= plural.toLowerCase() %>', {
+      type: '<%= camelized %>',
+      authorize: () => false,
+      args: nonNull(arg({ type: 'SomethingQueryInput' })),
+      description: 'Returns available <%= plural.toLowerCase() %>',
+    })
 
-        return await originalResolve(root, args, ctx, info);
+    // single query
+    t.field('something', {
+      type: '<%= camelized %>',
+      description: 'Returns a specific <%= camelized %>',
+      // update auth rules
+      authorize: () => false,
+      args: nonNull(arg({ type: 'SomethingQueryInput' })),
+      resolve: (_root, args, ctx) => {
+        // TODO
       },
     });
-
-    // Custom Query
-    t.field('me', {
-      type: 'User',
-      description: 'Returns the currently logged in user',
-      nullable: true,
-      resolve: (_root, _args, ctx) => ctx.user,
-    });
-
-    t.list.field('availabilityForUser', {
-      type: 'Event',
-      description: 'Returns available time slots to schedule calls with an expert',
-    })
   },
 });
 
@@ -61,6 +50,60 @@ export const <%= camelized %>Queries = extendType({
 export const <%= camelized %>Mutations = extendType({
   type: 'Mutation',
   definition: (t) => {
+    t.field('somethingMutation', {
+      type: 'String',
+      description: 'Does something',
+      args: {
+        data: nonNull(arg({ type: 'SomethingMutationInput' })),
+      },
+      authorize: () => false,
+      resolve: async (_root, args, ctx) => {
+        console.log(args.data.hello)
+        return args.data.hello
+      }
+    });
   },
 });
-*/
+
+// Inputs
+export const SomethingMutationInput = inputObjectType({
+  name: 'SomethingMutationInput',
+  description: 'Input used to do something',
+  definition: (t) => {
+    t.nonNull.string('hello');
+  },
+})
+
+export const SomethingQueryInput = inputObjectType({
+  name: 'SomethingQueryInput',
+  description: 'Input used to do something',
+  definition: (t) => {
+    t.nonNull.string('hello');
+  },
+});
+
+export const <%= camelized %>OrderByInput = inputObjectType({
+  name: '<%= camelized %>OrderByInput',
+  description: 'Order <%= camelized.toLowerCase() %> by a specific field',
+  definition(t) {
+    t.field('hello', { type: 'SortOrder' });
+  },
+});
+
+export const UserWhereUniqueInput = inputObjectType({
+  name: 'UserWhereUniqueInput',
+  description: 'Input to find users based on unique fields',
+  definition(t) {
+    t.id('id');
+    t.email('email');
+  },
+});
+
+export const UserWhereInput = inputObjectType({
+  name: 'UserWhereInput',
+  description: 'Input to find users based other fields',
+  definition(t) {
+    t.int('id');
+    t.field('email', { type: 'StringFilter' });
+  },
+});

@@ -141,8 +141,8 @@ describe("copyFiles", () => {
       });
     });
 
-    it("copies prisma/env with the correct contents", async () => {
-      const target = path.join(targetFolder, "prisma", ".env");
+    it("copies env with the correct contents", async () => {
+      const target = path.join(targetFolder, ".env");
       const file = await fs.promises.readFile(target);
       const fileString = file.toString();
       const { user, password, host, port, name } = variables.db.dev;
