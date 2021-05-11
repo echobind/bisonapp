@@ -14,7 +14,7 @@ describe("Creating a new app", () => {
   describe("prisma .env", () => {
     it("contains the proper database URL", () => {
       cy.task("getAppName").then((appName) => {
-        cy.task("readProjectFile", "prisma/.env")
+        cy.task("readProjectFile", ".env")
           .should("contain", `postgresql://postgres@localhost:5432`)
           .should("contain", `${appName}_dev`);
       });
