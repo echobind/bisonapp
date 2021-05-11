@@ -39,6 +39,12 @@ async function copyFiles({ variables, targetFolder }) {
     copyWithTemplate(fromPath("_.gitignore"), toPath(".gitignore"), variables),
 
     copyWithTemplate(
+      fromPath("_.env.ejs"),
+      toPath(".env"),
+      variables
+    ),
+
+    copyWithTemplate(
       fromPath("_.env.local.ejs"),
       toPath(".env.local"),
       variables
@@ -80,7 +86,6 @@ async function copyFiles({ variables, targetFolder }) {
         "layouts",
         "lib",
         "prisma",
-        "!prisma/_.env*",
         "public",
         "scripts",
         "services",
