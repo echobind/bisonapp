@@ -1,4 +1,4 @@
-import { objectType, extendType, inputObjectType, stringArg, arg } from 'nexus';
+import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType } from 'nexus';
 import { Role } from '@prisma/client';
 import { UserInputError, ForbiddenError } from 'apollo-server-micro';
 
@@ -93,7 +93,6 @@ export const Mutations = extendType({
         data: nonNull(arg({ type: 'SignupInput' })),
       },
       resolve: async (_root, args, ctx) => {
-        let data;
         const existingUser = await ctx.db.user.findUnique({ where: { email: args.data.email } });
 
         if (existingUser) {
@@ -102,18 +101,10 @@ export const Mutations = extendType({
           });
         }
 
-        try {
-          data = await validateSignupParams(args.data);
-        } catch (e) {
-          throw new UserInputError('Invalid Data', {
-            invalidArgs: formatYupErrorsForApollo(e),
-          });
-        }
-
         // force role to user and hash the password
         const updatedArgs = {
           data: {
-            ...data,
+            ...args.data,
             roles: { set: [Role.USER] },
             password: hashPassword(data.password),
           },
