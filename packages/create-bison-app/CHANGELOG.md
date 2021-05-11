@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.10.0-canary.4 (2021-05-11)
+
+
+### Features
+
+* Heroku updates: ([#135](https://github.com/echobind/bisonapp/issues/135)) ([f2d657c](https://github.com/echobind/bisonapp/commit/f2d657cf9f5c020a97b9fa1de2efe01e0eb84962))
+
+
+
 ## 1.10.0-canary.3 (2021-04-26)
 
 
