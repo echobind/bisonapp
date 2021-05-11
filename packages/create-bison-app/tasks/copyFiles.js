@@ -101,7 +101,6 @@ async function copyFiles({ variables, targetFolder }) {
         "next-env.d.ts",
         "prettier.config.js",
         "tsconfig.json",
-        "tsconfig.cjs.json",
         "types.ts",
       ],
       targetFolder,
