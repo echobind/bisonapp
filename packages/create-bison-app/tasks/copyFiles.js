@@ -40,7 +40,7 @@ async function copyFiles({ variables, targetFolder }) {
 
     copyWithTemplate(
       fromPath("_.env.ejs"),
-      toPath(".env.local"),
+      toPath(".env"),
       variables
     ),
 
