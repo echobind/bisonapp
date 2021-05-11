@@ -19,6 +19,15 @@ export const User = objectType({
     t.string('email', {
       resolve: (profile, _args, ctx) => (canAccess(profile, ctx) ? profile.email : null),
     });
+
+    t.field('profile', {
+      type: 'Profile',
+      resolve: (parent, _, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: parent.id }
+        }).profile()
+      }
+    })
   },
 });
 
