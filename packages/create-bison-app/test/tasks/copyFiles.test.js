@@ -132,7 +132,7 @@ describe("copyFiles", () => {
     });
 
     it("copies the prisma folder", async () => {
-      const files = ["migrations", "schema.prisma", "seeds.js"];
+      const files = ["migrations", "schema.prisma", "seed.ts"];
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, "prisma", file);
