@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.10.0-canary.6 (2021-05-11)
+
+
+### Features
+
+* migrate away from prisma-nexus-plugin. ([#137](https://github.com/echobind/bisonapp/issues/137)) ([093e8c4](https://github.com/echobind/bisonapp/commit/093e8c4812907cbd3a2554e0253d212610824c10))
+
+
+
 ## 1.10.0-canary.5 (2021-05-11)
 
 **Note:** Version bump only for package root
