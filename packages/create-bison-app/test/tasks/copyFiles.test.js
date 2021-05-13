@@ -90,7 +90,6 @@ describe("copyFiles", () => {
         "next-env.d.ts",
         "prettier.config.js",
         "README.md",
-        "tsconfig.cjs.json",
         "tsconfig.json",
         "types.ts",
       ];
