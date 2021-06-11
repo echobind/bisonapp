@@ -2,26 +2,19 @@
   "version": "1.10.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "command": {
     "version": {
       "message": "chore(release): publish %s [skip ci]"
     },
     "publish": {
-      "allowBranch": [
-        "main",
-        "canary"
-      ],
+      "allowBranch": ["main", "canary"],
       "conventionalCommits": true,
       "createRelease": "github",
       "changelogPreset": {
         "name": "conventionalcommits",
         "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
-        "issuePrefixes": [
-          "#"
-        ],
+        "issuePrefixes": ["#"],
         "types": [
           {
             "type": "feat",
