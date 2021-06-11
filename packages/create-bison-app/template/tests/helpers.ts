@@ -85,7 +85,7 @@ export const resetDB = async (): Promise<boolean> => {
  */
 export const setupDB = async (): Promise<boolean> => {
   // ensure the db is created and migrated
-  await exec(`yarn prisma migrate up --create-db --experimental`);
+  await exec(`yarn prisma migrate deploy`);
 
   return true;
 };
