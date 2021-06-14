@@ -5,7 +5,7 @@ import request from 'supertest';
 import { User } from '@prisma/client';
 import { Client } from 'pg';
 
-import { server, GRAPHQL_PATH } from '../pages/api/graphql';
+import server, { GRAPHQL_PATH } from '../pages/api/graphql';
 import { appJwtForUser } from '../services/auth';
 import { prisma, connect, disconnect } from '../lib/prisma';
 
@@ -85,7 +85,7 @@ export const resetDB = async (): Promise<boolean> => {
  */
 export const setupDB = async (): Promise<boolean> => {
   // ensure the db is created and migrated
-  await exec(`yarn prisma migrate up --create-db --experimental`);
+  await exec(`yarn prisma migrate deploy`);
 
   return true;
 };
