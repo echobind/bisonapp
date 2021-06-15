@@ -5,6 +5,7 @@ Change to your project directory:
 
 To set up your local environment:
 * Setup your database with <%= color.bold('yarn db:setup') %>. You will be prompted to create it if necessary.
+* Run <%= color.bold('yarn generate') %> to generate the prisma client, nexus typings, and GraphQL typings
 * Run the app with <%= color.bold('yarn dev') %>. This will start the dev server and watchers for generating types.
 
 <% if (host.name === 'vercel') { -%>

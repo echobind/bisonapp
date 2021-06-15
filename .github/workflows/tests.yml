@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 14.x]
+      max-parallel: 1
 
     steps:
       - name: Checkout

@@ -82,7 +82,6 @@ describe("copyFiles", () => {
         ".eslintrc.js",
         ".hygen.js",
         ".tool-versions",
-        "api.graphql",
         "codegen.yml",
         "constants.ts",
         "cypress.json",
@@ -91,7 +90,6 @@ describe("copyFiles", () => {
         "prettier.config.js",
         "README.md",
         "tsconfig.json",
-        "types.ts",
       ];
 
       files.forEach((file) => {

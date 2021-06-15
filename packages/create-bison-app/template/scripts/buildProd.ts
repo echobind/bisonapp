@@ -1,7 +1,7 @@
 export {};
 const spawn = require('child_process').spawn;
 
-const DEFAULT_BUILD_COMMAND = `yarn build:nexus && yarn build:prisma && yarn build:next`;
+const DEFAULT_BUILD_COMMAND = `yarn generate && yarn build:next`;
 
 /**
  * This builds the production app.

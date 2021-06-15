@@ -93,7 +93,6 @@ async function copyFiles({ variables, targetFolder }) {
         ".eslintrc.js",
         ".hygen.js",
         ".tool-versions",
-        "api.graphql",
         "codegen.yml",
         "constants.ts",
         "cypress.json",
@@ -101,7 +100,6 @@ async function copyFiles({ variables, targetFolder }) {
         "next-env.d.ts",
         "prettier.config.js",
         "tsconfig.json",
-        "types.ts",
       ],
       targetFolder,
       {
