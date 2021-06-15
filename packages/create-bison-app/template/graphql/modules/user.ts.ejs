@@ -1,9 +1,9 @@
 import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType } from 'nexus';
 import { Role } from '@prisma/client';
-import { UserInputError, ForbiddenError } from 'apollo-server-micro';
+import { UserInputError } from 'apollo-server-micro';
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
-import { isAdmin, canAccess } from '../../services/permissions';
+import { canAccess } from '../../services/permissions';
 
 // User Type
 export const User = objectType({
