@@ -6,7 +6,7 @@ import { UserFactory } from '../../factories/user';
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
-describe('User createUser mutation', () => {
+describe.skip('User createUser mutation', () => {
   describe('non-admin', () => {
     it('returns a Forbidden error', async () => {
       const query = `

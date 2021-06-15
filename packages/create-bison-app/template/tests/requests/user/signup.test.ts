@@ -1,7 +1,10 @@
 import { Role } from '@prisma/client';
+import Chance from 'chance';
 
 import { graphQLRequest, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
+
+const chance = new Chance();
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -22,7 +25,14 @@ describe('User signup mutation', () => {
 
       const user = await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables = { data: { email: user.email, password: 'fake' } };
+      const variables = {
+        data: {
+          email: user.email,
+          password: 'fake',
+          profile: { create: { firstName: chance.first(), lastName: chance.last() } },
+        },
+      };
+
       const response = await graphQLRequest({ query, variables });
       const errorMessages = response.body.errors.map((e) => e.message);
 
@@ -48,7 +58,12 @@ describe('User signup mutation', () => {
       `;
 
       const variables = {
-        data: { email: 'hello@wee.net', password: 'fake', roles: { set: [Role.ADMIN] } },
+        data: {
+          email: 'hello@wee.net',
+          password: 'fake',
+          profile: { create: { firstName: chance.first(), lastName: chance.last() } },
+          roles: { set: [Role.ADMIN] },
+        },
       };
 
       const response = await graphQLRequest({ query, variables });
@@ -56,7 +71,7 @@ describe('User signup mutation', () => {
 
       expect(errors).toMatchInlineSnapshot(`
         Array [
-          "Variable \\"$data\\" got invalid value { email: \\"hello@wee.net\\", password: \\"fake\\", roles: { set: [Array] } }; Field \\"roles\\" is not defined by type \\"SignupInput\\".",
+          "Variable \\"$data\\" got invalid value { email: \\"hello@wee.net\\", password: \\"fake\\", profile: { create: [Object] }, roles: { set: [Array] } }; Field \\"roles\\" is not defined by type \\"SignupInput\\".",
         ]
       `);
     });
