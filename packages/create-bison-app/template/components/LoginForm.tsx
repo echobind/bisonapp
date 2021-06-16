@@ -31,7 +31,13 @@ export const LOGIN_MUTATION = gql`
 
 /** Form to Login */
 export function LoginForm() {
-  const { register, handleSubmit, errors, setError } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm();
+
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
   const { login: loginUser } = useAuth();
@@ -68,8 +74,7 @@ export function LoginForm() {
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
             type="text"
-            name="email"
-            ref={register({
+            {...register('email', {
               required: 'email is required',
               pattern: {
                 value: EMAIL_REGEX,
@@ -85,8 +90,7 @@ export function LoginForm() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             type="password"
-            name="password"
-            ref={register({ required: 'password is required' })}
+            {...register('password', { required: 'password is required' })}
             isInvalid={errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
