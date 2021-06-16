@@ -6,7 +6,7 @@ import { UserFactory } from '../../factories/user';
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
-describe('users query', () => {
+describe.skip('users query', () => {
   describe('not logged in', () => {
     it('returns an Unauthorized error', async () => {
       const query = `
