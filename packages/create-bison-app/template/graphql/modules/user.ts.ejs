@@ -1,6 +1,6 @@
 import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType, list } from 'nexus';
 import { Role } from '@prisma/client';
-import { ForbiddenError, UserInputError } from 'apollo-server-micro';
+import { UserInputError } from 'apollo-server-micro';
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
 import { canAccess, isAdmin } from '../../services/permissions';
@@ -57,10 +57,9 @@ export const UserQueries = extendType({
     // List Users Query (admin only)
     t.field('users', {
       type: list('User'),
-      resolve: async (_root, _args, ctx) => {
-        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
-
-        return await ctx.db.user.findMany({ ..._args });
+      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+      resolve: async (_root, args, ctx) => {
+        return await ctx.db.user.findMany({ ...args });
       },
     });
 
@@ -70,8 +69,8 @@ export const UserQueries = extendType({
       args: {
         where: nonNull(arg({ type: 'UserWhereUniqueInput' })),
       },
-      resolve: async (_root, _args, ctx) => {
-        return await ctx.db.user.findUnique({ where: _args.where });
+      resolve: async (_root, args, ctx) => {
+        return await ctx.db.user.findUnique({ where: args.where });
       },
     });
   },
@@ -153,10 +152,10 @@ export const Mutations = extendType({
     t.field('createUser', {
       type: 'User',
       description: 'Create User for an account',
-      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
       args: {
         data: nonNull(arg({ type: 'UserCreateInput' })),
       },
+      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
       resolve: async (_root, args, ctx) => {
         const { data } = args;
         const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });

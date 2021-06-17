@@ -22,7 +22,7 @@ describe('users query', () => {
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
-          "Unauthorized",
+          "Not authorized",
         ]
       `);
     });
@@ -44,7 +44,7 @@ describe('users query', () => {
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
-          "Unauthorized",
+          "Not authorized",
         ]
       `);
     });
