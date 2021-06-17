@@ -237,7 +237,7 @@ export function OrganizationForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input name="name" ref={register({ required: true })} />
+      <input {...register('name', { required: true })} />
       {errors.name && <span>This field is required</span>}
       
       <input type="submit" />
@@ -255,8 +255,7 @@ export function OrganizationForm() {
         <FormLabel htmlFor="name">Name</FormLabel>
         <Input
           type="text"
-          name="name"
-          ref={register({ required: true })}
+          {...register('name', { required: true })}
           isInvalid={errors.name}
         />
         <ErrorText>{errors.name && errors.name.message}</ErrorText>

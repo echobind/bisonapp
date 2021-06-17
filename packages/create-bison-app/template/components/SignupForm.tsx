@@ -35,7 +35,13 @@ export const SIGNUP_MUTATION = gql`
 
 /** Form to sign up */
 export function SignupForm() {
-  const { register, handleSubmit, errors, setError } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm();
+
   const [isLoading, setIsLoading] = useState(false);
   const [signup] = useSignupMutation();
   const { login } = useAuth();
@@ -77,8 +83,7 @@ export function SignupForm() {
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
             type="text"
-            name="email"
-            ref={register({
+            {...register('email', {
               required: 'email is required',
               pattern: {
                 value: EMAIL_REGEX,
@@ -94,8 +99,7 @@ export function SignupForm() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             type="password"
-            name="password"
-            ref={register({ required: 'password is required', minLength: 8 })}
+            {...register('password', { required: 'password is required', minLength: 8 })}
             isInvalid={errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
@@ -105,8 +109,7 @@ export function SignupForm() {
           <FormLabel>First Name</FormLabel>
           <Input
             type="text"
-            name="firstName"
-            ref={register({ required: true })}
+            {...register('firstName', { required: true })}
             isInvalid={errors.firstName}
           />
           <ErrorText>{errors.firstName && errors.firstName.message}</ErrorText>
@@ -116,8 +119,7 @@ export function SignupForm() {
           <FormLabel>Last Name</FormLabel>
           <Input
             type="text"
-            name="lastName"
-            ref={register({ required: true })}
+            {...register('lastName', { required: true })}
             isInvalid={errors.lastName}
           />
           <ErrorText>{errors.lastName && errors.lastName.message}</ErrorText>
