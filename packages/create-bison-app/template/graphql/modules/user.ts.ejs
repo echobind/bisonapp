@@ -1,9 +1,9 @@
-import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType } from 'nexus';
+import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType, list } from 'nexus';
 import { Role } from '@prisma/client';
-import { UserInputError } from 'apollo-server-micro';
+import { ForbiddenError, UserInputError } from 'apollo-server-micro';
 
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
-import { canAccess } from '../../services/permissions';
+import { canAccess, isAdmin } from '../../services/permissions';
 
 // User Type
 export const User = objectType({
@@ -52,6 +52,27 @@ export const UserQueries = extendType({
       type: 'User',
       description: 'Returns the currently logged in user',
       resolve: (_root, _args, ctx) => ctx.user,
+    });
+
+    // List Users Query (admin only)
+    t.field('users', {
+      type: list('User'),
+      resolve: async (_root, _args, ctx) => {
+        if (!isAdmin(ctx.user)) throw new ForbiddenError('Unauthorized');
+
+        return await ctx.db.user.findMany({ ..._args });
+      },
+    });
+
+    // User Query
+    t.field('user', {
+      type: 'User',
+      args: {
+        where: nonNull(arg({ type: 'UserWhereUniqueInput' })),
+      },
+      resolve: async (_root, _args, ctx) => {
+        return await ctx.db.user.findUnique({ where: _args.where });
+      },
     });
   },
 });
@@ -129,6 +150,36 @@ export const Mutations = extendType({
         };
       },
     });
+    t.field('createUser', {
+      type: 'User',
+      description: 'Create User for an account',
+      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+      args: {
+        data: nonNull(arg({ type: 'UserCreateInput' })),
+      },
+      resolve: async (_root, args, ctx) => {
+        const { data } = args;
+        const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });
+
+        if (existingUser) {
+          throw new UserInputError('Email already exists.', {
+            invalidArgs: { email: 'already exists' },
+          });
+        }
+
+        // force role to user and hash the password
+        const updatedArgs = {
+          data: {
+            ...data,
+            password: hashPassword(data.password),
+          },
+        };
+
+        const user = await ctx.db.user.create(updatedArgs);
+
+        return user;
+      },
+    });
   },
 });
 
@@ -195,5 +246,17 @@ export const UserWhereInput = inputObjectType({
   definition(t) {
     t.int('id');
     t.field('email', { type: 'StringFilter' });
+  },
+});
+
+export const UserCreateInput = inputObjectType({
+  name: 'UserCreateInput',
+  description: 'Input to Add a new user',
+  definition(t) {
+    t.nonNull.string('email');
+    t.nonNull.string('password');
+    t.field('roles', {
+      type: list('Role'),
+    });
   },
 });
