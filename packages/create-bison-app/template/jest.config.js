@@ -16,7 +16,7 @@ module.exports = {
   testPathIgnorePatterns,
   globals: {
     'ts-jest': {
-      tsConfig: {
+      tsconfig: {
         jsx: 'react',
       },
     },

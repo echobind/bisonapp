@@ -6,7 +6,7 @@ import { UserFactory } from '../../factories/user';
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
-describe.skip('User createUser mutation', () => {
+describe('User createUser mutation', () => {
   describe('non-admin', () => {
     it('returns a Forbidden error', async () => {
       const query = `
@@ -46,7 +46,7 @@ describe.skip('User createUser mutation', () => {
       const admin = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
 
       const variables = {
-        data: { email: 'hello@wee.net', password: 'fake', roles: { set: [Role.ADMIN] } },
+        data: { email: 'hello@wee.net', password: 'fake', roles: [Role.ADMIN] },
       };
 
       const response = await graphQLRequestAsUser(admin, { query, variables });

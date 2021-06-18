@@ -6,7 +6,7 @@ import { UserFactory } from '../../factories/user';
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
-describe.skip('users query', () => {
+describe('users query', () => {
   describe('not logged in', () => {
     it('returns an Unauthorized error', async () => {
       const query = `
@@ -22,7 +22,7 @@ describe.skip('users query', () => {
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
-          "Unauthorized",
+          "Not authorized",
         ]
       `);
     });
@@ -44,7 +44,7 @@ describe.skip('users query', () => {
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
-          "Unauthorized",
+          "Not authorized",
         ]
       `);
     });
@@ -77,8 +77,8 @@ describe.skip('users query', () => {
   describe('trying to view another users email', () => {
     it('returns undefined for the email', async () => {
       const query = `
-        query USER($id: String!) {
-          user(where: { id: $id }) {
+        query USER($id: ID!) {
+          user( where: {id: $id} ) {
             id
             email
           }
@@ -101,7 +101,7 @@ describe.skip('users query', () => {
   describe('admin trying to view another users email', () => {
     it('returns the email', async () => {
       const query = `
-        query USER($id: String!) {
+        query USER($id: ID!) {
           user(where: { id: $id }) {
             id
             email
