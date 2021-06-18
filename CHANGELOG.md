@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.10.1-canary.3 (2021-06-18)
+
+
+### Bug Fixes
+
+* broken tests after app init ([#163](https://github.com/echobind/bisonapp/issues/163)) ([a98e956](https://github.com/echobind/bisonapp/commit/a98e956efb744f47d072780f9de7ec9ecb789a8c))
+
+
+
 ### 1.10.1-canary.2 (2021-06-17)
 
 **Note:** Version bump only for package root
