@@ -3,7 +3,7 @@ import React from 'react';
 import { render, waitFor, userEvent } from '../../utils';
 import { SignupForm } from '../../../components/SignupForm';
 
-describe.skip('SignupForm', () => {
+describe('SignupForm', () => {
   it('loads', async () => {
     expect(() => {
       render(<SignupForm />);

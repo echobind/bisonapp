@@ -80,7 +80,7 @@ const mockRouter: NextRouter = {
   replace: jest.fn(),
   reload: jest.fn(),
   back: jest.fn(),
-  prefetch: jest.fn(),
+  prefetch: jest.fn(() => Promise.resolve()),
   beforePopState: jest.fn(),
   events: {
     on: jest.fn(),
