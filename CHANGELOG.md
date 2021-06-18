@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.10.1-canary.4 (2021-06-18)
+
+
+### Bug Fixes
+
+* login and signup component unit tests ([#165](https://github.com/echobind/bisonapp/issues/165)) ([be40238](https://github.com/echobind/bisonapp/commit/be402382a71f128921381bccc9b9bb188654456f))
+
+
+
 ### 1.10.1-canary.3 (2021-06-18)
 
 
