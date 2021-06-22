@@ -10,8 +10,8 @@ async function init() {
   return await createApp(args);
 }
 
-async function createApp(args) {
-  const tmpdir = await makeTempDir();
+async function createApp(args, appDir) {
+  const tmpdir = appDir || await makeTempDir();
   const cliPath = path.join(__dirname, "..", "cli.js");
 
   const cliOptions = args.length ? args : ["myapp", "--acceptDefaults"];

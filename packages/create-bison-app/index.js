@@ -1,4 +1,5 @@
 "use strict";
+const fs = require("fs");
 const path = require("path");
 const slugify = require("slugify");
 const execa = require("execa");
@@ -6,6 +7,7 @@ const Listr = require("listr");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
+const { BISON_DEV_APP_VARIABLES_FILE } = require("./scripts/createDevAppAndStartServer");
 const { copyFiles } = require("./tasks/copyFiles");
 const { version: bisonVersion } = require("./package.json");
 
@@ -17,6 +19,7 @@ module.exports = async ({ name, ...answers }) => {
     bisonVersion,
     ...answers,
   };
+  const isDevApp = targetFolder.indexOf(__dirname) === 0;
 
   const tasks = new Listr([
     {
@@ -132,6 +135,18 @@ module.exports = async ({ name, ...answers }) => {
           {
             cwd: pkgName,
           }
+        );
+      },
+    },
+    {
+      title: "Save configuration",
+      enabled: () => isDevApp,
+      task: async () => {
+        // Save variables to file so template directory can be watched
+        // and render templates again using same variables
+        await fs.promises.writeFile(
+          path.join(targetFolder, BISON_DEV_APP_VARIABLES_FILE), 
+          JSON.stringify(variables, null, 2)
         );
       },
     },

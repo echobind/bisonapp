@@ -113,4 +113,5 @@ async function copyFiles({ variables, targetFolder }) {
 
 module.exports = {
   copyFiles,
+  templateFolder,
 };
