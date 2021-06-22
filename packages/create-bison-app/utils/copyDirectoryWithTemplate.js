@@ -4,6 +4,16 @@ const globby = require("globby");
 const { copyWithTemplate } = require("./copyWithTemplate");
 
 /**
+ * Remove any extra prefix or extension from the template filename
+ * @param {*} file File path
+ */
+function cleanTemplateDestPath(file) {
+  return file
+    .replace(/_\./, ".")
+    .replace(/\.ejs$/, "");
+}
+
+/**
  * Copies a file to a different location, running it through an optional ejs template
  * @param {*} from The source file
  * @param {*} to The path to write
@@ -20,16 +30,13 @@ async function copyDirectoryWithTemplate(from, to, variables) {
 
   return await Promise.all(
     files.map(async (file) => {
-      const toFile = file
-        .replace(from, to)
-        .replace(/_\./, ".")
-        .replace(/\.ejs$/, "");
-
+      const toFile = cleanTemplateDestPath(file.replace(from, to));
       return copyWithTemplate(file, toFile, variables);
     })
   );
 }
 
 module.exports = {
+  cleanTemplateDestPath,
   copyDirectoryWithTemplate,
 };
