@@ -1,7 +1,6 @@
-import chakraTheme from '@chakra-ui/theme';
+import { extendTheme } from '@chakra-ui/react';
 
-const theme = {
-  ...chakraTheme,
+const theme = extendTheme({
   colors: {
     transparent: 'transparent',
     current: 'currentColor',
@@ -165,13 +164,10 @@ const theme = {
     },
   },
   styles: {
-    ...chakraTheme.styles,
     global: {
-      ...chakraTheme.styles.global,
-
       // insert any necessary global styles here
     },
   },
-};
+});
 
 export default theme;
