@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### 1.10.1-canary.5 (2021-06-29)
+
+
+### Bug Fixes
+
+* update setupDB command to not fail when run multiple times ([eda3ae5](https://github.com/echobind/bisonapp/commit/eda3ae5360c9c4fb9403f44984925ad3d2fb2552))
+
+
+
 ### 1.10.1-canary.4 (2021-06-18)
 
 
