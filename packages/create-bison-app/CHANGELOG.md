@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.0 (2021-06-30)
+
+
+### Features
+
+* **enhancement:** Upgrades generated graphql nexus file with more CRUD examples ([#174](https://github.com/echobind/bisonapp/issues/174)) ([bbb581c](https://github.com/echobind/bisonapp/commit/bbb581ca28f49614969271a4589bb6bbecaf5f4b))
+
+
+
 ### 1.10.1-canary.5 (2021-06-29)
 
 
