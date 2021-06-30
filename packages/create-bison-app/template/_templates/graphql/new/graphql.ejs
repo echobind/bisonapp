@@ -3,11 +3,9 @@ to: graphql/modules/<%= name %>.ts
 ---
 <% camelized = h.inflection.camelize(name) -%>
 <% plural = h.inflection.pluralize(camelized) -%>
-import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType } from 'nexus';
-import { Role } from '@prisma/client';
-import { UserInputError, /*ForbiddenError*/ } from 'apollo-server-micro';
+import { objectType, extendType, inputObjectType, arg, nonNull /*, enumType*/ } from 'nexus';
 
-// import { isAdmin } from '../services/permissions';
+import { isAdmin } from '../../services/permissions';
 
 // <%= camelized %> Type
 export const <%= camelized %> = objectType({
@@ -17,6 +15,7 @@ export const <%= camelized %> = objectType({
     t.nonNull.id('id');
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
+    t.nonNull.string('name');
   },
 });
 
@@ -28,18 +27,29 @@ export const <%= camelized %>Queries = extendType({
     t.list.field('<%= plural.toLowerCase() %>', {
       type: '<%= camelized %>',
       authorize: (_root, _args, ctx) => !!ctx.user,
-      args: nonNull(arg({ type: 'SomethingQueryInput' })),
-      description: 'Returns available <%= plural.toLowerCase() %>',
+      args: {
+        where: arg({ type: '<%= camelized %>WhereInput' }),
+        orderBy: arg({ type: '<%= camelized %>OrderByInput', list: true }),
+      },
+      description: 'Returns found <%= plural.toLowerCase() %>',
+      resolve: async (_root, args, ctx) => {
+        const { where = {}, orderBy = [] } = args;
+
+        return await ctx.db.<%= name %>.findMany({ where, orderBy });
+      }
     })
 
     // single query
-    t.field('something', {
+    t.field('<%= name.toLowerCase() %>', {
       type: '<%= camelized %>',
       description: 'Returns a specific <%= camelized %>',
       authorize: (_root, _args, ctx) => !!ctx.user,
-      args: nonNull(arg({ type: 'SomethingQueryInput' })),
+      args: {
+        where: nonNull(arg({ type: '<%= camelized%>WhereUniqueInput' }))
+      },
       resolve: (_root, args, ctx) => {
-        // TODO
+        const { where } = args;
+        return ctx.prisma.<%= name %>.findUnique({ where })
       },
     });
   },
@@ -49,60 +59,75 @@ export const <%= camelized %>Queries = extendType({
 export const <%= camelized %>Mutations = extendType({
   type: 'Mutation',
   definition: (t) => {
-    t.field('somethingMutation', {
-      type: 'String',
-      description: 'Does something',
+    t.field('create<%= camelized %>', {
+      type: '<%= camelized %>',
+      description: 'Creates a <%= camelized %>',
+      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
       args: {
-        data: nonNull(arg({ type: 'SomethingMutationInput' })),
+        data: nonNull(arg({ type: 'Create<%= camelized %>Input' })),
       },
-      authorize: (_root, _args, ctx) => !!ctx.user,
       resolve: async (_root, args, ctx) => {
-        console.log(args.data.hello)
-        return args.data.hello
+        return await ctx.db.<%= name %>.create(args);
+      }
+    });
+
+    t.field('update<%= camelized %>', {
+      type: '<%= camelized %>',
+      description: 'Updates a <%= camelized %>',
+      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+      args: {
+        where: nonNull(arg({ type: '<%= camelized %>WhereUniqueInput'})),
+        data: nonNull(arg({ type: 'Update<%= camelized %>Input' })),
+      },
+      resolve: async (_root, args, ctx) => {
+        const { where, data } = args;
+
+        return await ctx.db.<%= name %>.update({ where, data });
       }
     });
   },
 });
 
-// Inputs
-export const SomethingMutationInput = inputObjectType({
-  name: 'SomethingMutationInput',
-  description: 'Input used to do something',
+// MUTATION INPUTS
+export const Create<%= camelized %>Input = inputObjectType({
+  name: 'Create<%= camelized %>Input',
+  description: 'Input used to create a <%= name %>',
   definition: (t) => {
-    t.nonNull.string('hello');
-  },
-})
-
-export const SomethingQueryInput = inputObjectType({
-  name: 'SomethingQueryInput',
-  description: 'Input used to do something',
-  definition: (t) => {
-    t.nonNull.string('hello');
+    t.nonNull.string('name');
   },
 });
 
+export const Update<%= camelized %>Input = inputObjectType({
+  name: 'Update<%= camelized %>Input',
+  description: 'Input used to update a <%= name %>',
+  definition: (t) => {
+    t.nonNull.string('name');
+  },
+});
+
+// QUERY INPUTS
 export const <%= camelized %>OrderByInput = inputObjectType({
   name: '<%= camelized %>OrderByInput',
   description: 'Order <%= camelized.toLowerCase() %> by a specific field',
   definition(t) {
-    t.field('hello', { type: 'SortOrder' });
+    t.field('name', { type: 'SortOrder' });
   },
 });
 
-export const UserWhereUniqueInput = inputObjectType({
-  name: 'UserWhereUniqueInput',
-  description: 'Input to find users based on unique fields',
+export const <%= camelized %>WhereUniqueInput = inputObjectType({
+  name: '<%= camelized %>WhereUniqueInput',
+  description: 'Input to find <%= plural.toLowerCase() %> based on unique fields',
   definition(t) {
     t.id('id');
-    t.email('email');
+    // add DB uniq fields here
+    // t.string('name');
   },
 });
 
-export const UserWhereInput = inputObjectType({
-  name: 'UserWhereInput',
-  description: 'Input to find users based other fields',
+export const <%= camelized %>WhereInput = inputObjectType({
+  name: '<%= camelized %>WhereInput',
+  description: 'Input to find <%= plural.toLowerCase() %> based on other fields',
   definition(t) {
-    t.int('id');
-    t.field('email', { type: 'StringFilter' });
+    t.field('name', { type: 'StringFilter' });
   },
 });
