@@ -1,4 +1,4 @@
-import { objectType, extendType, inputObjectType, stringArg, arg, nonNull, enumType, list } from 'nexus';
+import { objectType, extendType, inputObjectType, queryField, mutationField, stringArg, arg, nonNull, enumType, list } from 'nexus';
 import { Role } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
@@ -44,141 +44,128 @@ export const AuthPayload = objectType({
 });
 
 // Queries
-export const UserQueries = extendType({
-  type: 'Query',
-  definition: (t) => {
-    // Me Query
-    t.field('me', {
-      type: 'User',
-      description: 'Returns the currently logged in user',
-      resolve: (_root, _args, ctx) => ctx.user,
-    });
+export const meQuery = queryField('me', {
+  type: 'User',
+  description: 'Returns the currently logged in user',
+  resolve: (_root, _args, ctx) => ctx.user,
+});
 
-    // List Users Query (admin only)
-    t.field('users', {
-      type: list('User'),
-      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
-      resolve: async (_root, args, ctx) => {
-        return await ctx.db.user.findMany({ ...args });
-      },
-    });
+export const findUsersQuery = queryField('users', {
+  type: list('User'),
+  authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+  resolve: async (_root, args, ctx) => {
+    return await ctx.db.user.findMany({ ...args });
+  },
+});
 
-    // User Query
-    t.field('user', {
-      type: 'User',
-      args: {
-        where: nonNull(arg({ type: 'UserWhereUniqueInput' })),
-      },
-      resolve: async (_root, args, ctx) => {
-        return await ctx.db.user.findUnique({ where: args.where });
-      },
-    });
+export const findUniqueUserQuery = queryField('user', {
+  type: 'User',
+  args: {
+    where: nonNull(arg({ type: 'UserWhereUniqueInput' })),
+  },
+  resolve: async (_root, args, ctx) => {
+    return await ctx.db.user.findUnique({ where: args.where });
   },
 });
 
 // Mutations
-export const Mutations = extendType({
-  type: 'Mutation',
-  definition: (t) => {
-    // Login Mutation
-    t.field('login', {
-      type: 'AuthPayload',
-      description: 'Login to an existing account',
-      args: {
-        email: nonNull(stringArg()),
-        password: nonNull(stringArg()),
+export const loginMutation = mutationField('login', {
+  type: 'AuthPayload',
+  description: 'Login to an existing account',
+  args: {
+    email: nonNull(stringArg()),
+    password: nonNull(stringArg()),
+  },
+  resolve: async (_root, args, ctx) => {
+    const { email, password } = args;
+    const user = await ctx.db.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new UserInputError(`No user found for email: ${email}`, {
+        invalidArgs: { email: 'is invalid' },
+      });
+    }
+
+    const valid = comparePasswords(password, user.password);
+
+    if (!valid) {
+      throw new UserInputError('Invalid password', {
+        invalidArgs: { password: 'is invalid' },
+      });
+    }
+
+    const token = appJwtForUser(user);
+
+    return {
+      token,
+      user,
+    };
+  },
+});
+
+export const signupMutation = mutationField('signup', {
+  type: 'AuthPayload',
+  description: 'Signup for an account',
+  args: {
+    data: nonNull(arg({ type: 'SignupInput' })),
+  },
+  resolve: async (_root, args, ctx) => {
+    const { data } = args;
+    const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });
+
+    if (existingUser) {
+      throw new UserInputError('Email already exists.', {
+        invalidArgs: { email: 'already exists' },
+      });
+    }
+
+    // force role to user and hash the password
+    const updatedArgs = {
+      data: {
+        ...data,
+        roles: { set: [Role.USER] },
+        password: hashPassword(data.password),
       },
-      resolve: async (_root, args, ctx) => {
-        const { email, password } = args;
-        const user = await ctx.db.user.findUnique({ where: { email } });
+    };
 
-        if (!user) {
-          throw new UserInputError(`No user found for email: ${email}`, {
-            invalidArgs: { email: 'is invalid' },
-          });
-        }
+    const user = await ctx.db.user.create(updatedArgs);
+    const token = appJwtForUser(user);
 
-        const valid = comparePasswords(password, user.password);
+    return {
+      user,
+      token,
+    };
+  },
+});
 
-        if (!valid) {
-          throw new UserInputError('Invalid password', {
-            invalidArgs: { password: 'is invalid' },
-          });
-        }
+export const createUserMutation = mutationField('createUser', {
+  type: 'User',
+  description: 'Create User for an account',
+  args: {
+    data: nonNull(arg({ type: 'UserCreateInput' })),
+  },
+  authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+  resolve: async (_root, args, ctx) => {
+    const { data } = args;
+    const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });
 
-        const token = appJwtForUser(user);
+    if (existingUser) {
+      throw new UserInputError('Email already exists.', {
+        invalidArgs: { email: 'already exists' },
+      });
+    }
 
-        return {
-          token,
-          user,
-        };
+    // force role to user and hash the password
+    const updatedArgs = {
+      data: {
+        ...data,
+        password: hashPassword(data.password),
       },
-    });
+    };
 
-    t.field('signup', {
-      type: 'AuthPayload',
-      description: 'Signup for an account',
-      args: {
-        data: nonNull(arg({ type: 'SignupInput' })),
-      },
-      resolve: async (_root, args, ctx) => {
-        const { data } = args;
-        const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });
+    const user = await ctx.db.user.create(updatedArgs);
 
-        if (existingUser) {
-          throw new UserInputError('Email already exists.', {
-            invalidArgs: { email: 'already exists' },
-          });
-        }
-
-        // force role to user and hash the password
-        const updatedArgs = {
-          data: {
-            ...data,
-            roles: { set: [Role.USER] },
-            password: hashPassword(data.password),
-          },
-        };
-
-        const user = await ctx.db.user.create(updatedArgs);
-        const token = appJwtForUser(user);
-
-        return {
-          user,
-          token,
-        };
-      },
-    });
-    t.field('createUser', {
-      type: 'User',
-      description: 'Create User for an account',
-      args: {
-        data: nonNull(arg({ type: 'UserCreateInput' })),
-      },
-      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
-      resolve: async (_root, args, ctx) => {
-        const { data } = args;
-        const existingUser = await ctx.db.user.findUnique({ where: { email: data.email } });
-
-        if (existingUser) {
-          throw new UserInputError('Email already exists.', {
-            invalidArgs: { email: 'already exists' },
-          });
-        }
-
-        // force role to user and hash the password
-        const updatedArgs = {
-          data: {
-            ...data,
-            password: hashPassword(data.password),
-          },
-        };
-
-        const user = await ctx.db.user.create(updatedArgs);
-
-        return user;
-      },
-    });
+    return user;
   },
 });
 

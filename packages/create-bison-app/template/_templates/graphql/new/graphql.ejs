@@ -3,7 +3,7 @@ to: graphql/modules/<%= name %>.ts
 ---
 <% camelized = h.inflection.camelize(name) -%>
 <% plural = h.inflection.pluralize(camelized) -%>
-import { objectType, extendType, inputObjectType, arg, nonNull /*, enumType*/ } from 'nexus';
+import { objectType, extendType, inputObjectType, queryField, mutationField, arg, list, nonNull /*, enumType*/ } from 'nexus';
 
 import { isAdmin } from '../../services/permissions';
 
@@ -20,72 +20,60 @@ export const <%= camelized %> = objectType({
 });
 
 // Queries
-export const <%= camelized %>Queries = extendType({
-  type: 'Query',
-  definition: (t) => {
-    // List <%= plural %> Query
-    t.list.field('<%= plural.toLowerCase() %>', {
-      type: '<%= camelized %>',
-      authorize: (_root, _args, ctx) => !!ctx.user,
-      args: {
-        where: arg({ type: '<%= camelized %>WhereInput' }),
-        orderBy: arg({ type: '<%= camelized %>OrderByInput', list: true }),
-      },
-      description: 'Returns found <%= plural.toLowerCase() %>',
-      resolve: async (_root, args, ctx) => {
-        const { where = {}, orderBy = [] } = args;
+export const find<%= plural %>Query = queryField('<%= plural.toLowerCase() %>', {
+  type: list('<%= camelized %>'),
+  authorize: (_root, _args, ctx) => !!ctx.user,
+  args: {
+    where: arg({ type: '<%= camelized %>WhereInput' }),
+    orderBy: arg({ type: '<%= camelized %>OrderByInput', list: true }),
+  },
+  description: 'Returns found <%= plural.toLowerCase() %>',
+  resolve: async (_root, args, ctx) => {
+    const { where = {}, orderBy = [] } = args;
 
-        return await ctx.db.<%= name %>.findMany({ where, orderBy });
-      }
-    })
+    return await ctx.db.<%= name %>.findMany({ where, orderBy });
+  }
+});
 
-    // single query
-    t.field('<%= name.toLowerCase() %>', {
-      type: '<%= camelized %>',
-      description: 'Returns a specific <%= camelized %>',
-      authorize: (_root, _args, ctx) => !!ctx.user,
-      args: {
-        where: nonNull(arg({ type: '<%= camelized%>WhereUniqueInput' }))
-      },
-      resolve: (_root, args, ctx) => {
-        const { where } = args;
-        return ctx.prisma.<%= name %>.findUnique({ where })
-      },
-    });
+export const findUnique<%= camelized %>Query = queryField('<%= name.toLowerCase() %>', {
+  type: '<%= camelized %>',
+  description: 'Returns a specific <%= camelized %>',
+  authorize: (_root, _args, ctx) => !!ctx.user,
+  args: {
+    where: nonNull(arg({ type: '<%= camelized%>WhereUniqueInput' }))
+  },
+  resolve: (_root, args, ctx) => {
+    const { where } = args;
+    return ctx.prisma.<%= name %>.findUnique({ where })
   },
 });
 
 // Mutations
-export const <%= camelized %>Mutations = extendType({
-  type: 'Mutation',
-  definition: (t) => {
-    t.field('create<%= camelized %>', {
-      type: '<%= camelized %>',
-      description: 'Creates a <%= camelized %>',
-      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
-      args: {
-        data: nonNull(arg({ type: 'Create<%= camelized %>Input' })),
-      },
-      resolve: async (_root, args, ctx) => {
-        return await ctx.db.<%= name %>.create(args);
-      }
-    });
-
-    t.field('update<%= camelized %>', {
-      type: '<%= camelized %>',
-      description: 'Updates a <%= camelized %>',
-      authorize: (_root, _args, ctx) => isAdmin(ctx.user),
-      args: {
-        where: nonNull(arg({ type: '<%= camelized %>WhereUniqueInput'})),
-        data: nonNull(arg({ type: 'Update<%= camelized %>Input' })),
-      },
-      resolve: async (_root, args, ctx) => {
-        const { where, data } = args;
-
-        return await ctx.db.<%= name %>.update({ where, data });
-      }
-    });
+export const create<%= camelized %>Mutation = mutationField('create<%= camelized %>', {
+  type: '<%= camelized %>',
+  description: 'Creates a <%= camelized %>',
+  authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+  args: {
+    data: nonNull(arg({ type: 'Create<%= camelized %>Input' })),
   },
+  resolve: async (_root, args, ctx) => {
+    return await ctx.db.<%= name %>.create(args);
+  }
+});
+
+export const update<%= camelized %>Mutation = mutationField('update<%= camelized %>', {
+  type: '<%= camelized %>',
+  description: 'Updates a <%= camelized %>',
+  authorize: (_root, _args, ctx) => isAdmin(ctx.user),
+  args: {
+    where: nonNull(arg({ type: '<%= camelized %>WhereUniqueInput'})),
+    data: nonNull(arg({ type: 'Update<%= camelized %>Input' })),
+  },
+  resolve: async (_root, args, ctx) => {
+    const { where, data } = args;
+
+    return await ctx.db.<%= name %>.update({ where, data });
+  }
 });
 
 // MUTATION INPUTS
