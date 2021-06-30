@@ -12,7 +12,6 @@ const chance = new Chance();
 export const <%= upper %>Factory = {
   build: (attrs: Partial<<%= upper %>> = {}) => {
     return {
-      id: chance.guid(),
       ...attrs,
     };
   },
