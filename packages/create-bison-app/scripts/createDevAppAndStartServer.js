@@ -19,8 +19,8 @@ async function init() {
   const { clean, port } = yargs(args).argv;
 
   if (clean) {
-    await fs.promises.rmdir(devAppPath, { recursive: true });
     await removeTemplateSymlinks();
+    await fs.promises.rm(devAppPath, { force: true, recursive: true });
   }
 
   // Create bison app if it does not exist
@@ -90,7 +90,8 @@ async function removeTemplateSymlinks() {
     path.join(templateFolder, relativePath);
   const unlinkFile = async (filename) => {
     const filePath = templatePath(filename);
-    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isSymbolicLink()) {
+    const lstat = fs.lstatSync(filePath, { throwIfNoEntry: false });
+    if (lstat && lstat.isSymbolicLink()) {
       await fs.promises.unlink(filePath);
     }
   };
@@ -99,8 +100,8 @@ async function removeTemplateSymlinks() {
   await unlinkFile("types.ts");
 
   // Directories cannot be "unlinked" so they must be removed
-  await fs.promises.rmdir(templatePath("node_modules"), { recursive: true });
-  await fs.promises.rmdir(templatePath("types"), { recursive: true });
+  await fs.promises.rm(templatePath("node_modules"), { force: true, recursive: true });
+  await fs.promises.rm(templatePath("types"), { force: true, recursive: true });
 }
 
 if (require.main === module) {
