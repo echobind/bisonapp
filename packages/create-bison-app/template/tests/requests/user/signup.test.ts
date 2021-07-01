@@ -90,7 +90,7 @@ describe('User signup mutation', () => {
         }
       `;
 
-      const { roles, ...attrs } = UserFactory.build();
+      const attrs = UserFactory.build();
       const variables = {
         data: {
           ...attrs,
