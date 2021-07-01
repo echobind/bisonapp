@@ -13,7 +13,6 @@ interface UserAttrs extends Omit<Partial<User>, 'roles'> {
 export const UserFactory = {
   build: (attrs: UserAttrs = {}) => {
     return {
-      id: chance.guid(),
       email: chance.email(),
       password: 'test1234',
       roles: { set: [Role.USER] },
