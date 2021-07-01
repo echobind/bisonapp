@@ -90,13 +90,16 @@ describe('User signup mutation', () => {
         }
       `;
 
-      const attrs = UserFactory.build();
+      // eslint-disable-next-line
+      const { roles, ...attrs } = UserFactory.build();
+
       const variables = {
         data: {
           ...attrs,
           profile: { create: { firstName: chance.first(), lastName: chance.last() } },
         },
       };
+
       const response = await graphQLRequest({ query, variables });
       const { token, user } = response.body.data.signup;
 

@@ -2,22 +2,23 @@
 to: tests/factories/<%= name %>.ts
 ---
 <% single = h.inflection.singularize(name) -%>
-<% upper = h.inflection.camelize(single, false) -%>
-import Chance from 'chance';
-import { <%= upper %> } from '@prisma/client';
+<% camelized = h.inflection.camelize(name) -%>
+import { Prisma } from '@prisma/client';
+// import Chance from 'chance';
+
 import { buildPrismaIncludeFromAttrs, prisma } from '../helpers';
 
-const chance = new Chance();
+// const chance = new Chance();
 
-export const <%= upper %>Factory = {
-  build: (attrs: Partial<<%= upper %>> = {}) => {
+export const <%= camelized %>Factory = {
+  build: (attrs: Partial<Prisma.<%= camelized %>CreateInput> = {}) => {
     return {
       ...attrs,
     };
   },
 
-  create: async (attrs: Partial<<%= upper %>> = {}) => {
-    const <%= single %> = <%= upper %>Factory.build(attrs);
+  create: async (attrs: Partial<Prisma.<%= camelized %>CreateInput> = {}) => {
+    const <%= single %> = <%= camelized %>Factory.build(attrs);
     const options: Record<string, any> = {};
     const includes = buildPrismaIncludeFromAttrs(attrs);
     if (includes) options.include = includes;
