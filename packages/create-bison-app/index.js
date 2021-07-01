@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const slugify = require("slugify");
 const execa = require("execa");
-const git = require('isomorphic-git');
-const globby = require('globby');
+const git = require("isomorphic-git");
+const globby = require("globby");
 const Listr = require("listr");
 const ejs = require("ejs");
 const color = require("chalk");
@@ -40,10 +40,7 @@ module.exports = async ({ name, ...answers }) => {
         await git.init(gitOptions);
 
         const paths = await globby(
-          [
-            `./${pkgName}/**`,
-            `!./${pkgName}/.git/**`
-          ],
+          [`./${pkgName}/**`, `!./${pkgName}/.git/**`],
           {
             dot: true,
             gitignore: true,
@@ -52,102 +49,26 @@ module.exports = async ({ name, ...answers }) => {
         for (const filepath of paths) {
           await git.add({
             ...gitOptions,
-            filepath: filepath.replace(`./${pkgName}/`, ''),
+            filepath: filepath.replace(`./${pkgName}/`, ""),
           });
         }
 
         if (variables.githubRepo) {
           await git.addRemote({
             ...gitOptions,
-            remote: 'origin',
-            url: variables.githubRepo
+            remote: "origin",
+            url: variables.githubRepo,
           });
         }
 
         return await git.commit({
           ...gitOptions,
-          message: 'Initial commit from Bison Template!',
+          message: "Initial commit from Bison Template!",
           author: {
-            name: 'Bison Template',
-            email: 'hi@echobind.com'
-          }
-        })
-      },
-    },
-    {
-      title: `Heroku Setup`,
-      enabled: () =>
-        variables.host.name === "heroku" &&
-        variables.host.createAppsAndPipelines,
-      task: async () => {
-        const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
-        // ! Bug w/ Pipelines, better error handling needed.
-        // await fsPromises.writeFile("Procfile", "web: yarn db:deploy && yarn start");
-
-        // create staging app
-        await execa(
-          "heroku",
-          [
-            "apps:create",
-            variables.host.staging.name,
-            "--remote=staging",
-            `--addons=${variables.host.staging.db}`,
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // create prod app
-        await execa(
-          "heroku",
-          [
-            "apps:create",
-            variables.host.production.name,
-            "--remote=production",
-            `--addons=${variables.host.production.db}`,
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // create pipeline
-        await execa(
-          "heroku",
-          [
-            "pipelines:create",
-            variables.name,
-            "--remote=staging",
-            "--stage=staging",
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // add staging app to pipeline
-        await execa(
-          "heroku",
-          [
-            "pipelines:add",
-            variables.name,
-            "--remote=production",
-            "--stage=production",
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // connect pipeline to github
-        await execa(
-          "heroku",
-          ["pipelines:connect", variables.name, `--repo=${repoName}`],
-          {
-            cwd: pkgName,
-          }
-        );
+            name: "Bison Template",
+            email: "hi@echobind.com",
+          },
+        });
       },
     },
     {

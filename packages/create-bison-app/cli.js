@@ -104,49 +104,6 @@ function generateQuestions(appName) {
       ],
       default: "vercel",
     },
-    {
-      name: "host.createAppsAndPipelines",
-      type: "confirm",
-      message: "Do you want to automatically create apps and pipelines?",
-      description: "Create apps/pipelines on Heroku",
-      default: true,
-      when: (answers) =>
-        answers.repo.addRemote && answers.host.name === "heroku",
-    },
-    {
-      name: "host.staging.name",
-      type: "input",
-      message: "Enter the name for the staging app (must be unique)",
-      description: "staging app name on Heroku",
-      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
-      default: `${appName}-staging`,
-    },
-    {
-      name: "host.staging.db",
-      type: "list",
-      message: "What database tier do you want on staging?",
-      description: "staging database tier on Heroku",
-      choices: ["heroku-postgresql:hobby-dev", "heroku-postgresql:standard-0"],
-      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
-      default: "heroku-postgresql:hobby-dev",
-    },
-    {
-      name: "host.production.name",
-      type: "input",
-      message: "Enter the name for the production app (must be unique)",
-      description: "prod app name on Heroku",
-      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
-      default: `${appName}`,
-    },
-    {
-      name: "host.production.db",
-      type: "list",
-      message: "What database tier do you want on production?",
-      description: "prod database tier on Heroku",
-      choices: ["heroku-postgresql:hobby-dev", "heroku-postgresql:standard-0"],
-      when: ({ host }) => host.name === "heroku" && host.createAppsAndPipelines,
-      default: "heroku-postgresql:standard-0",
-    },
   ];
 }
 
@@ -243,20 +200,7 @@ require("yargs").usage(
 
     const { name, ...cliAnswers } = yargs;
     const answers = await fetchAnswers(cliAnswers);
-    const hostName = answers.host.name;
 
-    if (hostName !== "heroku") {
-      return createBisonApp({ name, ...answers });
-    }
-
-    // If heroku, make sure they are logged in before continuing.
-    try {
-      await verifyHerokuLogin();
-      return createBisonApp({ name, ...answers });
-    } catch {
-      console.error(
-        `\n\nIt looks like you're not logged in to Heroku CLI. Use \`heroku login\` and try again.`
-      );
-    }
+    return createBisonApp({ name, ...answers });
   }
 ).argv;
