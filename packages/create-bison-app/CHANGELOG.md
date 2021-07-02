@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.4 (2021-07-02)
+
+
+### Features
+
+* **enhancement:** Upgrade to queryField and mutationField: ([#176](https://github.com/echobind/bisonapp/issues/176)) ([7a0da6b](https://github.com/echobind/bisonapp/commit/7a0da6ba45d32f0e85648fe58bcf9c0a49c42b18))
+
+
+
 ## 1.11.0-canary.3 (2021-07-02)
 
 
