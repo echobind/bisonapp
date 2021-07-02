@@ -31,7 +31,7 @@ async function init() {
 
     await createApp([BISON_DEV_APP_NAME, ...args], distPath);
 
-    await execa("yarn db:setup && yarn generate", {
+    await execa("yarn setup:dev", {
       cwd: devAppPath,
       shell: true,
       stdio: "inherit",
@@ -40,9 +40,12 @@ async function init() {
     await createTemplateSymlinks(devAppPath);
   }
 
-  const templateVariables = require(path.join(devAppPath, BISON_DEV_APP_VARIABLES_FILE));
+  const templateVariables = require(path.join(
+    devAppPath,
+    BISON_DEV_APP_VARIABLES_FILE
+  ));
 
-  const copyFile = async src => {
+  const copyFile = async (src) => {
     const relativeSrc = cleanTemplateDestPath(src.replace(templateFolder, ""));
     const dest = path.join(devAppPath, relativeSrc);
     if (src.match(/\.ejs$/) && !src.match(/_templates\//)) {
@@ -53,26 +56,27 @@ async function init() {
   };
 
   // Watch template files and copy to dev app
-  chokidar.watch(templateFolder, {
-      ignored: path => path.includes("node_modules")
+  chokidar
+    .watch(templateFolder, {
+      ignored: (path) => path.includes("node_modules"),
     })
     .on("add", copyFile)
     .on("change", copyFile);
-  
+
   return startServer(devAppPath, port);
 }
 
 /**
- * Create symbolic links to node_modules and generated files in the dev app so 
+ * Create symbolic links to node_modules and generated files in the dev app so
  * the template directory files won't contain errors
  */
 async function createTemplateSymlinks(appPath) {
   // Files and directories that do not exist in template that need to be linked
-  const relativeAppPaths = ["api.graphql", "node_modules", "types", "types.ts"]
+  const relativeAppPaths = ["api.graphql", "node_modules", "types", "types.ts"];
 
   for (const relativePath of relativeAppPaths) {
     await fs.promises.symlink(
-      path.join(appPath, relativePath), 
+      path.join(appPath, relativePath),
       path.join(templateFolder, relativePath)
     );
   }
@@ -82,13 +86,14 @@ async function createTemplateSymlinks(appPath) {
  * Remove all symlinks in the template directory
  */
 async function removeTemplateSymlinks() {
-  const templatePath = relativePath => path.join(templateFolder, relativePath);
-  const unlinkFile = async filename => {
+  const templatePath = (relativePath) =>
+    path.join(templateFolder, relativePath);
+  const unlinkFile = async (filename) => {
     const filePath = templatePath(filename);
     if (fs.existsSync(filePath) && fs.lstatSync(filePath).isSymbolicLink()) {
       await fs.promises.unlink(filePath);
     }
-  }
+  };
 
   await unlinkFile("api.graphql");
   await unlinkFile("types.ts");

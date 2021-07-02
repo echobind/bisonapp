@@ -7,6 +7,7 @@
 <% } -%>
   "scripts": {
     "build": "yarn ts-node ./scripts/buildProd",
+    "build:types": "yarn build:prisma && touch types.ts && yarn build:nexus && yarn codegen",
     "build:prisma": "prisma generate",
     "build:next": "next build",
     "build:nexus": "cross-env NODE_ENV=development yarn ts-node --transpile-only graphql/schema.ts",
@@ -30,8 +31,8 @@
     "g:test:factory": "hygen test factory --name",
     "g:test:request": "hygen test request --name",
     "g:test:util": "hygen test util --name",
-    "generate": "yarn build:prisma && yarn build:nexus && yarn codegen",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
+    "setup:dev": "yarn db:setup && yarn build:types",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
     "test:ci": "yarn withEnv:test jest --runInBand",
