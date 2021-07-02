@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.3 (2021-07-02)
+
+
+### Bug Fixes
+
+* do not remove file extension from hygen templates when copied by dev server ([663589e](https://github.com/echobind/bisonapp/commit/663589eea464ae0be1bff2c4b64f16e516e8c917))
+
+
+
 ## 1.11.0-canary.2 (2021-07-02)
 
 
