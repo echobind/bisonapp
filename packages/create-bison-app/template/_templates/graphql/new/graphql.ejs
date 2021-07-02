@@ -3,7 +3,16 @@ to: graphql/modules/<%= name %>.ts
 ---
 <% camelized = h.inflection.camelize(name) -%>
 <% plural = h.inflection.pluralize(camelized) -%>
-import { objectType, extendType, inputObjectType, queryField, mutationField, arg, list, nonNull /*, enumType*/ } from 'nexus';
+import {
+  objectType,
+  extendType,
+  inputObjectType,
+  queryField,
+  mutationField,
+  arg,
+  list,
+  nonNull
+} from 'nexus';
 
 import { isAdmin } from '../../services/permissions';
 

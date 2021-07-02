@@ -1,4 +1,14 @@
-import { objectType, inputObjectType, queryField, mutationField, stringArg, arg, nonNull, enumType, list } from 'nexus';
+import {
+  objectType,
+  inputObjectType,
+  queryField,
+  mutationField,
+  stringArg,
+  arg,
+  nonNull,
+  enumType,
+  list,
+} from 'nexus';
 import { Role } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
@@ -23,11 +33,13 @@ export const User = objectType({
     t.field('profile', {
       type: 'Profile',
       resolve: (parent, _, context) => {
-        return context.prisma.user.findUnique({
-          where: { id: parent.id }
-        }).profile()
-      }
-    })
+        return context.prisma.user
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .profile();
+      },
+    });
   },
 });
 
