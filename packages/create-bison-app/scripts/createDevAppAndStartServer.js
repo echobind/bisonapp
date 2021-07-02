@@ -46,9 +46,13 @@ async function init() {
   ));
 
   const copyFile = async (src) => {
-    const relativeSrc = cleanTemplateDestPath(src.replace(templateFolder, ""));
-    const dest = path.join(devAppPath, relativeSrc);
-    if (src.match(/\.ejs$/) && !src.match(/_templates\//)) {
+    const relativeSrc = src.replace(templateFolder, "");
+    const isHygenTemplate = src.match(/_templates\//);
+    const dest = path.join(
+      devAppPath,
+      isHygenTemplate ? relativeSrc : cleanTemplateDestPath(relativeSrc)
+    );
+    if (src.match(/\.ejs$/) && !isHygenTemplate) {
       await copyWithTemplate(src, dest, templateVariables);
     } else {
       await fs.promises.copyFile(src, dest);
