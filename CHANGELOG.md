@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.2 (2021-07-02)
+
+
+### Bug Fixes
+
+* symlinked files and directories not being removed ([d8c7ae9](https://github.com/echobind/bisonapp/commit/d8c7ae92f0d23a2887d08ace4cf9af4d1ea2d63f))
+
+
+
 ## 1.11.0-canary.1 (2021-06-30)
 
 **Note:** Version bump only for package root
