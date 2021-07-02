@@ -21,27 +21,12 @@ function convertInquirerTypeToYarnType(type) {
 function generateQuestions(appName) {
   return [
     {
-      name: "repo.addRemote",
-      type: "confirm",
-      message:
-        "Would you like to add a git origin when complete? (required if using Heroku)",
-      default: true,
-    },
-    {
-      name: "githubRepo",
-      type: "input",
-      message: "Create a new GitHub repo and paste the url here:",
-      description: "The GitHub url",
-      when: (answers) => answers.repo.addRemote,
-    },
-    {
       name: "repo.stagingBranch",
       type: "input",
       message:
         "What branch would you like to use for staging deploys? (migrates staging db on build)",
       description: "The Staging Branch Name",
       default: "dev",
-      when: (answers) => answers.repo.addRemote,
     },
     {
       name: "repo.productionBranch",
@@ -49,7 +34,6 @@ function generateQuestions(appName) {
       message: "What branch would you like to use for production deploys?",
       description: "The Production Branch Name",
       default: "main",
-      when: (answers) => answers.repo.addRemote,
     },
     {
       name: "db.dev.name",
