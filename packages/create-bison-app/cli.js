@@ -3,6 +3,7 @@ const createBisonApp = require(".");
 const inquirer = require("inquirer");
 const Logo = require("./logo");
 const execa = require("execa");
+const chalk = require('chalk');
 
 const TYPE_MAPPING = {
   input: "string",
@@ -52,39 +53,85 @@ function generateQuestions(appName) {
       when: (answers) => answers.repo.addRemote,
     },
     {
+      name: "db.dev.databaseType",
+      type: "list",
+      message: "What type of database would you like to use?",
+      description: "The database type",
+      choices: [
+        { name: "Postgres", value: "postgres" },
+        { name: "MySQL", value: "MySQL" },
+        { name: "SQLite", value: "SQLite" },
+      ],
+      default: "postgres",
+    },
+    {
+      name: "db.dev.localDatabasePrompt",
+      type: "confirm",
+      message: "Do you have it setup?",
+      description: "Verify user has a db setup",
+      default: true,
+    },
+    {
+      name: "db.dev.continue",
+      type: "confirm",
+      message: "Visit https://github.com/echobind/bisonapp/blob/main/docs/postgres.md for intructions to setup a new database.\n\bContinue? Press [Enter] for YES",
+      description: "Provide link to help install Postgres",
+      when: (answers) => answers.db.dev.localDatabasePrompt == false && answers.db.dev.databaseType == "postgres",
+      default: true,
+    },
+    {
       name: "db.dev.name",
       type: "input",
-      message: "What is the local database name?",
+      prefix: "The name you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")}  Local database name`,
       description: "The database to use in development",
       default: `${appName}_dev`,
     },
     {
       name: "db.dev.user",
       type: "input",
-      message: "What is the local database username?",
+      prefix: "The username you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database username`,
       description: "The database user",
       default: "postgres",
     },
     {
       name: "db.dev.password",
       type: "input",
-      message: "What is the local database password?",
+      prefix: "The password you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database password`,
       description: "The database password",
       default: "",
     },
     {
       name: "db.dev.host",
       type: "input",
-      message: "What is the local database host?",
+      prefix: "The host you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database host`,
       description: "The database host",
       default: "localhost",
     },
     {
       name: "db.dev.port",
       type: "input",
-      message: "What is the local database port?",
+      prefix: "The port you will use for the new database (or current).\n",
+      message: `${chalk.green("\b?")} Local database port`,
       description: "The database port",
-      default: "5432",
+      default: (answers) => {
+        switch (answers.db.dev.databaseType) {
+          case "postgres":
+            return 5432;
+            break;
+          case "SQLite":
+            return "file:./dev.db";
+            break;
+          case "MySQL":
+            return 3306;
+            break;
+          default: 5432;
+            break;
+        }
+      },
     },
     {
       name: "db.test.name",
