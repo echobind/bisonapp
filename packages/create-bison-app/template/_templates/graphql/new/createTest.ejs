@@ -1,0 +1,66 @@
+---
+to: tests/requests/<%= name %>/create<%=h.inflection.camelize(name) %>.test.ts
+---
+<% camelized = h.inflection.camelize(name) -%>
+<% plural = h.inflection.pluralize(camelized) -%>
+import { Role } from '@prisma/client';
+
+import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
+import { UserFactory } from '../../factories/user';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('<%= camelized %> create<%= camelized %> mutation', () => {
+  describe('As a Role User', () => {
+    it('returns Not Authorized', async () => {
+      const query = `
+        mutation create<%= camelized %>($data: <%= camelized %>CreateInput!) {
+          create<%= camelized %>(data: $data) {
+            id
+          }
+        }
+      `;
+
+      const user = await UserFactory.create({ roles: [Role.USER] });
+
+      // Insert <%= camelized %>CreateInput!
+      const variables = { data: { name: 'TODO' } };
+
+      const response = await graphQLRequestAsUser(user, { query, variables });
+      const errorMessages = response.body.errors.map((e) => e.message);
+
+      expect(errorMessages).toMatchInlineSnapshot(`
+        Array [
+          "Not authorized",
+        ]
+      `);
+
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+
+  describe('As Role ADMIN', () => {
+    it('can create a <%= name %>', async () => {
+      const query = `
+        mutation create<%= camelized %>($data: <%= camelized %>CreateInput!) {
+          create<%= camelized %>(data: $data) {
+            id
+          }
+        }
+      `;
+
+      const admin = await UserFactory.create({ roles: [Role.ADMIN] });
+
+      const variables = { data: { name: 'TODO' } };
+
+      const response = await graphQLRequestAsUser(admin, { query, variables });
+      const errorMessages = response.body.errors.map((e) => e.message);
+      const { create<%= camelized %> } = response.body.data;
+
+      expect(errorMessages).toBeNull();
+      expect(create<%= camelized %>.id).not.toBeNull();
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+});
