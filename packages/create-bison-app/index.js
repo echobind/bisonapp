@@ -7,7 +7,9 @@ const Listr = require("listr");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
-const { BISON_DEV_APP_VARIABLES_FILE } = require("./scripts/createDevAppAndStartServer");
+const {
+  BISON_DEV_APP_VARIABLES_FILE,
+} = require("./scripts/createDevAppAndStartServer");
 const { copyFiles } = require("./tasks/copyFiles");
 const { version: bisonVersion } = require("./package.json");
 
@@ -41,10 +43,6 @@ module.exports = async ({ name, ...answers }) => {
         await index.write();
         const id = await index.writeTree();
 
-        if (variables.githubRepo) {
-          await nodegit.Remote.create(repo, "origin", variables.githubRepo);
-        }
-
         const author = nodegit.Signature.now(
           "Bison Template",
           "hello@echobind.com"
@@ -63,89 +61,13 @@ module.exports = async ({ name, ...answers }) => {
       },
     },
     {
-      title: `Heroku Setup`,
-      enabled: () =>
-        variables.host.name === "heroku" &&
-        variables.host.createAppsAndPipelines,
-      task: async () => {
-        const repoName = variables.githubRepo.match(/(\w+\/\w+).git$/)[1];
-        // ! Bug w/ Pipelines, better error handling needed.
-        // await fsPromises.writeFile("Procfile", "web: yarn db:deploy && yarn start");
-
-        // create staging app
-        await execa(
-          "heroku",
-          [
-            "apps:create",
-            variables.host.staging.name,
-            "--remote=staging",
-            `--addons=${variables.host.staging.db}`,
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // create prod app
-        await execa(
-          "heroku",
-          [
-            "apps:create",
-            variables.host.production.name,
-            "--remote=production",
-            `--addons=${variables.host.production.db}`,
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // create pipeline
-        await execa(
-          "heroku",
-          [
-            "pipelines:create",
-            variables.name,
-            "--remote=staging",
-            "--stage=staging",
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // add staging app to pipeline
-        await execa(
-          "heroku",
-          [
-            "pipelines:add",
-            variables.name,
-            "--remote=production",
-            "--stage=production",
-          ],
-          {
-            cwd: pkgName,
-          }
-        );
-
-        // connect pipeline to github
-        await execa(
-          "heroku",
-          ["pipelines:connect", variables.name, `--repo=${repoName}`],
-          {
-            cwd: pkgName,
-          }
-        );
-      },
-    },
-    {
       title: "Save configuration",
       enabled: () => isDevApp,
       task: async () => {
         // Save variables to file so template directory can be watched
         // and render templates again using same variables
         await fs.promises.writeFile(
-          path.join(targetFolder, BISON_DEV_APP_VARIABLES_FILE), 
+          path.join(targetFolder, BISON_DEV_APP_VARIABLES_FILE),
           JSON.stringify(variables, null, 2)
         );
       },

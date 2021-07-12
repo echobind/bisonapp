@@ -21,10 +21,6 @@ const DEFAULT_VARS = {
       name: "testdb",
     },
   },
-  repo: {
-    stagingBranch: "dev",
-    productionBranch: "main",
-  },
   bisonVersion,
 };
 
@@ -105,11 +101,6 @@ describe("copyFiles", () => {
       const { bison: bisonConfig } = contents;
 
       expect(bisonConfig.version).toBe(bisonVersion);
-      expect(bisonConfig.branches.staging).toBe(variables.repo.stagingBranch);
-
-      expect(bisonConfig.branches.production).toBe(
-        variables.repo.productionBranch
-      );
     });
 
     it("copies pages", async () => {

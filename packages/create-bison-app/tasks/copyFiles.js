@@ -23,6 +23,7 @@ async function copyFiles({ variables, targetFolder }) {
   if (isHeroku) {
     herokuFiles = [
       copyWithTemplate(fromPath("app.json"), toPath("app.json"), variables),
+      copyWithTemplate(fromPath("Procfile"), toPath("Procfile"), variables),
     ];
   }
 
@@ -38,11 +39,7 @@ async function copyFiles({ variables, targetFolder }) {
     copyWithTemplate(fromPath("README.md.ejs"), toPath("README.md"), variables),
     copyWithTemplate(fromPath("_.gitignore"), toPath(".gitignore"), variables),
 
-    copyWithTemplate(
-      fromPath("_.env.ejs"),
-      toPath(".env"),
-      variables
-    ),
+    copyWithTemplate(fromPath("_.env.ejs"), toPath(".env"), variables),
 
     copyWithTemplate(
       fromPath("_.env.local.ejs"),
