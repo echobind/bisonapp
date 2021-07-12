@@ -48,6 +48,10 @@ export default (on, _config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
+  on('before:run', () => {
+    return setupDB();
+  });
+
   on('task', {
     resetDB: () => {
       if (process.env.CYPRESS_LOCAL) return false;
