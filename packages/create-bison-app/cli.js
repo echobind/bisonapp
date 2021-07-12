@@ -21,19 +21,18 @@ function convertInquirerTypeToYarnType(type) {
 function generateQuestions(appName) {
   return [
     {
-      name: "repo.stagingBranch",
-      type: "input",
-      message:
-        "What branch would you like to use for staging deploys? (migrates staging db on build)",
-      description: "The Staging Branch Name",
-      default: "dev",
-    },
-    {
       name: "repo.productionBranch",
       type: "input",
       message: "What branch would you like to use for production deploys?",
       description: "The Production Branch Name",
       default: "main",
+    },
+    {
+      name: "repo.stagingBranch",
+      type: "input",
+      message: "What branch would you like to use for staging deploys?",
+      description: "The Staging Branch Name",
+      default: "dev",
     },
     {
       name: "db.dev.name",

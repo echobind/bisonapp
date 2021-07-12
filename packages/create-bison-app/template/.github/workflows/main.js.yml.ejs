@@ -116,9 +116,9 @@ jobs:
 
     ## For a typical Jamstack flow, the ref below should be your default branch.
     ## For a traditional flow that auto-deploys staging and deploys prod is as needed, keep as is
-  
+
 <% if (host.name === 'heroku') { -%>
-    if: github.ref == 'refs/heads/<%= repo.stagingBranch %>' 
+    if: github.ref == 'refs/heads/<%= repo.stagingBranch %>'
 <% } else { -%>
     if: github.ref != 'refs/heads/<%= repo.productionBranch %>' # every branch EXCEPT production
 <% } -%>
