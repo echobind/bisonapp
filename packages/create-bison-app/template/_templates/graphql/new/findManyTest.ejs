@@ -1,0 +1,109 @@
+---
+to: tests/requests/<%= h.inflection.camelize(name) %>/<%= h.inflection.pluralize(name) %>.test.ts
+---
+<% camelized = h.inflection.camelize(name) -%>
+<% plural = h.inflection.pluralize(name) -%>
+import { Role } from '@prisma/client';
+
+import { resetDB, disconnect, graphQLRequestAsUser, graphQLRequest } from '../../helpers';
+import { UserFactory } from '../../factories/user';
+import { <%= camelized %>Factory } from '../../factories/<%= name %>';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('<%= plural %> query', () => {
+  describe('not logged in', () => {
+    it('returns a Not Authorized error', async () => {
+      const query = `
+        query <%= plural %> {
+          <%= plural %> {
+            id
+            name
+          }
+        }
+      `;
+
+      const response = await graphQLRequest({ query });
+      const errorMessages = response.body.errors.map((e) => e.message);
+
+      expect(errorMessages).toEqual(['Not authorized']);
+    });
+  });
+
+  describe('As Role Admin', () => {
+    it('Can Query <%= camelized %>', async () => {
+      const query = `
+        query <%= plural %>($where: <%= camelized %>WhereInput!) {
+          <%= plural %>(where: $where) {
+            id
+            name
+          }
+        }
+      `;
+
+      const admin = await UserFactory.create({ roles: [Role.ADMIN] });
+      const record = await <%= camelized %>Factory.create({ name: 'TODO' });
+      const record2 = await <%= camelized %>Factory.create({ name: 'ASDF' });
+
+      const variables = { where: {} };
+      const response = await graphQLRequestAsUser(admin, { query, variables });
+
+      expect(response.body.data.<%= plural %>).toMatchObject([
+        { id: record.id, name: 'TODO' },
+        { id: record2.id, name: 'ASDF' },
+      ]);
+
+      expect('Updated Generated Test').toBeNull();
+    });
+  });
+
+  describe('As Role User', () => {
+    it('Can Query <%= camelized %>', async () => {
+      const query = `
+        query <%= plural %>($where: <%= camelized %>WhereInput!) {
+          <%= plural %>(where: $where) {
+            id
+            name
+          }
+        }
+      `;
+
+      const user = await UserFactory.create({ roles: [Role.USER] });
+      const record = await <%= camelized %>Factory.create({ name: 'TODO' });
+      const record2 = await <%= camelized %>Factory.create({ name: 'ASDF' });
+
+      const variables = { where: {} };
+      const response = await graphQLRequestAsUser(user, { query, variables });
+
+      expect(response.body.data.<%= plural %>).toMatchObject([
+        { id: record.id, name: 'TODO' },
+        { id: record2.id, name: 'ASDF' },
+      ]);
+
+      expect('Updated Generated Test').toBeNull();
+    });
+
+    it('Can Filter <%= camelized %>', async () => {
+      const query = `
+        query <%= plural %>($where: <%= camelized %>WhereInput!) {
+          <%= plural %>(where: $where) {
+            id
+            name
+          }
+        }
+      `;
+
+      const user = await UserFactory.create({ roles: [Role.USER] });
+      const record = await <%= camelized %>Factory.create({ name: 'TODO' });
+      await <%= camelized %>Factory.create({ name: 'ASDF' });
+
+      // TODO: Update with <%= camelized %>WhereInput! use case
+      const variables = { where: { name: record.name } };
+      const response = await graphQLRequestAsUser(user, { query, variables });
+
+      expect(response.body.data.<%= plural %>).toMatchObject([{ id: record.id, name: 'TODO' }]);
+      expect('Updated Generated Test').toBeNull();
+    });
+  });
+});

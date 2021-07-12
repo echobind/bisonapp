@@ -1,0 +1,75 @@
+---
+to: tests/requests/<%= name %>/update<%=h.inflection.camelize(name) %>.test.ts
+---
+<% camelized = h.inflection.camelize(name) -%>
+<% plural = h.inflection.pluralize(camelized) -%>
+import { Role } from '@prisma/client';
+
+import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
+import { UserFactory } from '../../factories/user';
+import { <%= camelized %>Factory } from '../../factories/<%= name %>';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('<%= camelized %> update<%= camelized %> mutation', () => {
+  describe('As a Role User', () => {
+    it('returns Not Authorized', async () => {
+      const query = `
+        mutation update<%= camelized %>($data: <%= camelized %>UpdateInput!) {
+          update<%= camelized %>(data: $data) {
+            id
+          }
+        }
+      `;
+
+      const user = await UserFactory.create({ roles: [Role.USER] });
+      await <%= camelized %>Factory.create({ name: 'TODO' });
+
+      //TODO: Insert <%= camelized %>UpdateInput! use case
+      const variables = {
+        where: { name: 'TODO' },
+        data: { name: 'UPDATED' },
+      };
+
+      const response = await graphQLRequestAsUser(user, { query, variables });
+      const errorMessages = response.body.errors.map((e) => e.message);
+
+      expect(errorMessages).toMatchInlineSnapshot(`
+        Array [
+          "Not authorized",
+        ]
+      `);
+
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+
+  describe('As Role ADMIN', () => {
+    it('can update a <%= name %>', async () => {
+      const query = `
+        mutation update<%= camelized %>($data: <%= camelized %>UpdateInput!) {
+          update<%= camelized %>(data: $data) {
+            id
+          }
+        }
+      `;
+
+      const admin = await UserFactory.create({ roles: [Role.ADMIN] });
+      await <%= camelized %>Factory.create({ name: 'TODO' });
+
+      const variables = {
+        where: { name: 'TODO' },
+        data: { name: 'UPDATED' },
+      };
+
+      const response = await graphQLRequestAsUser(admin, { query, variables });
+      const errorMessages = response.body.errors.map((e) => e.message);
+      const { update<%= camelized %> } = response.body.data;
+
+      expect(errorMessages).toBeNull();
+      expect(update<%= camelized %>.name).toEqual('UPDATED');
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+});

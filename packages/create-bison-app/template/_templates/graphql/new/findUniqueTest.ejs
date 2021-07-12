@@ -1,0 +1,66 @@
+---
+to: tests/requests/<%= h.inflection.camelize(name) %>/<%= name %>.test.ts
+---
+<% single = h.inflection.singularize(name) -%>
+<% camelized = h.inflection.camelize(name) -%>
+import { Role } from '@prisma/client';
+
+import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
+import { UserFactory } from '../../factories/user';
+import { <%= camelized %>Factory } from '../../factories/<%= name %>';
+
+beforeEach(async () => resetDB());
+afterAll(async () => disconnect());
+
+describe('<%= name %> query', () => {
+  describe('as Role User', () => {
+    it('can query other <%= camelized %>', async () => {
+      const query = `
+        query <%= single %>($where: <%= camelized %>WhereUniqueInput!) {
+          <%= single %>( where: $where ) {
+            id
+            name
+          }
+        }
+      `;
+
+      const user = await UserFactory.create({ roles: [Role.USER] });
+
+      const record = await <%= camelized %>Factory.create();
+      const variables = { where: { id: record.id } };
+
+      const response = await graphQLRequestAsUser(user, { query, variables });
+
+      const { <%= single %> } = response.body.data;
+
+      expect(<%= single %>.id).not.toBeNull();
+      expect(<%= single %>.name).toEqual(record.name);
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+
+  describe('as Role ADMIN', () => {
+    it('can query a user email', async () => {
+      const query = `
+        query <%= single %>($where: <%= camelized %>WhereUniqueInput!) {
+          <%= single %>( where: $where ) {
+            id
+            name
+          }
+        }
+      `;
+
+      const admin = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
+      const record = await <%= camelized %>Factory.create();
+      const variables = { where: { id: record.id } };
+
+      const response = await graphQLRequestAsUser(admin, { query, variables });
+
+      const { <%= single %> } = response.body.data;
+
+      expect(<%= single %>.id).not.toBeNull();
+      expect(<%= single %>.name).toEqual(record.name);
+      expect('Update Generated Test').toBeNull();
+    });
+  });
+});
