@@ -7,8 +7,8 @@ const Listr = require("listr");
 const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
-const { BISON_DEV_APP_VARIABLES_FILE } = require("./scripts/createDevAppAndStartServer");
 const { copyFiles } = require("./tasks/copyFiles");
+const { saveDevAppVariables } = require("./utils/devAppVariables");
 const { version: bisonVersion } = require("./package.json");
 
 module.exports = async ({ name, ...answers }) => {
@@ -144,10 +144,7 @@ module.exports = async ({ name, ...answers }) => {
       task: async () => {
         // Save variables to file so template directory can be watched
         // and render templates again using same variables
-        await fs.promises.writeFile(
-          path.join(targetFolder, BISON_DEV_APP_VARIABLES_FILE), 
-          JSON.stringify(variables, null, 2)
-        );
+        await saveDevAppVariables(targetFolder, variables);
       },
     },
   ]);

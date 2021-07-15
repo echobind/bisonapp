@@ -8,9 +8,9 @@ const { startServer } = require("../scripts/startServer");
 const { templateFolder } = require("../tasks/copyFiles");
 const { cleanTemplateDestPath } = require("../utils/copyDirectoryWithTemplate");
 const { copyWithTemplate } = require("../utils/copyWithTemplate");
+const { getDevAppVariables } = require("../utils/devAppVariables");
 
 const BISON_DEV_APP_NAME = "bison-dev-app";
-const BISON_DEV_APP_VARIABLES_FILE = "bison.json";
 
 async function init() {
   const distPath = path.join(__dirname, "..", "dist");
@@ -40,10 +40,7 @@ async function init() {
     await createTemplateSymlinks(devAppPath);
   }
 
-  const templateVariables = require(path.join(
-    devAppPath,
-    BISON_DEV_APP_VARIABLES_FILE
-  ));
+  const templateVariables = getDevAppVariables(devAppPath);
 
   const copyFile = async (src) => {
     const relativeSrc = src.replace(templateFolder, "");
@@ -111,7 +108,3 @@ async function removeTemplateSymlinks() {
 if (require.main === module) {
   init();
 }
-
-module.exports = {
-  BISON_DEV_APP_VARIABLES_FILE,
-};
