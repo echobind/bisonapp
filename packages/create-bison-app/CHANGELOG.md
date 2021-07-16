@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.5 (2021-07-16)
+
+
+### Bug Fixes
+
+* refactor scripts import in the create-bison-app script into util file ([e3d87b0](https://github.com/echobind/bisonapp/commit/e3d87b0d2715c086e565b0ee6b7dc5b4ac9c707c))
+
+
+
 ## 1.11.0-canary.4 (2021-07-02)
 
 
