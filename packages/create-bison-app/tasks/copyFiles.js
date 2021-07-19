@@ -92,6 +92,7 @@ async function copyFiles({ variables, targetFolder }) {
         "utils",
         ".eslintrc.js",
         ".hygen.js",
+        ".nvmrc",
         ".tool-versions",
         "codegen.yml",
         "constants.ts",
@@ -100,10 +101,12 @@ async function copyFiles({ variables, targetFolder }) {
         "next-env.d.ts",
         "prettier.config.js",
         "tsconfig.json",
+        "tsconfig.cjs.json",
       ],
       targetFolder,
       {
         cwd: templateFolder,
+        dot: true,
         // preserve path
         parents: true,
       }
