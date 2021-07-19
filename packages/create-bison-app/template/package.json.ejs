@@ -39,7 +39,7 @@
     "test:e2e": "cross-env DOTENV_CONFIG_PATH=.env.test ts-node -r dotenv/config $(yarn bin)/start-server-and-test 'yarn test:server' http://localhost:3001 'yarn cypress:run'",
     "test:e2e:local": "cross-env CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress open",
     "test:server": "next start --port 3001",
-    "ts-node": "ts-node-dev --compiler-options '{\"module\":\"CommonJS\"}'",
+    "ts-node": "ts-node-dev --project tsconfig.cjs.json",
     "withEnv:test": "cross-env DOTENV_CONFIG_PATH=.env.test yarn ts-node -r dotenv/config ./scripts/yarnWithEnv",
     "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN,TYPESCRIPT\" -c \"black.bgGreen.dim,black.bgBlue.dim,white.bgMagenta.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\" \"yarn watch:ts\"",
     "watch:codegen": "yarn codegen --watch",
