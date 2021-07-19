@@ -3,8 +3,9 @@ const fs = require("fs");
 const path = require("path");
 const slugify = require("slugify");
 const execa = require("execa");
+const git = require('isomorphic-git');
+const globby = require('globby');
 const Listr = require("listr");
-const nodegit = require("nodegit");
 const ejs = require("ejs");
 const color = require("chalk");
 const { copyFiles } = require("./tasks/copyFiles");
@@ -35,31 +36,42 @@ module.exports = async ({ name, ...answers }) => {
     {
       title: "Git init",
       task: async () => {
-        const repo = await nodegit.Repository.init(targetFolder, 0);
-        const index = await repo.refreshIndex();
-        await index.addAll(".");
-        await index.write();
-        const id = await index.writeTree();
+        const gitOptions = { dir: targetFolder, fs };
+        await git.init(gitOptions);
 
-        if (variables.githubRepo) {
-          await nodegit.Remote.create(repo, "origin", variables.githubRepo);
+        const paths = await globby(
+          [
+            `./${pkgName}/**`,
+            `!./${pkgName}/.git/**`
+          ],
+          {
+            dot: true,
+            gitignore: true,
+          }
+        );
+        for (const filepath of paths) {
+          await git.add({
+            ...gitOptions,
+            filepath: filepath.replace(`./${pkgName}/`, ''),
+          });
         }
 
-        const author = nodegit.Signature.now(
-          "Bison Template",
-          "hello@echobind.com"
-        );
+        if (variables.githubRepo) {
+          await git.addRemote({
+            ...gitOptions,
+            remote: 'origin',
+            url: variables.githubRepo
+          });
+        }
 
-        const committer = nodegit.Signature.now(
-          "Bison Template",
-          "hello@echobind.com"
-        );
-
-        const message = `Initial commit from Bison Template!`;
-
-        // Since we're creating an inital commit, it has no parents. Note that unlike
-        // normal we don't get the head either, because there isn't one yet.
-        return repo.createCommit("HEAD", author, committer, message, id, []);
+        return await git.commit({
+          ...gitOptions,
+          message: 'Initial commit from Bison Template!',
+          author: {
+            name: 'Bison Template',
+            email: 'hi@echobind.com'
+          }
+        })
       },
     },
     {
