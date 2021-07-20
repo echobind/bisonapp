@@ -15,7 +15,6 @@
   },
   "scripts": {
     "dev": "node ./scripts/createDevAppAndStartServer",
-    "test:e2e": "start-server-and-test 'node ./scripts/createAppAndStartServer foo --acceptDefaults' 3001 'cypress run --spec cypress/integration/createBisonAppWithDefaults.test.js'",
     "test:unit": "yarn jest",
     "test": "yarn test:unit"
   },
@@ -48,11 +47,9 @@
   "devDependencies": {
     "@actions/core": "1.2.6",
     "chokidar": "^3.5.2",
-    "cypress": "^5.1.0",
     "ejs-lint": "^1.1.0",
     "jest": "^26.4.2",
-    "prettier": "^2.0.5",
-    "start-server-and-test": "^1.11.3"
+    "prettier": "^2.0.5"
   },
   "jest": {
     "testPathIgnorePatterns": [
