@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.6 (2021-07-20)
+
+**Note:** Version bump only for package create-bison-app
+
+
+
+
+
 ## 1.11.0-canary.5 (2021-07-16)
 
 
