@@ -18,10 +18,6 @@ beforeEach(() => {
   cy.task('resetDB');
 });
 
-before(() => {
-  cy.task('setupDB');
-});
-
 after(() => {
   cy.task('disconnectDB');
 });

@@ -1,9 +1,8 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 import '@testing-library/cypress/add-commands';
 import { LOGIN_TOKEN_KEY } from '../../constants';
 import { LoginTaskObject } from '../plugins';
-import { UserAttrs } from '../../tests/factories/user';
 
 declare global {
   // eslint-disable-next-line
@@ -46,7 +45,12 @@ function login(attrs: Pick<User, 'email' | 'password'>) {
  *  Handles creating and logging in a user with a set of attributes
  *  This should be used to login in future e2e tests instead of the login form.
  */
-function createUserAndLogin(attrs: UserAttrs) {
+function createUserAndLogin(args: Prisma.UserCreateInput) {
+  const attrs = {
+    ...args,
+    password: args?.password || 'abcd1234',
+  };
+
   return cy.task('factory', { name: 'User', attrs }).then((user: User) => {
     return login({ email: user.email, password: attrs.password }).then(() => user);
   });

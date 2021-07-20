@@ -5,6 +5,13 @@ jobs:
   release:
     name: Run
     runs-on: ubuntu-18.04
+    services:
+      postgres:
+        image: postgres:11.5
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     strategy:
       matrix:
@@ -14,13 +21,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node
+
+      - name: Set up node
         uses: actions/setup-node@v2.1.2
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Find yarn cache location
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: JS package cache
         uses: actions/cache@v2.1.0
         with:
@@ -28,28 +38,48 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install packages
         run: yarn && yarn lerna bootstrap
-      - name: Create new App
-        id: create-app
-        # Sets outputs.appPath to the created directory
-        run: node ./packages/create-bison-app/scripts/createApp foo --acceptDefaults
-      - name: Check Build Command
-        run: |
-          cd ${{steps.create-app.outputs.appPath}}
-          yarn build
-      - name: Run Unit Tests
+
+      - name: Run unit tests
         run: yarn test
-      - name: Run Cypress E2E Tests
+
+      - name: Create bison app
+        id: create-app
+        # Sets outputs.appPath to the created directory and outputs.appName
+        run: node ./packages/create-bison-app/scripts/createApp bison-ci-app --acceptDefaults
+
+      - name: Build production bison app
+        working-directory: ${{ steps.create-app.outputs.appPath }}
+        run: yarn build
+
+      - name: Lint bison app
+        working-directory: ${{ steps.create-app.outputs.appPath }}
+        run: yarn lint
+
+      - name: Set up test database
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
+          NODE_ENV: test
+        working-directory: ${{ steps.create-app.outputs.appPath }}
+        run: yarn db:migrate
+
+      - name: Run bison app unit tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
+          NODE_ENV: test
+        working-directory: ${{ steps.create-app.outputs.appPath }}
+        run: yarn test:ci
+
+      - name: Run bison app E2E tests
         uses: cypress-io/github-action@v2
         with:
-          start: node ./packages/create-bison-app/scripts/startServer ${{steps.create-app.outputs.appPath}} 3001
+          working-directory: ${{ steps.create-app.outputs.appPath }}
+          start: yarn test:server
           wait-on: "http://localhost:3001"
-          wait-on-timeout: 180
-          project: ./packages/create-bison-app
-          spec: ./packages/create-bison-app/cypress/integration/createBisonAppWithDefaults.test.js
         env:
-          NODE_ENV: test
+          APP_SECRET: foo
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_PATH: ${{steps.create-app.outputs.appPath}}
-          APP_NAME: ${{steps.create-app.outputs.appName}}
+          NODE_ENV: test
