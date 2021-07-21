@@ -1,5 +1,10 @@
 name: Run Tests
-on: [push]
+on:
+  push:
+    branches:
+      - canary
+      - main
+  pull_request:
 
 jobs:
   release:
