@@ -21,11 +21,9 @@ We're always improving on this, and we welcome suggestions from the community!
 
 ## Features
 
-- Preconfigured for CI using [GitHub Actions](https://github.com/features/actions)
 - Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
-- Pre-configured for deployment on [Vercel](https://vercel.io) with customizable branch workflow.
 
 ## Conventions
 
@@ -37,7 +35,6 @@ We're always improving on this, and we welcome suggestions from the community!
 ## Tradeoffs
 
 - To reduce complexity, Bison avoids yarn workspaces and separate top-level folders. Think of your app like a traditional monolith, but with a separate frontend and API. This means that folders may be a little more intermingled than you're used to.
-- Currently, Bison only works on Vercel. We plan to add support for Netlify soon.
 
 ## Alternatives
 
