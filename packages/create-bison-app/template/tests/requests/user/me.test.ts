@@ -22,19 +22,6 @@ describe('me query', () => {
           "data": Object {
             "me": null,
           },
-          "extensions": Object {
-            "cacheControl": Object {
-              "hints": Array [
-                Object {
-                  "maxAge": 0,
-                  "path": Array [
-                    "me",
-                  ],
-                },
-              ],
-              "version": 1,
-            },
-          },
         }
       `);
     });
@@ -65,19 +52,6 @@ describe('me query', () => {
               "roles": Array [
                 "USER",
               ],
-            },
-          },
-          "extensions": Object {
-            "cacheControl": Object {
-              "hints": Array [
-                Object {
-                  "maxAge": 0,
-                  "path": Array [
-                    "me",
-                  ],
-                },
-              ],
-              "version": 1,
             },
           },
         }
