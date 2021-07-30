@@ -1,4 +1,11 @@
+import {
+  ApolloServerPluginCacheControl,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageDisabled,
+} from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-micro';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { createContext } from '../../graphql/context';
 import { schema } from '../../graphql/schema';
 
@@ -13,10 +20,22 @@ export const config = {
 
 export const server = new ApolloServer({
   schema,
-  playground: process.env.NODE_ENV !== 'production',
   introspection: true,
   context: createContext,
-  cacheControl: true,
+  plugins: [
+    process.env.NODE_ENV === 'production'
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ApolloServerPluginCacheControl({
+      calculateHttpHeaders: false,
+    }),
+  ],
 });
 
-export default server.createHandler({ path: GRAPHQL_PATH });
+const serverStart = server.start();
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await serverStart;
+
+  return server.createHandler({ path: GRAPHQL_PATH })(req, res);
+}
