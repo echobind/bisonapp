@@ -80,9 +80,7 @@ yarn db:migrate
 
 ## Write a type, query, input, or mutation using [Nexus](https://nexusjs.org/guides/schema)
 
-```
-# TODO
-```
+[See Nexus Examples](./nexus-examples.md)
 
 ## Create a new request test
 
