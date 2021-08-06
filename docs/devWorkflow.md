@@ -80,9 +80,7 @@ yarn db:migrate
 
 ## Write a type, query, input, or mutation using [Nexus](https://nexusjs.org/guides/schema)
 
-```
-# TODO
-```
+[See Nexus Examples](./nexus-examples.md)
 
 ## Create a new request test
 
@@ -146,3 +144,7 @@ function fakeCell() {
   return <Success user={data.user}>
 }
 ```
+
+### Request Spec Examples
+
+[Request Spec Examples](./request-spec-examples.md)
