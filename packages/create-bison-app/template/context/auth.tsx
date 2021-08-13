@@ -48,7 +48,7 @@ function AuthProvider({ ...props }: Props) {
    * Logs in a user by setting an auth token in a cookie. We use cookies so they are available in SSR.
    * @param token the token to login with
    */
-  function login(token) {
+  function login(token: string) {
     cookies().set(LOGIN_TOKEN_KEY, token, { path: '/', expires: COOKIE_EXPIRE_DATE });
 
     const fetchUserData = called ? refetch : loadCurrentUser;

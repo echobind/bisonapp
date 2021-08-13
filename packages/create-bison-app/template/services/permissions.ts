@@ -1,4 +1,6 @@
-import { Role, User } from '@prisma/client';
+import { Role, Profile, User } from '@prisma/client';
+
+import { Context } from '../graphql/context';
 
 /**
  * Returns true if the user has a role of admin
@@ -13,7 +15,7 @@ export const isAdmin = (user: Partial<User>): boolean => {
  * @param user the user to test
  * @param ctx the context which contains the current user
  */
-export function isSelf(user, ctx) {
+export function isSelf(user: { id: string }, ctx: Context): boolean {
   return user.id === ctx.user?.id;
 }
 
@@ -26,7 +28,7 @@ export function isSelf(user, ctx) {
  * @param ctx the context which contains the current user
  * @param idField the key in the object to check against
  */
-export function canAccess(object, ctx, idField = 'userId') {
+export function canAccess(object: Profile | User, ctx: Context, idField = 'userId'): boolean {
   if (!ctx.user) return false;
   if (isAdmin(ctx.user)) return true;
   if (isSelf(object, ctx)) return true;
