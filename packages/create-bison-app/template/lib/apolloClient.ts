@@ -9,7 +9,8 @@ import { cookies } from './cookies';
 
 export function createApolloClient(ctx?: Record<string, any>) {
   // Apollo needs an absolute URL when in SSR, so determine host
-  let host, protocol;
+  let host: string;
+  let protocol: string;
   let hostUrl = process.env.API_URL;
 
   if (ctx) {

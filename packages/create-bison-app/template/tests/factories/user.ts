@@ -18,12 +18,12 @@ export const UserFactory = {
 
   create: async (attrs: Partial<Prisma.UserCreateInput> = {}) => {
     const user = UserFactory.build(attrs);
-    const options: Record<string, any> = {};
+    const options: Partial<Prisma.UserCreateArgs> = {};
     const includes = buildPrismaIncludeFromAttrs(attrs);
     if (includes) options.include = includes;
 
     return await prisma.user.create({
-      data: { ...user, password: hashPassword(user.password), roles: user.roles as any },
+      data: { ...user, password: hashPassword(user.password), roles: user.roles },
       ...options,
     });
   },
