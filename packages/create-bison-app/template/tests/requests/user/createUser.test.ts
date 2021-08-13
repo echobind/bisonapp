@@ -10,7 +10,7 @@ describe('User createUser mutation', () => {
   describe('non-admin', () => {
     it('returns a Forbidden error', async () => {
       const query = `
-        mutation SIGNUP($data: UserCreateInput!) {
+        mutation CREATEUSER($data: UserCreateInput!) {
           createUser(data: $data) {
             id
             email
@@ -35,7 +35,7 @@ describe('User createUser mutation', () => {
   describe('admin', () => {
     it('allows setting role', async () => {
       const query = `
-        mutation SIGNUP($data: UserCreateInput!) {
+        mutation CREATEUSER($data: UserCreateInput!) {
           createUser(data: $data) {
             id
             roles
