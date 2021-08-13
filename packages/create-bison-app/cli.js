@@ -107,7 +107,7 @@ require("yargs").usage(
     // Show the logo!
     console.log(Logo);
 
-    function parseObjectFromDotNotation2(obj) {
+    function parseObjectFromDotNotation(obj) {
       if (!obj) {
         return {};
       }
@@ -157,8 +157,8 @@ require("yargs").usage(
           return prev;
         }, Object.create(null));
 
-        const parsedDefaults = parseObjectFromDotNotation2(defaults);
-        const parsedAnswers = parseObjectFromDotNotation2(filteredAnswers);
+        const parsedDefaults = parseObjectFromDotNotation(defaults);
+        const parsedAnswers = parseObjectFromDotNotation(filteredAnswers);
 
         return { ...parsedDefaults, ...parsedAnswers };
       }
