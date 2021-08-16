@@ -13,11 +13,13 @@ export const Profile = objectType({
     t.nonNull.field('user', {
       type: 'User',
       resolve: (parent, _, context) => {
-        return context.prisma.profile.findUnique({
-          where: { id: parent.id }
-        }).user()
-      }
-    })
+        return context.prisma.profile
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .user();
+      },
+    });
 
     t.string('fullName', {
       description: 'The first and last name of a user',
