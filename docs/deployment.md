@@ -4,7 +4,7 @@
 
 - Create a new Vercel app by running `vercel`.
 - Create a staging and production database on Heroku, Digital Ocean, or AWS. For production, you likely want to enable some form of connection pooling so that you don't exhaust database connections.
-- Add the appropriate values for the `APP_SECRET` and `DATABASE_URL` ENV vars to the app settings page (https://vercel.com/<org>/<app>/settings/environment-variables). Use the staging URL for preview and the production URL for production.
+- Add the appropriate values for the `APP_SECRET` and `DATABASE_URL` ENV vars to the app settings page (`https://vercel.com/<org>/<app>/settings/environment-variables`). Use the staging URL for preview and the production URL for production.
 
 Verify things work by running `vercel` again.
 
