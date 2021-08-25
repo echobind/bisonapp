@@ -219,7 +219,10 @@ describe("copyFiles", () => {
 
     it("copies test utils", async () => {
       const files = [
-        "helpers.ts",
+        "helpers/buildPrismaIncludeFromAttrs.ts",
+        "helpers/db.ts",
+        "helpers/graphQLRequest.ts",
+        "helpers/index.ts",
         "jest.setup.js",
         "jest.teardown.js",
         "matchMedia.mock.js",
