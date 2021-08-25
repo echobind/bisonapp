@@ -6,7 +6,8 @@ to: tests/factories/<%= name %>.ts
 import { Prisma } from '@prisma/client';
 // import Chance from 'chance';
 
-import { buildPrismaIncludeFromAttrs, prisma } from '../helpers';
+import { buildPrismaIncludeFromAttrs } from '../helpers/buildPrismaIncludeFromAttrs';
+import { prisma } from '../../lib/prisma'
 
 // const chance = new Chance();
 
