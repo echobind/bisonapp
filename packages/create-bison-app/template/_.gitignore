@@ -41,6 +41,7 @@ cypress/screenshots*
 cypress/logs*
 !cypress/videos/.gitkeep
 !cypress/screenshots/.gitkeep
+!cypress/logs/.gitkeep
 
 # generated files
 /api.graphql
