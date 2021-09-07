@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.18 (2021-09-07)
+
+
+### Bug Fixes
+
+* Cypress keep ([#214](https://github.com/echobind/bisonapp/issues/214)) ([203d436](https://github.com/echobind/bisonapp/commit/203d436e0953e6f197206c66b08fb05744f35a1f))
+
+
+
 ## 1.11.0-canary.17 (2021-08-24)
 
 **Note:** Version bump only for package root
