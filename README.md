@@ -86,13 +86,12 @@ From the root, run `yarn dev`. This:
 
 ## Next Steps
 
-After the app is running locally, you'll want to [set up deployment](./docs/deployment.md) and [CI](./docs/ci.md)
+After the app is running locally, you'll want to [set up deployment](./docs/deployment.md).
 
 # Docs
 
 - [Recommended Dev Workflow](./docs/devWorkflow.md)
 - [Deployment](./docs/deployment.md)
-- [CI Setup](./docs/ci.md)
 - [FAQ](./docs/faq.md)
 
 Have an idea to improve Bison? [Let us know!](https://github.com/echobind/bisonapp/issues/new)
