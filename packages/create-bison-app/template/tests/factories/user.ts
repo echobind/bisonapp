@@ -1,7 +1,8 @@
 import Chance from 'chance';
 import { Role, Prisma } from '@prisma/client';
 
-import { buildPrismaIncludeFromAttrs, prisma } from '../helpers';
+import { buildPrismaIncludeFromAttrs } from '../helpers/buildPrismaIncludeFromAttrs';
+import { prisma } from '../../lib/prisma';
 import { hashPassword } from '../../services/auth';
 
 const chance = new Chance();
