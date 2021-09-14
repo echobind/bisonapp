@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^4.4.0",
-    "lerna": "^3.22.1"
+    "lerna": "^4.0.0"
   }
 }
