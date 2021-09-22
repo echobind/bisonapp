@@ -48,7 +48,7 @@
     "@actions/core": "1.2.6",
     "chokidar": "^3.5.2",
     "ejs-lint": "^1.1.0",
-    "jest": "^26.4.2",
+    "jest": "^27.2.1",
     "prettier": "^2.0.5"
   },
   "jest": {
