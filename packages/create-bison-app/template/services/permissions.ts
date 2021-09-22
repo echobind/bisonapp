@@ -15,7 +15,7 @@ export const isAdmin = (user: Partial<User>): boolean => {
  * @param user the user to test
  * @param ctx the context which contains the current user
  */
-export function isSelf(user: { id: string }, ctx: Context): boolean {
+export function isSelf(user: Pick<User, 'id'>, ctx: Context): boolean {
   return user.id === ctx.user?.id;
 }
 
@@ -33,5 +33,5 @@ export function canAccess(object: Profile | User, ctx: Context, idField = 'userI
   if (isAdmin(ctx.user)) return true;
   if (isSelf(object, ctx)) return true;
 
-  return object[idField] === ctx.user?.id;
+  return (object as any)[idField] === ctx.user?.id;
 }

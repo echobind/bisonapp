@@ -4,7 +4,11 @@ import NextLink from 'next/link';
 
 import { Logo } from '../components/Logo';
 
-export function LoggedOutLayout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export function LoggedOutLayout({ children }: Props) {
   return (
     <Flex direction="column" minH="100vh">
       <>

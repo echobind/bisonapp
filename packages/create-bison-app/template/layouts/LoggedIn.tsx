@@ -6,7 +6,11 @@ import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
 import { useAuth } from '../context/auth';
 
-export function LoggedInLayout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export function LoggedInLayout({ children }: Props) {
   const { logout } = useAuth();
   const router = useRouter();
 

@@ -20,7 +20,7 @@ function buildProd() {
     stdio: 'inherit',
   });
 
-  child.on('exit', function (code) {
+  child.on('exit', function (code: number) {
     process.exit(code);
   });
 }

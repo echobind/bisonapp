@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 
 import { AllProviders } from '../components/AllProviders';
@@ -19,7 +20,7 @@ const LoggedOutLayout = dynamic(() =>
 /**
  * Renders a layout depending on the result of the useAuth hook
  */
-function AppWithAuth({ children }) {
+function AppWithAuth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
   return user ? (
@@ -29,7 +30,7 @@ function AppWithAuth({ children }) {
   );
 }
 
-function App({ pageProps, Component }) {
+function App({ pageProps, Component }: AppProps) {
   return (
     <AllProviders>
       <AppWithAuth>

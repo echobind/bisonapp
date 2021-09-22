@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client';
 import Chance from 'chance';
+import { GraphQLError } from 'graphql';
 
 import { graphQLRequest, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
@@ -34,7 +35,7 @@ describe('User signup mutation', () => {
       };
 
       const response = await graphQLRequest({ query, variables });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -67,7 +68,7 @@ describe('User signup mutation', () => {
       };
 
       const response = await graphQLRequest({ query, variables });
-      const errors = response.body.errors.map((e) => e.message);
+      const errors = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errors).toMatchInlineSnapshot(`
         Array [

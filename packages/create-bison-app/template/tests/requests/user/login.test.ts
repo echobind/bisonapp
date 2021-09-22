@@ -1,5 +1,8 @@
+import { GraphQLError } from 'graphql';
+
 import { graphQLRequest, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
+import { LoginMutationVariables } from '../../../types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -19,9 +22,9 @@ describe('login mutation', () => {
     it('returns an Authentication error', async () => {
       await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables = { email: 'fake', password: 'fake' };
+      const variables: LoginMutationVariables = { email: 'fake', password: 'fake' };
       const response = await graphQLRequest({ query, variables });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -35,9 +38,9 @@ describe('login mutation', () => {
     it('returns an Authentication error', async () => {
       const user = await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables = { email: user.email, password: 'fake' };
+      const variables: LoginMutationVariables = { email: user.email, password: 'fake' };
       const response = await graphQLRequest({ query, variables });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -56,7 +59,7 @@ describe('login mutation', () => {
         password,
       });
 
-      const variables = { email: user.email, password };
+      const variables: LoginMutationVariables = { email: user.email, password };
       const response = await graphQLRequest({ query, variables });
 
       expect(response.body).toMatchInlineSnapshot(`

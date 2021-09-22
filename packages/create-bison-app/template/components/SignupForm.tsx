@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 
 import { useAuth } from '../context/auth';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
-import { useSignupMutation } from '../types';
+import { SignupMutationVariables, useSignupMutation } from '../types';
 import { EMAIL_REGEX } from '../constants';
 
 import { ErrorText } from './ErrorText';
@@ -33,6 +33,9 @@ export const SIGNUP_MUTATION = gql`
   }
 `;
 
+type SignupFormValue = Pick<SignupMutationVariables['data'], 'email' | 'password'> &
+  Pick<SignupMutationVariables['data']['profile']['create'], 'firstName' | 'lastName'>;
+
 /** Form to sign up */
 export function SignupForm() {
   const {
@@ -40,7 +43,7 @@ export function SignupForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm();
+  } = useForm<SignupFormValue>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [signup] = useSignupMutation();
@@ -51,11 +54,15 @@ export function SignupForm() {
    * Submits the login form
    * @param formData the data passed from the form hook
    */
-  async function handleSignup(formData) {
+  async function handleSignup(formData: SignupFormValue) {
     try {
       setIsLoading(true);
       const { email, password, ...profile } = formData;
-      const variables = { data: { email, password, profile: { create: profile } } };
+
+      const variables: SignupMutationVariables = {
+        data: { email, password, profile: { create: profile } },
+      };
+
       const { data } = await signup({ variables });
 
       await login(data.signup.token);
@@ -90,7 +97,7 @@ export function SignupForm() {
                 message: 'invalid email',
               },
             })}
-            isInvalid={errors.email}
+            isInvalid={!!errors.email}
           />
           <ErrorText>{errors.email && errors.email.message}</ErrorText>
         </FormControl>
@@ -100,7 +107,7 @@ export function SignupForm() {
           <Input
             type="password"
             {...register('password', { required: 'password is required', minLength: 8 })}
-            isInvalid={errors.password}
+            isInvalid={!!errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
         </FormControl>
@@ -110,7 +117,7 @@ export function SignupForm() {
           <Input
             type="text"
             {...register('firstName', { required: true })}
-            isInvalid={errors.firstName}
+            isInvalid={!!errors.firstName}
           />
           <ErrorText>{errors.firstName && errors.firstName.message}</ErrorText>
         </FormControl>
@@ -120,7 +127,7 @@ export function SignupForm() {
           <Input
             type="text"
             {...register('lastName', { required: true })}
-            isInvalid={errors.lastName}
+            isInvalid={!!errors.lastName}
           />
           <ErrorText>{errors.lastName && errors.lastName.message}</ErrorText>
         </FormControl>

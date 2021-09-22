@@ -1,8 +1,12 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
 
+interface Props {
+  children: React.ReactNode;
+}
+
 /** A form with a centered box. Ex: Login, Signup */
-export function CenteredBoxForm({ children }) {
+export function CenteredBoxForm({ children }: Props) {
   return (
     <Box
       margin="auto"
