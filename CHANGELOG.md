@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.11.0-canary.21 (2021-09-22)
+
+
+### Bug Fixes
+
+* update db:deploy script to run correct prisma command ([#222](https://github.com/echobind/bisonapp/issues/222)) ([506274b](https://github.com/echobind/bisonapp/commit/506274b0ccc36106efdc480af6015511c89df02a))
+
+
+
 ## 1.11.0-canary.20 (2021-09-13)
 
 **Note:** Version bump only for package root
