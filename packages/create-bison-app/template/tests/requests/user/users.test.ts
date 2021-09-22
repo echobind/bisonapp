@@ -1,7 +1,9 @@
 import { Role } from '@prisma/client';
+import { GraphQLError } from 'graphql';
 
 import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
 import { UserFactory } from '../../factories/user';
+import { User, UserWhereUniqueInput } from '../../../types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -18,7 +20,7 @@ describe('users query', () => {
       `;
 
       const response = await graphQLRequest({ query });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -40,7 +42,7 @@ describe('users query', () => {
 
       const user = await UserFactory.create();
       const response = await graphQLRequestAsUser(user, { query });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -65,7 +67,7 @@ describe('users query', () => {
       const user2 = await UserFactory.create();
 
       const response = await graphQLRequestAsUser(user1, { query });
-      const { users } = response.body.data;
+      const { users }: { users: Pick<User, 'email'>[] } = response.body.data;
 
       const expectedUsers = [user1, user2].map((u) => u.email);
       const actualUsers = users.map((u) => u.email);
@@ -88,7 +90,7 @@ describe('users query', () => {
       // create 2 users
       const user1 = await UserFactory.create();
       const user2 = await UserFactory.create();
-      const variables = { id: user2.id };
+      const variables: UserWhereUniqueInput = { id: user2.id };
 
       const response = await graphQLRequestAsUser(user1, { query, variables });
       const { id, email } = response.body.data.user;
@@ -112,7 +114,7 @@ describe('users query', () => {
       // create an admin and a regular user
       const user1 = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
       const user2 = await UserFactory.create();
-      const variables = { id: user2.id };
+      const variables: UserWhereUniqueInput = { id: user2.id };
 
       const response = await graphQLRequestAsUser(user1, { query, variables });
       const { id, email } = response.body.data.user;

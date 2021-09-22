@@ -5,6 +5,6 @@ const spawn = require('child_process').spawn;
 const args = process.argv.slice(2);
 const child = spawn('yarn', args, { stdio: 'inherit' });
 
-child.on('exit', function (code) {
+child.on('exit', function (code: number) {
   process.exit(code);
 });

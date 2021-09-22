@@ -1,7 +1,8 @@
-import { Role } from '@prisma/client';
+import { GraphQLError } from 'graphql';
 
 import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
 import { UserFactory } from '../../factories/user';
+import { Role, UserCreateInput } from '../../../types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -20,9 +21,12 @@ describe('User createUser mutation', () => {
 
       const user = await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables = { data: { email: user.email, password: 'fake' } };
+      const variables: { data: UserCreateInput } = {
+        data: { email: user.email, password: 'fake' },
+      };
+
       const response = await graphQLRequestAsUser(user, { query, variables });
-      const errorMessages = response.body.errors.map((e) => e.message);
+      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
 
       expect(errorMessages).toMatchInlineSnapshot(`
         Array [
@@ -45,7 +49,7 @@ describe('User createUser mutation', () => {
 
       const admin = await UserFactory.create({ roles: { set: [Role.ADMIN] } });
 
-      const variables = {
+      const variables: { data: UserCreateInput } = {
         data: { email: 'hello@wee.net', password: 'fake', roles: [Role.ADMIN] },
       };
 

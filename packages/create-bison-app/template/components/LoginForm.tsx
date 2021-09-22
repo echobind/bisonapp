@@ -19,7 +19,7 @@ import { EMAIL_REGEX } from '../constants';
 import { useAuth } from '../context/auth';
 import { ErrorText } from '../components/ErrorText';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
-import { useLoginMutation } from '../types';
+import { LoginMutationVariables, useLoginMutation } from '../types';
 
 export const LOGIN_MUTATION = gql`
   mutation login($email: String!, $password: String!) {
@@ -36,7 +36,7 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm();
+  } = useForm<LoginMutationVariables>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
@@ -47,7 +47,7 @@ export function LoginForm() {
    * Submits the login form
    * @param formData the data passed from the form hook
    */
-  async function handleLogin(formData) {
+  async function handleLogin(formData: LoginMutationVariables) {
     try {
       setIsLoading(true);
       const { data } = await login({ variables: formData });
@@ -81,7 +81,7 @@ export function LoginForm() {
                 message: 'invalid email',
               },
             })}
-            isInvalid={errors.email}
+            isInvalid={!!errors.email}
           />
           <ErrorText>{errors.email && errors.email.message}</ErrorText>
         </FormControl>
@@ -91,7 +91,7 @@ export function LoginForm() {
           <Input
             type="password"
             {...register('password', { required: 'password is required' })}
-            isInvalid={errors.password}
+            isInvalid={!!errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
         </FormControl>

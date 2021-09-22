@@ -1,5 +1,5 @@
-import util from 'util';
 import childProcess from 'child_process';
+import util from 'util';
 
 import { Client } from 'pg';
 

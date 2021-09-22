@@ -1,10 +1,17 @@
 import React from 'react';
+import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
-import { ApolloProvider } from '@apollo/client';
+import { Dict } from '@chakra-ui/utils';
 
 import { AuthProvider } from '../context/auth';
 import { createApolloClient } from '../lib/apolloClient';
 import defaultTheme from '../chakra';
+
+interface Props {
+  apolloClient?: ApolloClient<NormalizedCacheObject>;
+  children: React.ReactNode;
+  theme?: Dict<any>;
+}
 
 const defaultApolloClient = createApolloClient();
 
@@ -15,7 +22,7 @@ export function AllProviders({
   apolloClient = defaultApolloClient,
   theme = defaultTheme,
   children,
-}) {
+}: Props) {
   return (
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
