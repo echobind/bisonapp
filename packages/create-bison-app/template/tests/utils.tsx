@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import React from 'react';
 import { render as defaultRender } from '@testing-library/react';
 // import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import { RouterContext } from 'next/dist/next-server/lib/router-context';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 import '@testing-library/jest-dom/extend-expect';
 
