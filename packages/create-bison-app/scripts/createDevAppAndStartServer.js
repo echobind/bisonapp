@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const yargs = require("yargs/yargs");
 const { createApp } = require("../scripts/createApp");
-const { startServer } = require("../scripts/startServer");
 const { templateFolder } = require("../tasks/copyFiles");
 const { cleanTemplateDestPath } = require("../utils/copyDirectoryWithTemplate");
 const { copyWithTemplate } = require("../utils/copyWithTemplate");
@@ -16,7 +15,10 @@ async function init() {
   const distPath = path.join(__dirname, "..", "dist");
   const devAppPath = path.join(distPath, BISON_DEV_APP_NAME);
   const args = process.argv.slice(2);
-  const { clean, port } = yargs(args).argv;
+  const { _, clean } = yargs(args).argv;
+
+  // Script in the template's package.json to run
+  const templateCommand = _.length ? _[0] : 'dev';
 
   if (clean) {
     await removeTemplateSymlinks();
@@ -56,15 +58,21 @@ async function init() {
     }
   };
 
-  // Watch template files and copy to dev app
-  chokidar
-    .watch(templateFolder, {
-      ignored: (path) => path.includes("node_modules"),
-    })
-    .on("add", copyFile)
-    .on("change", copyFile);
+  if (templateCommand === 'dev') {
+    // Watch template files and copy to dev app
+    chokidar
+      .watch(templateFolder, {
+        ignored: (path) => path.includes("node_modules"),
+      })
+      .on("add", copyFile)
+      .on("change", copyFile);
+  }
 
-  return startServer(devAppPath, port);
+  return await execa(`yarn ${templateCommand}`, {
+    cwd: devAppPath,
+    shell: true,
+    stdio: "inherit",
+  });
 }
 
 /**
