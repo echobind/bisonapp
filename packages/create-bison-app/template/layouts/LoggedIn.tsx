@@ -1,10 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Box, Center, Flex, Text, Button } from '@chakra-ui/react';
+import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { Logo } from '../components/Logo';
 import { Nav } from '../components/Nav';
 import { useAuth } from '../context/auth';
+import { Footer } from '../components/Footer';
 
 interface Props {
   children: React.ReactNode;
@@ -43,18 +44,7 @@ export function LoggedInLayout({ children }: Props) {
         {children}
       </Box>
 
-      <Center as="footer" mt="auto" py={4}>
-        <Flex flexDirection="column" alignItems="center">
-          <Logo />
-          <Text as="i" textAlign="center">
-            Copyright Ⓒ 2020{' '}
-            <a href="https://echobind.com" target="_blank" rel="noopener noreferrer">
-              Echobind LLC.
-            </a>{' '}
-            All rights reserved.
-          </Text>
-        </Flex>
-      </Center>
+      <Footer />
     </Flex>
   );
 }
