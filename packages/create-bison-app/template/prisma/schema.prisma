@@ -1,25 +1,25 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Latest about migrations:  https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b
+// Latest about migrations: https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b
 
+
+generator prisma_client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator prisma_client {
-  provider = "prisma-client-js"
-}
-
 model Profile {
   id        String   @id @default(cuid())
+  userId    String   @unique
   firstName String
   lastName  String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -27,12 +27,12 @@ model User {
   email     String   @unique
   password  String
   roles     Role[]
-  profile   Profile?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  profile   Profile?
 }
 
 enum Role {
-  USER
   ADMIN
+  USER
 }
