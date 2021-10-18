@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 // import 'cypress';
 import path from 'path';
 
