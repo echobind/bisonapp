@@ -256,5 +256,8 @@ export const UserCreateInput = inputObjectType({
     t.field('roles', {
       type: list('Role'),
     });
+    t.field('profile', {
+      type: 'ProfileRelationalCreateInput'
+    })
   },
 });
