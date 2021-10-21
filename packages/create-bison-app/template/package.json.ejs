@@ -33,6 +33,7 @@
     "g:test:request": "hygen test request --name",
     "g:test:util": "hygen test util --name",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
+    "run:script": "yarn ts-node prisma/scripts/run.ts -f"
     "setup:dev": "yarn db:setup && yarn build:types",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
@@ -60,6 +61,7 @@
     "@sendgrid/mail": "^7.4.4",
     "apollo-server-micro": "^3.1.1",
     "bcryptjs": "^2.4.3",
+    "commander": "^8.1.0",
     "cross-fetch": "3.0.5",
     "framer-motion": "^4",
     "graphql": "^15.5.0",

@@ -9,7 +9,7 @@ const INITIAL_PASSWORD = 'test1234';
 
 const initialDevUsers: UserCreateInput[] = [
   {
-    email: 'ballen@speedforce.net',
+    email: 'barry.allen@speedforce.net',
     password: hashPassword(INITIAL_PASSWORD),
     roles: [Role.ADMIN],
     profile: {
@@ -47,5 +47,5 @@ const initialProdUsers: UserCreateInput[] = [
 
 const appEnv = process.env.APP_ENV || 'development';
 
-export const userCreateData: UserCreateInput[] =
+export const userSeedData: UserCreateInput[] =
   appEnv === 'production' ? initialProdUsers : initialDevUsers;

@@ -1,13 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-
 import { User, UserCreateInput } from '../../../types';
+import { prisma } from '../../../lib/prisma';
 
 type SeedUserResult = Pick<User, 'id' | 'email'>;
 
-export const seedUsers = async (
-  prisma: PrismaClient,
-  users: UserCreateInput[]
-): Promise<SeedUserResult[]> => {
+export const seedUsers = async (users: UserCreateInput[]): Promise<SeedUserResult[]> => {
   const userPromiseArray = users.map(
     async (user): Promise<SeedUserResult> =>
       prisma.user.upsert({
