@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.0 (2021-11-05)
+
+
+### Features
+
+* Creates and uses shared Footer component ([61bfbcc](https://github.com/echobind/bisonapp/commit/61bfbcc2a8ea938d56b9ec5e7d4137ae05c4e9e3))
+
+
+
 ## [1.11.0](https://github.com/echobind/bisonapp/compare/v1.11.0-canary.23...v1.11.0) (2021-11-04)
 
 **Note:** Version bump only for package root
