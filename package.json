@@ -14,12 +14,22 @@
     "node": ">=12"
   },
   "scripts": {
-    "publish:canary": "yarn lerna publish --conventional-prerelease --preid canary --pre-dist-tag canary --yes",
-    "publish:latest": "yarn lerna publish --conventional-graduate --yes",
+    "publish:canary": "release-it --preRelease=canary --increment=preminor --dry-run",
+    "publish:latest": "release-it --increment=minor --dry-run",
     "test": "yarn lerna run test --stream"
   },
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^4.4.0",
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "release-it": "^14.11.6",
+    "release-it-yarn-workspaces": "^2.0.1"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "release-it-yarn-workspaces": true
+    }
   }
 }
