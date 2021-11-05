@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.1 (2021-11-05)
+
+
+### Features
+
+* add ability to run any bison dev app script ([4860b9f](https://github.com/echobind/bisonapp/commit/4860b9f29ab464f6165bda5cca2fb1c6e02b132c))
+
+
+
 ## 1.12.0-canary.0 (2021-11-05)
 
 
