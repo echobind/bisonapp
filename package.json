@@ -15,12 +15,9 @@
   },
   "scripts": {
     "publish:canary": "release-it --preRelease=canary --increment=preminor --dry-run",
-    "publish:latest": "release-it --increment=minor --dry-run",
-    "test": "yarn lerna run test --stream"
+    "publish:latest": "release-it --increment=minor --dry-run"
   },
   "devDependencies": {
-    "conventional-changelog-conventionalcommits": "^4.4.0",
-    "lerna": "^4.0.0",
     "release-it": "^14.11.6",
     "release-it-yarn-workspaces": "^2.0.1"
   },
