@@ -14,7 +14,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "publish:canary": "release-it --preRelease=canary --increment=preminor --dry-run",
+    "publish:canary": "release-it --preRelease=canary --increment=prepatch --dry-run",
     "publish:latest": "release-it --increment=minor --dry-run"
   },
   "devDependencies": {
