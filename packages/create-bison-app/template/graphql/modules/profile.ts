@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { objectType, inputObjectType } from 'nexus';
 
 // Profile Type
 export const Profile = objectType({
@@ -27,5 +27,22 @@ export const Profile = objectType({
         return [firstName, lastName].filter((n) => Boolean(n)).join(' ');
       },
     });
+  },
+});
+
+export const ProfileCreateInput = inputObjectType({
+  name: 'ProfileCreateInput',
+  description: 'Profile Input for relational Create',
+  definition(t) {
+    t.nonNull.string('firstName');
+    t.nonNull.string('lastName');
+  },
+});
+
+export const ProfileRelationalCreateInput = inputObjectType({
+  name: 'ProfileRelationalCreateInput',
+  description: 'Input to Add a new user',
+  definition(t) {
+    t.nonNull.field('create', { type: 'ProfileCreateInput' });
   },
 });
