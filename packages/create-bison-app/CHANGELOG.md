@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.2 (2021-11-16)
+
+
+### Features
+
+* (enhancement) Seeds and Scripts ([#239](https://github.com/echobind/bisonapp/issues/239)) ([1714340](https://github.com/echobind/bisonapp/commit/1714340b13844d983d2335e5eb45092df14b405b))
+
+
+
 ## 1.12.0-canary.1 (2021-11-05)
 
 
