@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.3 (2021-11-18)
+
+
+### Features
+
+* Make external links themeable with Chakra UI ([#238](https://github.com/echobind/bisonapp/issues/238)) ([ff4fe13](https://github.com/echobind/bisonapp/commit/ff4fe13943e56d5459839a91a513c10ee0f0934a))
+
+
+
 ## 1.12.0-canary.2 (2021-11-16)
 
 
