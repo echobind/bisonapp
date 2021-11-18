@@ -1,4 +1,4 @@
-import { Center, Flex, Text } from '@chakra-ui/layout';
+import { Center, Flex, Text, Link } from '@chakra-ui/layout';
 
 import { Logo } from './Logo';
 
@@ -11,9 +11,9 @@ export function Footer() {
         <Logo />
         <Text as="em" textAlign="center">
           Copyright Ⓒ {year}{' '}
-          <a href="https://echobind.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://echobind.com" isExternal>
             Echobind LLC.
-          </a>{' '}
+          </Link>{' '}
           All rights reserved.
         </Text>
       </Flex>
