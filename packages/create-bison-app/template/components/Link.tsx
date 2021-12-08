@@ -1,13 +1,15 @@
-import type { PropsWithChildren } from 'react';
+import type { LinkProps, NextLinkAs } from 'types';
 
-import NextLink, { LinkProps as NextLinkProps } from 'next/link';
-import { Link as ChakraLink, LinkProps as ChakraLinkProps } from '@chakra-ui/react';
+import NextLink from 'next/link';
+import {
+  Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
+  BreadcrumbLink as ChakraBreadcrumbLink,
+  BreadcrumbLinkProps as ChakraBreadcrumbLinkProps,
+  Link as ChakraLink,
+  LinkProps as ChakraLinkProps,
+} from '@chakra-ui/react';
 
-type LinkProps =
-  | PropsWithChildren<NextLinkProps & Omit<ChakraLinkProps, 'as'>>
-  | PropsWithChildren<Omit<NextLinkProps, 'as'> & ChakraLinkProps>;
-
-type NextLinkAs = NextLinkProps['as'];
 type ChakraLinkAs = ChakraLinkProps['as'];
 
 //  Has to be a new component because both chakra and next share the `as` keyword
@@ -22,7 +24,7 @@ export const Link = ({
   isExternal,
   children,
   ...chakraProps
-}: LinkProps) => {
+}: LinkProps<ChakraLinkProps>) => {
   return isExternal ? (
     <ChakraLink href={href} as={as as ChakraLinkAs} isExternal {...chakraProps}>
       {children}
@@ -39,6 +41,62 @@ export const Link = ({
       locale={locale}
     >
       <ChakraLink {...chakraProps}>{children}</ChakraLink>
+    </NextLink>
+  );
+};
+
+export const ButtonLink = ({
+  href,
+  as,
+  replace,
+  scroll,
+  shallow,
+  prefetch,
+  locale,
+  children,
+  ...chakraProps
+}: LinkProps<ChakraButtonProps>) => {
+  return (
+    <NextLink
+      passHref={true}
+      href={href}
+      as={as as NextLinkAs}
+      replace={replace}
+      scroll={scroll}
+      shallow={shallow}
+      prefetch={prefetch}
+      locale={locale}
+    >
+      <ChakraButton as="a" {...chakraProps}>
+        {children}
+      </ChakraButton>
+    </NextLink>
+  );
+};
+
+export const BreadcrumbLink = ({
+  href,
+  as,
+  replace,
+  scroll,
+  shallow,
+  prefetch,
+  locale,
+  children,
+  ...chakraProps
+}: LinkProps<ChakraBreadcrumbLinkProps>) => {
+  return (
+    <NextLink
+      passHref={true}
+      href={href}
+      as={as as NextLinkAs}
+      replace={replace}
+      scroll={scroll}
+      shallow={shallow}
+      prefetch={prefetch}
+      locale={locale}
+    >
+      <ChakraBreadcrumbLink {...chakraProps}>{children}</ChakraBreadcrumbLink>
     </NextLink>
   );
 };

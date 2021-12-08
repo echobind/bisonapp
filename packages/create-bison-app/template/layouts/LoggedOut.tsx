@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Button } from '@chakra-ui/react';
 
-import { Link } from '../components/Link';
+import { ButtonLink } from '../components/Link';
 import { Logo } from '../components/Logo';
 import { Footer } from '../components/Footer';
 
@@ -16,9 +16,9 @@ export function LoggedOutLayout({ children }: Props) {
         <Flex p={4}>
           <Logo />
 
-          <Button as={Link} href="/login" ml="auto" display={{ base: 'none', lg: 'inline-flex' }}>
+          <ButtonLink href="/login" ml="auto" display={{ base: 'none', lg: 'inline-flex' }}>
             Login
-          </Button>
+          </ButtonLink>
         </Flex>
       </>
 
