@@ -1,6 +1,7 @@
-import { Center, Flex, Text, Link } from '@chakra-ui/layout';
+import { Center, Flex, Text } from '@chakra-ui/layout';
 
 import { Logo } from './Logo';
+import { Link } from './Link';
 
 export function Footer() {
   const year = new Date().getFullYear();

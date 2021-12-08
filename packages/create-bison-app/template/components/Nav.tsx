@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Link,
   Stack,
   useBreakpoint,
   Button,
@@ -9,7 +8,8 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
+
+import { Link } from './Link';
 
 export function Nav() {
   const breakpoint = useBreakpoint();
@@ -23,9 +23,7 @@ export function Nav() {
 
       <MenuList width="full">
         <MenuItem>
-          <NextLink href="/">
-            <Link href="">Link 1</Link>
-          </NextLink>
+          <Link href="/">Link 1</Link>
         </MenuItem>
 
         <MenuItem>
@@ -45,9 +43,7 @@ export function Nav() {
     </Menu>
   ) : (
     <Stack as="nav" direction="row" ml="auto" alignItems="center" fontSize="md" spacing={8}>
-      <NextLink href="/">
-        <Link href="">Link 1</Link>
-      </NextLink>
+      <Link href="/">Link 1</Link>
 
       <Link href="/#features">Link 2</Link>
       <Link href="/#tech">Link 3</Link>
