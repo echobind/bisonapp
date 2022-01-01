@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.4 (2021-12-14)
+
+
+### Bug Fixes
+
+* generate initial types before db:setup ([#241](https://github.com/echobind/bisonapp/issues/241)) ([18f705f](https://github.com/echobind/bisonapp/commit/18f705f0e90d1c40030d8d477e142f303ea00f1f))
+
+
+
 ## 1.12.0-canary.3 (2021-11-18)
 
 

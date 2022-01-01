@@ -34,7 +34,7 @@
     "g:test:util": "hygen test util --name",
     "lint": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
     "run:script": "yarn ts-node prisma/scripts/run.ts -f",
-    "setup:dev": "yarn db:setup && yarn build:types",
+    "setup:dev": "yarn db:deploy && yarn build:types && yarn db:seed",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
     "test:ci": "yarn withEnv:test jest --runInBand",
