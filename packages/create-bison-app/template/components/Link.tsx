@@ -1,5 +1,6 @@
-import type { LinkProps, NextLinkAs } from 'types';
-
+import type { PropsWithChildren } from 'react';
+import type { LinkProps as NextLinkProps } from 'next/link';
+import React from 'react';
 import NextLink from 'next/link';
 import {
   Button as ChakraButton,
@@ -9,6 +10,12 @@ import {
   Link as ChakraLink,
   LinkProps as ChakraLinkProps,
 } from '@chakra-ui/react';
+
+export type NextLinkAs = NextLinkProps['as'];
+
+export type LinkProps<T> =
+  | PropsWithChildren<NextLinkProps & Omit<T, 'as'>>
+  | PropsWithChildren<Omit<NextLinkProps, 'as'> & T>;
 
 type ChakraLinkAs = ChakraLinkProps['as'];
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Button } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { ButtonLink } from '../components/Link';
 import { Logo } from '../components/Logo';
