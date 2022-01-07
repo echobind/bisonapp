@@ -1,5 +1,6 @@
-import { objectType, inputObjectType } from 'nexus';
-import { ApolloError } from 'apollo-server-errors';
+import { inputObjectType, objectType } from 'nexus';
+
+import { NotFoundError } from '../errors';
 
 // Profile Type
 export const Profile = objectType({
@@ -21,7 +22,7 @@ export const Profile = objectType({
           .user();
 
         if (!user) {
-          throw new ApolloError('User not found', '404');
+          throw new NotFoundError('User not found');
         }
 
         return user;

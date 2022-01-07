@@ -66,7 +66,7 @@ export function SignupForm() {
       const { data } = await signup({ variables });
 
       if (!data?.signup?.token) {
-        throw new Error('Signpup failed.');
+        throw new Error('Signup failed.');
       }
 
       await login(data.signup.token);
