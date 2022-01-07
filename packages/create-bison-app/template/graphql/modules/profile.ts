@@ -1,4 +1,5 @@
 import { objectType, inputObjectType } from 'nexus';
+import { ApolloError } from 'apollo-server-errors';
 
 // Profile Type
 export const Profile = objectType({
@@ -12,12 +13,18 @@ export const Profile = objectType({
     t.nonNull.string('lastName');
     t.nonNull.field('user', {
       type: 'User',
-      resolve: (parent, _, context) => {
-        return context.prisma.profile
+      resolve: async (parent, _, context) => {
+        const user = await context.prisma.profile
           .findUnique({
             where: { id: parent.id },
           })
           .user();
+
+        if (!user) {
+          throw new ApolloError('User not found', '404');
+        }
+
+        return user;
       },
     });
 

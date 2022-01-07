@@ -1,14 +1,16 @@
 import { hashPassword } from '../../services/auth';
-import { Role, UserCreateInput } from '../../types';
+import { Role } from '../../types';
 
 import { seedUsers } from '../seeds/users';
+import { prisma } from '../../lib/prisma';
+import { Prisma } from '@prisma/client';
 
 // HR: Hey, we've had a few more employees join -- can you create an account for them?!
 
 const INITIAL_PASSWORD = 'test1234';
 
 const main = async () => {
-  const newEmployees: UserCreateInput[] = [
+  const newEmployees: Prisma.UserCreateInput[] = [
     {
       profile: {
         create: {

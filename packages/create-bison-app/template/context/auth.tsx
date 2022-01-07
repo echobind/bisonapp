@@ -10,7 +10,11 @@ const now = new Date();
 const timeValidInMs = 365 * 24 * 60 * 60 * 1000;
 const COOKIE_EXPIRE_DATE = new Date(now.getTime() + timeValidInMs);
 
-const AuthContext = createContext<AuthContextObject>({});
+const AuthContext = createContext<AuthContextObject>({
+  login: () => ({}),
+  logout: () => ({}),
+});
+
 AuthContext.displayName = 'AuthContext';
 
 export const ME_QUERY = gql`
@@ -74,12 +78,12 @@ const useAuth = () => useContext(AuthContext);
 export { AuthProvider, useAuth };
 
 interface Props {
-  loggedInUser?: Partial<User>;
+  loggedInUser?: Partial<User> | null;
   children: ReactNode;
 }
 
 export interface AuthContextObject {
-  user?: Partial<User>;
-  login?: (token?: string) => any;
-  logout?: () => any;
+  user?: Partial<User> | null;
+  login: (token: string) => any;
+  logout: () => any;
 }

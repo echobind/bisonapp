@@ -23,12 +23,22 @@ export function comparePasswords(password: string, hashedPassword: string): bool
   return bcrypt.compareSync(password, hashedPassword);
 }
 
+const getAppSecret = (): string => {
+  const appSecret = process.env.APP_SECRET;
+
+  if (!appSecret) {
+    throw new Error('APP_SECRET is not set');
+  }
+
+  return appSecret;
+};
+
 /**
  * Signs a JWT for the provided user
  * @param user The user to return a JWT for
  */
 export const appJwtForUser = (user: Partial<User>): string => {
-  return jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+  return jwt.sign({ userId: user.id }, getAppSecret());
 };
 
 /**
@@ -40,7 +50,7 @@ export const verifyAuthHeader = (header?: string): JWT | undefined => {
   const token = header.replace('Bearer ', '');
 
   try {
-    return jwt.verify(token, process.env.APP_SECRET) as JWT;
+    return jwt.verify(token, getAppSecret()) as JWT;
   } catch (e) {
     return;
   }

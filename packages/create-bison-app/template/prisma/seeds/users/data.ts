@@ -1,13 +1,13 @@
-import { hashPassword } from '../../../services/auth';
-import { Role, UserCreateInput } from '../../../types';
+import { Prisma, Role } from '@prisma/client';
 
+import { hashPassword } from '../../../services/auth';
 // *********************************************
 // ** DEVELOPMENT DATA SET
 // *********************************************
 
 const INITIAL_PASSWORD = 'test1234';
 
-const initialDevUsers: UserCreateInput[] = [
+const initialDevUsers: Prisma.UserCreateInput[] = [
   {
     email: 'barry.allen@speedforce.net',
     password: hashPassword(INITIAL_PASSWORD),
@@ -27,7 +27,7 @@ const initialDevUsers: UserCreateInput[] = [
 
 const INITIAL_PROD_PASSWORD = 'strong@password';
 
-const initialProdUsers: UserCreateInput[] = [
+const initialProdUsers: Prisma.UserCreateInput[] = [
   {
     email: 'apps@echobind.com',
     password: hashPassword(INITIAL_PROD_PASSWORD),
@@ -47,5 +47,5 @@ const initialProdUsers: UserCreateInput[] = [
 
 const appEnv = process.env.APP_ENV || 'development';
 
-export const userSeedData: UserCreateInput[] =
+export const userSeedData: Prisma.UserCreateInput[] =
   appEnv === 'production' ? initialProdUsers : initialDevUsers;

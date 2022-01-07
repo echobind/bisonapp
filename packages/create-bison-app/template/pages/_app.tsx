@@ -9,11 +9,11 @@ import { useAuth } from '../context/auth';
  * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
  * included in the bundle if we're rendering the logged out layout.
  */
-const LoggedInLayout = dynamic(() =>
+const LoggedInLayout = dynamic<{ children: React.ReactNode }>(() =>
   import('../layouts/LoggedIn').then((mod) => mod.LoggedInLayout)
 );
 
-const LoggedOutLayout = dynamic(() =>
+const LoggedOutLayout = dynamic<{ children: React.ReactNode }>(() =>
   import('../layouts/LoggedOut').then((mod) => mod.LoggedOutLayout)
 );
 
