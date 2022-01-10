@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import NextLink from 'next/link';
-import {
-  Link,
-  Flex,
-  Text,
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
-  Button,
-  Circle,
-} from '@chakra-ui/react';
+import { Flex, Text, FormControl, FormLabel, Input, Stack, Button, Circle } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { gql } from '@apollo/client';
 
 import { EMAIL_REGEX } from '../constants';
 import { useAuth } from '../context/auth';
 import { ErrorText } from '../components/ErrorText';
+import { Link } from './Link';
 import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
 import { LoginMutationVariables, useLoginMutation } from '../types';
 
@@ -116,11 +106,9 @@ export function LoginForm() {
       <Flex marginTop={8} justifyContent="center">
         <Text color="gray.500">
           New User?{' '}
-          <NextLink href="/signup" passHref>
-            <Link href="#" color="gray.900">
-              Sign Up
-            </Link>
-          </NextLink>
+          <Link href="/signup" color="gray.900">
+            Sign Up
+          </Link>
         </Text>
       </Flex>
     </form>

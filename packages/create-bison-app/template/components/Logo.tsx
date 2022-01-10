@@ -1,13 +1,12 @@
 import React from 'react';
 import { Heading } from '@chakra-ui/react';
-import NextLink from 'next/link';
+
+import { Link } from './Link';
 
 export function Logo() {
   return (
-    <NextLink href="/" passHref>
-      <Heading as="a" size="md">
-        MyApp
-      </Heading>
-    </NextLink>
+    <Heading as={Link} href="/" size="md">
+      MyApp
+    </Heading>
   );
 }

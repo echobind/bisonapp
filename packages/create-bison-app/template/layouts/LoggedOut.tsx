@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Flex, Button } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { Box, Flex } from '@chakra-ui/react';
 
+import { ButtonLink } from '../components/Link';
 import { Logo } from '../components/Logo';
 import { Footer } from '../components/Footer';
 
@@ -16,11 +16,9 @@ export function LoggedOutLayout({ children }: Props) {
         <Flex p={4}>
           <Logo />
 
-          <NextLink href="/login" passHref>
-            <Button as="a" ml="auto" display={{ base: 'none', lg: 'inline-flex' }}>
-              Login
-            </Button>
-          </NextLink>
+          <ButtonLink href="/login" ml="auto" display={{ base: 'none', lg: 'inline-flex' }}>
+            Login
+          </ButtonLink>
         </Flex>
       </>
 
