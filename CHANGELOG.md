@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.5 (2022-01-10)
+
+
+### Features
+
+* add universal chakra link component ([#243](https://github.com/echobind/bisonapp/issues/243)) ([4265bfa](https://github.com/echobind/bisonapp/commit/4265bfa571f4034c846e17a0610175a55bcc7ee5))
+
+
+
 ## 1.12.0-canary.4 (2021-12-14)
 
 
