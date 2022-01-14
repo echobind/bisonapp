@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.6 (2022-01-14)
+
+
+### Features
+
+* Enable TS strict ([#244](https://github.com/echobind/bisonapp/issues/244)) ([abc7075](https://github.com/echobind/bisonapp/commit/abc7075379fc7a6c948d1a0b92dc2af16004851c))
+
+
+
 ## 1.12.0-canary.5 (2022-01-10)
 
 
