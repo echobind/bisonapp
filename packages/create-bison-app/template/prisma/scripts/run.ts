@@ -16,7 +16,7 @@ const run = () => {
   });
 
   child.on('exit', function (code) {
-    process.exit(code);
+    process.exit(code || 1);
   });
 };
 

@@ -1,9 +1,12 @@
-import { ErrorOption } from 'react-hook-form';
+import { UseFormSetError } from 'react-hook-form';
 
 /**
  * Sets errors on the frontend from a GraphQL Response. Assumes react-hook-form.
  */
-export function setErrorsFromGraphQLErrors(setError: SetErrorFn, errors: ErrorResponse[]) {
+export function setErrorsFromGraphQLErrors(
+  setError: UseFormSetError<any>,
+  errors: ErrorResponse[]
+) {
   return (errors || []).forEach((e) => {
     const errorObjects = e.extensions.invalidArgs || {};
     Object.keys(errorObjects).forEach((key) => {
@@ -11,8 +14,6 @@ export function setErrorsFromGraphQLErrors(setError: SetErrorFn, errors: ErrorRe
     });
   });
 }
-
-type SetErrorFn = (e: string, obj: ErrorOption) => void;
 
 interface ErrorResponse {
   extensions: {

@@ -41,9 +41,14 @@ export function LoginForm() {
     try {
       setIsLoading(true);
       const { data } = await login({ variables: formData });
+
+      if (!data?.login?.token) {
+        throw new Error('Login failed.');
+      }
+
       await loginUser(data.login.token);
       await router.replace('/');
-    } catch (e) {
+    } catch (e: any) {
       setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
       setIsLoading(false);
     }

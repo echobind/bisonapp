@@ -55,10 +55,14 @@ export function SignupForm() {
 
       const { data } = await signup({ variables });
 
+      if (!data?.signup?.token) {
+        throw new Error('Signup failed.');
+      }
+
       await login(data.signup.token);
 
       router.replace('/');
-    } catch (e) {
+    } catch (e: any) {
       setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
     } finally {
       setIsLoading(false);

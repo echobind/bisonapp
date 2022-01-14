@@ -12,6 +12,7 @@ import {
 import { Role } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
+import { prismaArgObject } from '../helpers';
 import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
 import { canAccess, isAdmin } from '../../services/permissions';
 
@@ -76,7 +77,7 @@ export const findUniqueUserQuery = queryField('user', {
     where: nonNull(arg({ type: 'UserWhereUniqueInput' })),
   },
   resolve: async (_root, args, ctx) => {
-    return await ctx.db.user.findUnique({ where: args.where });
+    return await ctx.db.user.findUnique({ where: prismaArgObject(args.where) });
   },
 });
 
@@ -170,7 +171,7 @@ export const createUserMutation = mutationField('createUser', {
     // force role to user and hash the password
     const updatedArgs = {
       data: {
-        ...data,
+        ...prismaArgObject(data),
         password: hashPassword(data.password),
       },
     };

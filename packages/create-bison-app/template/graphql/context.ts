@@ -31,5 +31,5 @@ type ApolloApiContext = ApolloContext<{ req: IncomingMessage }>;
 export type Context = {
   db: PrismaClient;
   prisma: PrismaClient;
-  user: User;
+  user: User | null;
 };
