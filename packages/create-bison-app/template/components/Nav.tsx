@@ -23,15 +23,21 @@ export function Nav() {
 
       <MenuList width="full">
         <MenuItem>
-          <Link href="/">Link 1</Link>
+          <NextLink href="/page1" passHref>
+            <Link>Link 1</Link>
+          </NextLink>
         </MenuItem>
 
         <MenuItem>
-          <Link href="/">Link 2</Link>
+          <NextLink href="/page1" passHref>
+            <Link>Link 2</Link>
+          </NextLink>
         </MenuItem>
 
         <MenuItem>
-          <Link href="/">Link 3</Link>
+          <NextLink href="/page3" passHref>
+            <Link>Link 3</Link>
+          </NextLink>
         </MenuItem>
 
         <MenuItem>
@@ -43,10 +49,18 @@ export function Nav() {
     </Menu>
   ) : (
     <Stack as="nav" direction="row" ml="auto" alignItems="center" fontSize="md" spacing={8}>
-      <Link href="/">Link 1</Link>
+      <NextLink href="/page1" passHref>
+        <Link>Link 1</Link>
+      </NextLink>
 
-      <Link href="/#features">Link 2</Link>
-      <Link href="/#tech">Link 3</Link>
+      <NextLink href="/page2" passHref>
+        <Link>Link 2</Link>
+      </NextLink>
+
+      <NextLink href="/page3" passHref>
+        <Link>Link 3</Link>
+      </NextLink>
+
       <Link href="https://github.com/echobind/" isExternal>
         External
       </Link>

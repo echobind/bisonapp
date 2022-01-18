@@ -5,6 +5,8 @@ import { ButtonLink } from '../components/Link';
 import { Logo } from '../components/Logo';
 import { Footer } from '../components/Footer';
 
+import { getLayout } from '../layouts/CenteredPageLayout';
+
 interface Props {
   children: React.ReactNode;
 }
@@ -30,3 +32,5 @@ export function LoggedOutLayout({ children }: Props) {
     </Flex>
   );
 }
+
+LoggedOutLayout.getLayout = getLayout;

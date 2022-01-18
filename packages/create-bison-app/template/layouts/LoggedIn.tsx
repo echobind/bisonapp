@@ -7,6 +7,8 @@ import { Nav } from '../components/Nav';
 import { useAuth } from '../context/auth';
 import { Footer } from '../components/Footer';
 
+import { getLayout } from '../layouts/CenteredPageLayout';
+
 interface Props {
   children: React.ReactNode;
 }
@@ -48,3 +50,5 @@ export function LoggedInLayout({ children }: Props) {
     </Flex>
   );
 }
+
+LoggedInLayout.getLayout = getLayout;
