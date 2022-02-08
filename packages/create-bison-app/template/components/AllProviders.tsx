@@ -3,9 +3,9 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { Dict } from '@chakra-ui/utils';
 
-import { AuthProvider } from '../context/auth';
-import { createApolloClient } from '../lib/apolloClient';
-import defaultTheme from '../chakra';
+import { AuthProvider } from '@/context/auth';
+import { createApolloClient } from '@/lib/apolloClient';
+import defaultTheme from '@/chakra';
 
 interface Props {
   apolloClient?: ApolloClient<NormalizedCacheObject>;

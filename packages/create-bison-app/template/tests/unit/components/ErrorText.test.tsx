@@ -4,8 +4,8 @@
 
 import React from 'react';
 
-import { render } from '../../../tests/utils';
-import { ErrorText } from '../../../components/ErrorText';
+import { render } from '@/tests/utils';
+import { ErrorText } from '@/components/ErrorText';
 
 describe('ErrorText', () => {
   it('loads', async () => {

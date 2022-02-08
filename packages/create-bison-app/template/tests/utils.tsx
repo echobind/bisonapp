@@ -6,9 +6,9 @@ import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 import '@testing-library/jest-dom/extend-expect';
 
-import { AllProviders } from '../components/AllProviders';
-// import { ME_QUERY } from '../context/auth';
-// import { User } from '../types';
+import { AllProviders } from '@/components/AllProviders';
+// import { ME_QUERY } from '@/context/auth';
+// import { User } from '@/types';
 
 export * from '@testing-library/react';
 export { default as userEvent } from '@testing-library/user-event';

@@ -5,8 +5,8 @@ to: tests/requests/<%= name %>.test.ts
 <% model = name.split('/')[0] %>
 <% section = h.baseName(name) -%>
 <% upper = h.inflection.camelize(model, false) -%>
-import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
-import { <%= upper %>Factory } from '../../factories/<%= model %>';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/helpers';
+import { <%= upper %>Factory } from '@/factories/<%= model %>';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

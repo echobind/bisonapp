@@ -4,8 +4,8 @@
 
 import React from 'react';
 
-import { render, waitFor, userEvent } from '../../utils';
-import { LoginForm } from '../../../components/LoginForm';
+import { render, waitFor, userEvent } from '@/utils';
+import { LoginForm } from '@/components/LoginForm';
 
 describe('LoginForm', () => {
   describe('with no inputs', () => {

@@ -1,6 +1,6 @@
 import { inputObjectType, objectType } from 'nexus';
 
-import { NotFoundError } from '../errors';
+import { NotFoundError } from '@/graphql/errors';
 
 // Profile Type
 export const Profile = objectType({

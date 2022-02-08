@@ -1,6 +1,6 @@
 import { Prisma, Role } from '@prisma/client';
 
-import { hashPassword } from '../../../services/auth';
+import { hashPassword } from '@/services/auth';
 // *********************************************
 // ** DEVELOPMENT DATA SET
 // *********************************************

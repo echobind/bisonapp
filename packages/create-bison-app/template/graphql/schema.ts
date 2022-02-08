@@ -2,7 +2,7 @@ import path from 'path';
 
 import { declarativeWrappingPlugin, fieldAuthorizePlugin, makeSchema } from 'nexus';
 
-import prettierConfig from '../prettier.config';
+import prettierConfig from '@/prettier.config';
 
 import * as types from './modules';
 

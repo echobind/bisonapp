@@ -6,8 +6,8 @@ import {
 import { ApolloServer } from 'apollo-server-micro';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { createContext } from '../../graphql/context';
-import { schema } from '../../graphql/schema';
+import { createContext } from '@/graphql/context';
+import { schema } from '@/graphql/schema';
 
 export const GRAPHQL_PATH = '/api/graphql';
 

@@ -4,8 +4,8 @@
 
 import React from 'react';
 
-import { render } from '../../../tests/utils';
-import { Logo } from '../../../components/Logo';
+import { render } from '@/tests/utils';
+import { Logo } from '@/components/Logo';
 
 describe('Logo', () => {
   it('loads', async () => {
