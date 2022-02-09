@@ -1,3 +1,13 @@
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
+
+const { compilerOptions } = require('./tsconfig.json');
+
+// this creates a module name map based on all the path aliases from tsconfig
+// (so you only need to add path aliases in tsconfig, not here).
+const moduleNameMapper = compilerOptions.paths
+  ? pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/../' })
+  : {};
+
 const testPathIgnorePatterns = [
   '<rootDir>/node_modules',
   'cypress',
@@ -21,4 +31,5 @@ module.exports = {
       },
     },
   },
+  moduleNameMapper,
 };
