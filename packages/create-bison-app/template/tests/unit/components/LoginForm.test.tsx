@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { render, waitFor, userEvent } from '@/utils';
+import { render, waitFor, userEvent } from '@/tests/utils';
 import { LoginForm } from '@/components/LoginForm';
 
 describe('LoginForm', () => {

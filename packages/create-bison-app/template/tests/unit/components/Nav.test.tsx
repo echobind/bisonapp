@@ -5,7 +5,7 @@
 import React from 'react';
 
 import { render } from '@/tests/utils';
-import '@/matchMedia.mock';
+import '@/tests/matchMedia.mock';
 import { Nav } from '@/components/Nav';
 
 describe('Nav', () => {
