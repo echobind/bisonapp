@@ -8,7 +8,6 @@ import { useAuth } from '@/context/auth';
 import { setErrorsFromGraphQLErrors } from '@/utils/setErrors';
 import { SignupMutationVariables, useSignupMutation } from '@/types';
 import { EMAIL_REGEX } from '@/constants';
-
 import { Link } from '@/components/Link';
 import { ErrorText } from '@/components/ErrorText';
 
