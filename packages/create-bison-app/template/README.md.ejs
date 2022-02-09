@@ -272,8 +272,8 @@ export const OrganizationFactory = {
 Here we use inline snapshots to confirm the error message content, but you can also manually assert the content.
 
 ```ts
-import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/helpers';
-import { OrganizationFactory } from '@/factories/organization';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/tests/helpers';
+import { OrganizationFactory } from '@/tests/factories/organization';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
