@@ -2,8 +2,8 @@ import { Role } from '@prisma/client';
 import Chance from 'chance';
 import { GraphQLError } from 'graphql';
 
-import { graphQLRequest, resetDB, disconnect } from '@tests/helpers';
-import { UserFactory } from '@tests/factories/user';
+import { graphQLRequest, resetDB, disconnect } from '@/tests/helpers';
+import { UserFactory } from '@/tests/factories/user';
 
 const chance = new Chance();
 

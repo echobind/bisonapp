@@ -14,7 +14,7 @@ import { UserInputError } from 'apollo-server-micro';
 
 import { hashPassword, appJwtForUser, comparePasswords } from '@/services/auth';
 import { canAccess, isAdmin } from '@/services/permissions';
-import { prismaArgObject } from './helpers';
+import { prismaArgObject } from '@/graphql/helpers';
 
 // User Type
 export const User = objectType({
