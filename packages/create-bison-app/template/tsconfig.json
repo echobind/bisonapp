@@ -18,6 +18,7 @@
     "plugins": [{ "name": "nexus/typescript-language-service" }],
     "typeRoots": ["node_modules/@types", "types"],
     "rootDir": ".",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     }
