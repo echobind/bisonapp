@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.7 (2022-02-09)
+
+
+### Bug Fixes
+
+* The DATABASE_URL set in .env.test doesn't include a colon between the username and password. ([#246](https://github.com/echobind/bisonapp/issues/246)) ([9d33f77](https://github.com/echobind/bisonapp/commit/9d33f771ca22dad3b227404a90c827c11f7baf0d))
+
+
+
 ## 1.12.0-canary.6 (2022-01-14)
 
 
