@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.9 (2022-02-14)
+
+
+### Features
+
+* Add import path alias. ([#247](https://github.com/echobind/bisonapp/issues/247)) ([1e5de2c](https://github.com/echobind/bisonapp/commit/1e5de2c065601b24f50ca1e81b6751d1b6be7f21))
+
+
+
 ## 1.12.0-canary.8 (2022-02-10)
 
 **Note:** Version bump only for package create-bison-app
