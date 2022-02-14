@@ -1,9 +1,9 @@
 import { Role } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
-import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
-import { UserFactory } from '../../factories/user';
-import { User, UserWhereUniqueInput } from '../../../types';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/tests/helpers';
+import { UserFactory } from '@/tests/factories/user';
+import { User, UserWhereUniqueInput } from '@/types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

@@ -5,10 +5,10 @@ import path from 'path';
 
 import { User } from '@prisma/client';
 
-import { cookies } from '../../lib/cookies';
-import { LOGIN_TOKEN_KEY } from '../../constants';
-import { resetDB, disconnect, setupDB, graphQLRequest } from '../../tests/helpers';
-import * as Factories from '../../tests/factories';
+import { cookies } from '@/lib/cookies';
+import { LOGIN_TOKEN_KEY } from '@/constants';
+import { resetDB, disconnect, setupDB, graphQLRequest } from '@/tests/helpers';
+import * as Factories from '@/tests/factories';
 
 declare global {
   // eslint-disable-next-line

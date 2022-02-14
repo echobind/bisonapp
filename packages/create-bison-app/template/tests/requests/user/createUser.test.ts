@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-import { resetDB, disconnect, graphQLRequestAsUser } from '../../helpers';
-import { UserFactory } from '../../factories/user';
-import { Role, UserCreateInput } from '../../../types';
+import { resetDB, disconnect, graphQLRequestAsUser } from '@/tests/helpers';
+import { UserFactory } from '@/tests/factories/user';
+import { Role, UserCreateInput } from '@/types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

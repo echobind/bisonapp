@@ -69,7 +69,7 @@ Because Nexus is strongly typed, all of the `t.` operations should autocomplete 
   ```ts
   import { objectType, inputObjectType, queryField, mutationField, arg, list, nonNull } from 'nexus';
 
-  import { isAdmin } from '../../services/permissions';
+  import { isAdmin } from '@/services/permissions';
 
   // Organization Type
   export const Organization = objectType({
@@ -272,8 +272,8 @@ export const OrganizationFactory = {
 Here we use inline snapshots to confirm the error message content, but you can also manually assert the content.
 
 ```ts
-import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
-import { OrganizationFactory } from '../factories/organization';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/tests/helpers';
+import { OrganizationFactory } from '@/tests/factories/organization';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
@@ -515,7 +515,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Spinner, Text } from '@chakra-ui/react';
 
-import { OrganizationQuery, useOrganizationQuery } from '../types';
+import { OrganizationQuery, useOrganizationQuery } from '@/types';
 
 export const QUERY = gql`
   query organization($where: OrganizationWhereUniqueInput!) {
@@ -556,7 +556,7 @@ import Head from 'next/head';
 import { Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
-import { OrganizationCell } from '../../cells/Organization';
+import { OrganizationCell } from '@/cells/Organization';
 
 function OrganizationPage() {
   const router = useRouter();

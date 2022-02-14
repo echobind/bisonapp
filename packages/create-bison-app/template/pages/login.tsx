@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 
-import { CenteredBoxForm } from '../components/CenteredBoxForm';
-import { LoginForm } from '../components/LoginForm';
+import { CenteredBoxForm } from '@/components/CenteredBoxForm';
+import { LoginForm } from '@/components/LoginForm';
 
 function LoginPage() {
   return (

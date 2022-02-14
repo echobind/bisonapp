@@ -12,9 +12,9 @@ import {
 import { Role } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
-import { prismaArgObject } from '../helpers';
-import { hashPassword, appJwtForUser, comparePasswords } from '../../services/auth';
-import { canAccess, isAdmin } from '../../services/permissions';
+import { hashPassword, appJwtForUser, comparePasswords } from '@/services/auth';
+import { canAccess, isAdmin } from '@/services/permissions';
+import { prismaArgObject } from '@/graphql/helpers';
 
 // User Type
 export const User = objectType({
@@ -257,8 +257,9 @@ export const UserCreateInput = inputObjectType({
     t.field('roles', {
       type: list('Role'),
     });
+
     t.field('profile', {
-      type: 'ProfileRelationalCreateInput'
-    })
+      type: 'ProfileRelationalCreateInput',
+    });
   },
 });

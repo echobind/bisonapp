@@ -3,8 +3,8 @@ import { IncomingMessage } from 'http';
 import { Context as ApolloContext } from 'apollo-server-core';
 import { PrismaClient, User } from '@prisma/client';
 
-import { prisma } from '../lib/prisma';
-import { verifyAuthHeader } from '../services/auth';
+import { prisma } from '@/lib/prisma';
+import { verifyAuthHeader } from '@/services/auth';
 
 /**
  * Populates a context object for use in resolvers.

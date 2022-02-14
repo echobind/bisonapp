@@ -1,10 +1,10 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { gql } from '@apollo/client';
 
-import { cookies } from '../lib/cookies';
-import { useMeLazyQuery, User } from '../types';
-import { FullPageSpinner } from '../components/FullPageSpinner';
-import { LOGIN_TOKEN_KEY } from '../constants';
+import { cookies } from '@/lib/cookies';
+import { useMeLazyQuery, User } from '@/types';
+import { FullPageSpinner } from '@/components/FullPageSpinner';
+import { LOGIN_TOKEN_KEY } from '@/constants';
 
 const now = new Date();
 const timeValidInMs = 365 * 24 * 60 * 60 * 1000;

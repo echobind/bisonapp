@@ -1,8 +1,9 @@
+import '@testing-library/cypress/add-commands';
+
 import { Prisma, User } from '@prisma/client';
 
-import '@testing-library/cypress/add-commands';
-import { LOGIN_TOKEN_KEY } from '../../constants';
-import { LoginTaskObject } from '../plugins';
+import { LOGIN_TOKEN_KEY } from '@/constants';
+import { LoginTaskObject } from '@/cypress/plugins';
 
 declare global {
   // eslint-disable-next-line

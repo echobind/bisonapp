@@ -2,19 +2,19 @@ import React from 'react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 
-import { AllProviders } from '../components/AllProviders';
-import { useAuth } from '../context/auth';
+import { AllProviders } from '@/components/AllProviders';
+import { useAuth } from '@/context/auth';
 
 /**
  * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
  * included in the bundle if we're rendering the logged out layout.
  */
 const LoggedInLayout = dynamic<{ children: React.ReactNode }>(() =>
-  import('../layouts/LoggedIn').then((mod) => mod.LoggedInLayout)
+  import('@/layouts/LoggedIn').then((mod) => mod.LoggedInLayout)
 );
 
 const LoggedOutLayout = dynamic<{ children: React.ReactNode }>(() =>
-  import('../layouts/LoggedOut').then((mod) => mod.LoggedOutLayout)
+  import('@/layouts/LoggedOut').then((mod) => mod.LoggedOutLayout)
 );
 
 /**

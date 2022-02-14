@@ -2,10 +2,10 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Box, Flex, Button } from '@chakra-ui/react';
 
-import { Logo } from '../components/Logo';
-import { Nav } from '../components/Nav';
-import { useAuth } from '../context/auth';
-import { Footer } from '../components/Footer';
+import { Logo } from '@/components/Logo';
+import { Nav } from '@/components/Nav';
+import { useAuth } from '@/context/auth';
+import { Footer } from '@/components/Footer';
 
 interface Props {
   children: React.ReactNode;

@@ -3,9 +3,9 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import fetch from 'cross-fetch';
 
-import { LOGIN_TOKEN_KEY } from '../constants';
-
 import { cookies } from './cookies';
+
+import { LOGIN_TOKEN_KEY } from '@/constants';
 
 export function createApolloClient(ctx?: Record<string, any>) {
   // Apollo needs an absolute URL when in SSR, so determine host

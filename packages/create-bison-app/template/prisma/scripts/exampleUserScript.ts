@@ -1,9 +1,9 @@
-import { hashPassword } from '../../services/auth';
-import { Role } from '../../types';
-
-import { seedUsers } from '../seeds/users';
-import { prisma } from '../../lib/prisma';
 import { Prisma } from '@prisma/client';
+
+import { hashPassword } from '@/services/auth';
+import { Role } from '@/types';
+import { seedUsers } from '@/prisma/seeds/users';
+import { prisma } from '@/lib/prisma';
 
 // HR: Hey, we've had a few more employees join -- can you create an account for them?!
 

@@ -1,9 +1,9 @@
 import request from 'supertest';
 import { User } from '@prisma/client';
 
-import server, { GRAPHQL_PATH } from '../../pages/api/graphql';
-import { appJwtForUser } from '../../services/auth';
-import { disconnect } from '../../lib/prisma';
+import server, { GRAPHQL_PATH } from '@/pages/api/graphql';
+import { appJwtForUser } from '@/services/auth';
+import { disconnect } from '@/lib/prisma';
 
 /** A convenience method to call graphQL queries */
 export const graphQLRequest = async (options: GraphQLRequestOptions): Promise<any> => {

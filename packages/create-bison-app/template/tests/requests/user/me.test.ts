@@ -1,5 +1,5 @@
-import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '../../helpers';
-import { UserFactory } from '../../factories/user';
+import { graphQLRequest, graphQLRequestAsUser, resetDB, disconnect } from '@/tests/helpers';
+import { UserFactory } from '@/tests/factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

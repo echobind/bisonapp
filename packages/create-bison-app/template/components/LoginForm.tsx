@@ -4,12 +4,12 @@ import { Flex, Text, FormControl, FormLabel, Input, Stack, Button, Circle } from
 import { useForm } from 'react-hook-form';
 import { gql } from '@apollo/client';
 
-import { EMAIL_REGEX } from '../constants';
-import { useAuth } from '../context/auth';
-import { ErrorText } from '../components/ErrorText';
-import { Link } from './Link';
-import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
-import { LoginMutationVariables, useLoginMutation } from '../types';
+import { EMAIL_REGEX } from '@/constants';
+import { useAuth } from '@/context/auth';
+import { ErrorText } from '@/components/ErrorText';
+import { Link } from '@/components/Link';
+import { setErrorsFromGraphQLErrors } from '@/utils/setErrors';
+import { LoginMutationVariables, useLoginMutation } from '@/types';
 
 export const LOGIN_MUTATION = gql`
   mutation login($email: String!, $password: String!) {

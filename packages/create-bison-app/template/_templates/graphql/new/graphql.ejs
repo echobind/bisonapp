@@ -5,7 +5,7 @@ to: graphql/modules/<%= name %>.ts
 <% plural = h.inflection.pluralize(camelized) -%>
 import { objectType, inputObjectType, queryField, mutationField, arg, list, nonNull } from 'nexus';
 
-import { isAdmin } from '../../services/permissions';
+import { isAdmin } from '@/services/permissions';
 
 // <%= camelized %> Type
 export const <%= camelized %> = objectType({

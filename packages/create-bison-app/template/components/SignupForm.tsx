@@ -4,13 +4,12 @@ import { gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import { useAuth } from '../context/auth';
-import { setErrorsFromGraphQLErrors } from '../utils/setErrors';
-import { SignupMutationVariables, useSignupMutation } from '../types';
-import { EMAIL_REGEX } from '../constants';
-
-import { Link } from './Link';
-import { ErrorText } from './ErrorText';
+import { useAuth } from '@/context/auth';
+import { setErrorsFromGraphQLErrors } from '@/utils/setErrors';
+import { SignupMutationVariables, useSignupMutation } from '@/types';
+import { EMAIL_REGEX } from '@/constants';
+import { Link } from '@/components/Link';
+import { ErrorText } from '@/components/ErrorText';
 
 export const SIGNUP_MUTATION = gql`
   mutation signup($data: SignupInput!) {
