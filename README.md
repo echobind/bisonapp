@@ -24,6 +24,7 @@ We're always improving on this, and we welcome suggestions from the community!
 - Customizable [Hygen Templates](https://www.hygen.io/) to generate new files
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
+- Import path alias to the root project folder (`@/`) to avoid the need for long relative import paths.
 
 ## Conventions
 
