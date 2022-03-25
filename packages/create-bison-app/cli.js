@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 const createBisonApp = require(".");
 const inquirer = require("inquirer");
+const get = require("lodash/get");
+const set = require("lodash/set");
 const Logo = require("./logo");
-const execa = require("execa");
 
 const TYPE_MAPPING = {
   input: "string",
@@ -76,15 +77,6 @@ function generateQuestions(appName) {
   ];
 }
 
-/**
- * Verifies a user is logged into the Heroku CLI.
- * If they aren't
- */
-async function verifyHerokuLogin() {
-  const { stdout } = await execa("heroku", ["whoami"]);
-  console.log(`Logged into Heroku as ${stdout}`);
-}
-
 require("yargs").usage(
   "$0 <name>",
   "Creates a new Bison application",
@@ -107,63 +99,25 @@ require("yargs").usage(
     // Show the logo!
     console.log(Logo);
 
-    function parseObjectFromDotNotation(obj) {
-      if (!obj) {
-        return {};
-      }
-
-      const isPlainObject = (obj) =>
-        !!obj && obj.constructor === {}.constructor;
-
-      const getNestedObject = (obj) =>
-        Object.entries(obj).reduce((result, [prop, val]) => {
-          prop.split(".").reduce((nestedResult, prop, propIndex, propArray) => {
-            const lastProp = propIndex === propArray.length - 1;
-            if (lastProp) {
-              nestedResult[prop] = isPlainObject(val)
-                ? getNestedObject(val)
-                : val;
-            } else {
-              nestedResult[prop] = nestedResult[prop] || {};
-            }
-            return nestedResult[prop];
-          }, result);
-          return result;
-        }, {});
-
-      return getNestedObject(obj);
-    }
-
     async function fetchAnswers(answers = {}) {
       const questions = generateQuestions(name);
-      const answerKeys = Object.keys(answers);
 
-      // filter out yargs keys from answers
-      const filteredAnswers = answerKeys.reduce((prev, key) => {
-        if (key.match(/(_|\$0)/)) {
-          return prev;
-        }
-
-        prev[key] = answers[key];
-        return prev;
-      }, Object.create(null));
-
-      // use defaults if acceptDefaults is true
-      const shouldUseDefaults = answerKeys.find((k) => k === "acceptDefaults");
+      // Skip prompts and use defaults if acceptDefaults is true
+      const shouldUseDefaults = !!answers.acceptDefaults;
 
       if (shouldUseDefaults) {
-        const defaults = questions.reduce((prev, question) => {
-          prev[question.name] = question.default;
-          return prev;
-        }, Object.create(null));
+        const defaultAnswers = {};
 
-        const parsedDefaults = parseObjectFromDotNotation(defaults);
-        const parsedAnswers = parseObjectFromDotNotation(filteredAnswers);
+        for (const question of questions) {
+          // Get answer from arguments if exists or use default
+          const answer = get(answers, question.name, question.default);
+          set(defaultAnswers, question.name, answer);
+        }
 
-        return { ...parsedDefaults, ...parsedAnswers };
+        return defaultAnswers;
       }
 
-      // otherwise, prompt for remaining answers
+      // Otherwise, prompt for remaining answers
       return await inquirer.prompt(questions, answers);
     }
 
