@@ -1,9 +1,6 @@
 schema:
   - api.graphql
 overwrite: true
-hooks:
-  afterOneFileWrite:
-    - yarn lint
 generates:
   types.ts:
     documents:
@@ -14,6 +11,8 @@ generates:
       - 'context/**/*.{ts,tsx}'
       - '!pages/api*'
     plugins:
+      - add:
+          content: '/* eslint-disable */'
       - typescript
       - typescript-operations
       - typescript-react-apollo
