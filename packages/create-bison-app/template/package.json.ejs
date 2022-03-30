@@ -33,7 +33,7 @@
     "g:test:request": "hygen test request --name",
     "g:test:util": "hygen test util --name",
     "lint": "yarn eslint . --ext .ts,.tsx --ignore-pattern tmp",
-    "lint:fix": "yarn eslint . --ext .ts,.tsx --fix --ignore-pattern tmp",
+    "lint:fix": "yarn lint --fix",
     "run:script": "yarn ts-node prisma/scripts/run.ts -f",
     "setup:dev": "yarn db:deploy && yarn build:types && yarn db:seed",
     "start": "next start -p $PORT",
@@ -76,6 +76,7 @@
   },
   "devDependencies": {
     "@apollo/react-testing": "^4.0.0",
+    "@graphql-codegen/add": "^3.1.1",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/typescript": "^2.4.8",
     "@graphql-codegen/typescript-operations": "^2.3.5",
