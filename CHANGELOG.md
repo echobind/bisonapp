@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.12.0-canary.12 (2022-03-30)
+
+
+### Features
+
+* add new debug configurations to template ([#251](https://github.com/echobind/bisonapp/issues/251)) ([d655d5b](https://github.com/echobind/bisonapp/commit/d655d5b59199ca4e5471241ded3d277dbbab7fef))
+
+
+
 ## 1.12.0-canary.11 (2022-03-28)
 
 **Note:** Version bump only for package root
