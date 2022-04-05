@@ -71,7 +71,7 @@ npx create-bison-app MyApp
 
 ## Setup the database
 
-1. Setup a database locally (Postgres is the only type fully supported right now)
+1. Setup a database locally ([Postgres](https://postgresapp.com/downloads.html) is the only type fully supported right now)
 1. Make sure your database user has permission to create schemas and databases. We recommend using a superuser account locally to keep things easy.
 1. Setup your local database with `yarn db:setup`. You'll be prompted to create it if it doesn't already exist:
 
