@@ -9,7 +9,7 @@ on:
 jobs:
   release:
     name: Run
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgres:11.5
