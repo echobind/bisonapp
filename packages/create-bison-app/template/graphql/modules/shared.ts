@@ -14,11 +14,11 @@ export const StringFilter = inputObjectType({
     t.string('contains');
     t.string('endsWith');
     t.string('equals');
-    t.string('gt');
-    t.string('gte');
+    t.compare('gt');
+    t.compare('gte');
     t.list.nonNull.string('in');
-    t.string('lt');
-    t.string('lte');
+    t.compare('lt');
+    t.compare('lte');
     t.list.nonNull.string('notIn');
     t.string('startsWith');
   },
