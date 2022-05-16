@@ -41,7 +41,7 @@ const parseObject = (ast: ObjectValueNode) => {
   ast.fields.forEach((field) => {
     value[field.name.value] = parseAst(field.value);
   });
-  
+
   return value;
 };
 
