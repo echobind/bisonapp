@@ -5,10 +5,10 @@ import {
   PhoneNumberResolver,
   URLResolver,
 } from 'graphql-scalars';
-import { asNexusMethod } from 'nexus';
-import { GraphQLScalarType, Kind } from 'graphql';
+import { asNexusMethod, scalarType } from 'nexus';
+import { Kind, ObjectValueNode, ValueNode } from 'graphql';
 
-export const ComparisonOperatorScalarType = new GraphQLScalarType({
+export const ComparisonOperatorScalarType = scalarType({
   name: 'ComparisonOperator',
   description: 'Allows values typically used in comparison operators: string, number, Date object',
   // parseValue and serialize are used to ensure validity
@@ -20,7 +20,7 @@ export const ComparisonOperatorScalarType = new GraphQLScalarType({
     return typeof value === 'object' || typeof value === 'string' || typeof value === 'number' ? value
       : null
   },
-  parseLiteral: (ast) => {
+  parseLiteral: (ast: ValueNode) => {
     switch (ast.kind) {
       case Kind.STRING:
       case Kind.INT:
@@ -28,10 +28,11 @@ export const ComparisonOperatorScalarType = new GraphQLScalarType({
       case Kind.OBJECT: return parseObject(ast);
       default: return null
     }
-  }
+  },
+  asNexusMethod: 'compare'
 });
 
-const parseObject = (ast) => {
+const parseObject = (ast: ObjectValueNode) => {
   const value = Object.create(null);
   ast.fields.forEach((field) => {
     value[field.name.value] = parseAst(field.value);
@@ -39,7 +40,7 @@ const parseObject = (ast) => {
   return value;
 }
 
-const parseAst = (ast) => {
+const parseAst = (ast: ValueNode): any => {
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:
@@ -61,4 +62,3 @@ export const DateTime = asNexusMethod(DateTimeResolver, 'date');
 export const Email = asNexusMethod(EmailAddressResolver, 'email');
 export const PhoneNumber = asNexusMethod(PhoneNumberResolver, 'phone');
 export const URL = asNexusMethod(URLResolver, 'url');
-export const Comparison = asNexusMethod(ComparisonOperatorScalarType, 'compare');
