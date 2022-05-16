@@ -13,12 +13,14 @@ export const ComparisonOperatorScalarType = scalarType({
   description: 'Allows values typically used in comparison operators: string, number, Date object',
   // parseValue and serialize are used to ensure validity
   parseValue: (value) => {
-    return typeof value === 'object' || typeof value === 'string' || typeof value === 'number' ? value
-      : null
+    return typeof value === 'object' || typeof value === 'string' || typeof value === 'number' 
+    ? value
+      : null;
   },
   serialize: (value) => {
-    return typeof value === 'object' || typeof value === 'string' || typeof value === 'number' ? value
-      : null
+    return typeof value === 'object' || typeof value === 'string' || typeof value === 'number' 
+    ? value
+      : null;
   },
   parseLiteral: (ast: ValueNode) => {
     switch (ast.kind) {
@@ -26,10 +28,11 @@ export const ComparisonOperatorScalarType = scalarType({
       case Kind.INT:
         return ast.value;
       case Kind.OBJECT: return parseObject(ast);
-      default: return null
+      default:
+        return null
     }
   },
-  asNexusMethod: 'compare'
+  asNexusMethod: 'compare',
 });
 
 const parseObject = (ast: ObjectValueNode) => {
@@ -38,7 +41,7 @@ const parseObject = (ast: ObjectValueNode) => {
     value[field.name.value] = parseAst(field.value);
   });
   return value;
-}
+};
 
 const parseAst = (ast: ValueNode): any => {
   switch (ast.kind) {
