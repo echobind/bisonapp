@@ -31,5 +31,10 @@ module.exports = {
       },
     },
   },
-  moduleNameMapper,
+  moduleNameMapper: {
+    ...moduleNameMapper,
+    // Handle image imports
+    // https://jestjs.io/docs/webpack#handling-static-assets
+    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`
+  }
 };

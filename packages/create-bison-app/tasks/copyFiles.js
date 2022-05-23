@@ -74,6 +74,7 @@ async function copyFiles({ variables, targetFolder }) {
 
     cpy(
       [
+        "__mocks__",
         "_templates",
         ".vscode",
         "chakra",
