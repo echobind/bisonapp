@@ -1,4 +1,5 @@
 name: Run Tests
+
 on:
   push:
     branches:
@@ -7,21 +8,14 @@ on:
   pull_request:
 
 jobs:
-  release:
-    name: Run
-    runs-on: ubuntu-20.04
-    services:
-      postgres:
-        image: postgres:11.5
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+  create-app:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
-      max-parallel: 1
+        os: ["ubuntu-latest", "windows-latest"]
+        node-version: [14.x, 16.x]
+    outputs:
+      appName: ${{ steps.create-app.outputs.appName }}
 
     steps:
       - name: Checkout
@@ -55,36 +49,70 @@ jobs:
         # Sets outputs.appPath to the created directory and outputs.appName
         run: node ./packages/create-bison-app/scripts/createApp bison-ci-app --acceptDefaults
 
+      - name: Upload bison app
+        uses: actions/upload-artifact@v2
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          name: ${{ steps.create-app.outputs.appName }}
+          path: |
+            ${{ steps.create-app.outputs.appPath }}/
+            !${{ steps.create-app.outputs.appPath }}/node_modules
+          retention-days: 1
+
+  test:
+    needs: create-app
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Download bison app
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ needs.create-app.outputs.appName }}
+
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install bison app packages
+        run: yarn install
+
       - name: Build production bison app
-        working-directory: ${{ steps.create-app.outputs.appPath }}
         run: yarn build
 
       - name: Lint bison app
-        working-directory: ${{ steps.create-app.outputs.appPath }}
         run: yarn lint
 
       - name: Set up test database
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           NODE_ENV: test
-        working-directory: ${{ steps.create-app.outputs.appPath }}
         run: yarn db:migrate
 
       - name: Run bison app unit tests
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           NODE_ENV: test
-        working-directory: ${{ steps.create-app.outputs.appPath }}
         run: yarn test:ci
 
       - name: Run bison app E2E tests
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ${{ steps.create-app.outputs.appPath }}
           start: yarn test:server
           wait-on: "http://localhost:3001"
         env:
           APP_SECRET: foo
-          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ steps.create-app.outputs.appName }}_test
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
