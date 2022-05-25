@@ -26,11 +26,16 @@ async function copyDirectoryWithTemplate(from, to, variables) {
     console.error("error making directory", e);
   }
 
-  const files = await globby([`${from}/**`], { expandDirectories: true });
+  // Glob patterns can only contain forward-slashes (even on Windows)
+  const globPattern = `${from.replace(/\\/g, '/')}/**`;
+  const files = await globby([globPattern], { expandDirectories: true });
 
   return await Promise.all(
     files.map(async (file) => {
-      const toFile = cleanTemplateDestPath(file.replace(from, to));
+      // Normalize the file path for Windows to ensure back-slashes are used
+      const filePath = path.normalize(file);
+
+      const toFile = cleanTemplateDestPath(filePath.replace(from, to));
       return copyWithTemplate(file, toFile, variables);
     })
   );
