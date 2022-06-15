@@ -23,3 +23,31 @@ export const StringFilter = inputObjectType({
     t.string('startsWith');
   },
 });
+
+export const NumberFilter = inputObjectType({
+  name: 'NumberFilter',
+  description: 'A way to filter number fields. Meant to pass to prisma where clause',
+  definition(t) {
+    t.int('equals');
+    t.int('gt');
+    t.int('gte');
+    t.list.nonNull.int('in');
+    t.int('lt');
+    t.int('lte');
+    t.list.nonNull.int('notIn');
+  },
+});
+
+export const DateFilter = inputObjectType({
+  name: 'DateFilter',
+  description: 'A way to filter date fields. Meant to pass to prisma where clause',
+  definition(t) {
+    t.date('equals');
+    t.date('gt');
+    t.date('gte');
+    t.list.nonNull.date('in');
+    t.date('lt');
+    t.date('lte');
+    t.list.nonNull.date('notIn');
+  },
+});
