@@ -21,4 +21,4 @@ web:
 - [ ] Looks good on large screens
 - [ ] Looks good on mobile
 
-Closes [chXXXX][view ticket](https://app.clubhouse.io/org/story/XXXX)
+Closes [sc-###][view ticket](https://app.shortcut.com/ORGNAME/story/###)
