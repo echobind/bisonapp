@@ -17,7 +17,7 @@ We're always improving on this, and we welcome suggestions from the community!
 - [Chakra UI](https://chakra-ui.com/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Cypress](https://www.cypress.io/) for E2E tests
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io/) for unit and API request tests
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io) for unit and API request tests
 
 ## Features
 
