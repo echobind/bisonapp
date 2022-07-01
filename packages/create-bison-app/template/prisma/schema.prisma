@@ -2,7 +2,6 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // Latest about migrations: https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b
 
-
 generator prisma_client {
   provider = "prisma-client-js"
 }
@@ -26,7 +25,7 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   password  String
-  roles     Role[]
+  roles     Role[]   @default([USER])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   profile   Profile?
