@@ -1,3 +1,10 @@
+/// <reference types="cypress" />
+// ***********************************************
+// For comprehensive examples of custom
+// commands please read more here:
+// https://on.cypress.io/custom-commands
+// ***********************************************
+
 import '@testing-library/cypress/add-commands';
 
 import { Prisma, User } from '@prisma/client';
@@ -6,28 +13,13 @@ import { LOGIN_TOKEN_KEY } from '@/constants';
 import { LoginTaskObject } from '@/cypress/plugins';
 
 declare global {
-  // eslint-disable-next-line
   namespace Cypress {
     interface Chainable {
       login: typeof login;
+      createUserAndLogin: typeof createUserAndLogin;
     }
   }
 }
-
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 /**
  *  Handles logging a user in via email and password.
@@ -46,13 +38,13 @@ function login(attrs: Pick<User, 'email' | 'password'>) {
  *  Handles creating and logging in a user with a set of attributes
  *  This should be used to login in future e2e tests instead of the login form.
  */
-function createUserAndLogin(args: Prisma.UserCreateInput) {
+function createUserAndLogin(args: Partial<Prisma.UserCreateInput> = {}) {
   const attrs = {
     ...args,
     password: args?.password || 'abcd1234',
   };
 
-  return cy.task('factory', { name: 'User', attrs }).then((user: User) => {
+  return cy.task<User>('factory', { name: 'User', attrs }).then((user) => {
     return login({ email: user.email, password: attrs.password }).then(() => user);
   });
 }

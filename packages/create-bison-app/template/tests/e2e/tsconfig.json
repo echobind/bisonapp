@@ -1,4 +1,7 @@
 {
   "extends": "../../cypress/tsconfig.json",
-  "include": ["../**/*.ts"]
+  "compilerOptions": {
+    "isolatedModules": false
+  },
+  "include": ["../../cypress/**/*.ts", "../../cypress.config.ts", "../**/*.ts"]
 }

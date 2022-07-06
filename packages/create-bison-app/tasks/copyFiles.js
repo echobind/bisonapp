@@ -94,7 +94,7 @@ async function copyFiles({ variables, targetFolder }) {
         ".tool-versions",
         "codegen.yml",
         "constants.ts",
-        "cypress.json",
+        "cypress.config.ts",
         "jest.config.js",
         "next-env.d.ts",
         "prettier.config.js",

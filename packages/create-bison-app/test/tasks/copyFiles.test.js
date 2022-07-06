@@ -80,7 +80,7 @@ describe("copyFiles", () => {
         ".tool-versions",
         "codegen.yml",
         "constants.ts",
-        "cypress.json",
+        "cypress.config.ts",
         "jest.config.js",
         "next-env.d.ts",
         "prettier.config.js",
@@ -158,7 +158,7 @@ describe("copyFiles", () => {
     });
 
     it("copies e2e tests", async () => {
-      const files = [".eslintrc.json", "login.test.js"];
+      const files = [".eslintrc.json", "login.cy.ts", "logout.cy.ts", "tsconfig.json"];
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, "tests", "e2e", file);
