@@ -107,7 +107,7 @@ jobs:
         run: yarn test:ci
 
       - name: Run bison app E2E tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           start: yarn test:server
           wait-on: "http://localhost:3001"
