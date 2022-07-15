@@ -34,44 +34,38 @@ services:
     image: postgres:latest
     volumes:
       - ./.data/postgres:/var/lib/postgresql/data
+    restart: always
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
       POSTGRES_DB: dev
-    restart: always
 ```
-A different schema is created for your testing data. However, if you prefer the separation add the following: 
+A different schema is created for your testing data.
 
-```bash
-  db-test:
-    container_name: postgres-test
-    ports:
-      - 5431:5432
-    image: postgres:latest
-    volumes:
-      - ./.data/postgres-test:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: dev
-    restart: always
-
-```
 Please note the ports to adjust your environment variables. See below for an example. 
 
 Add `.data/` to your `.gitignore`
 
-Edit your environment variables:
-Change the database URL in `env.local` and `env.test` to:
+#### Edit your environment variables:
+Change the database URL in `.env.local`:
 ```
 DATABASE_URL="postgres://dev:dev@postgres:5433/dev?schema=public"
 ```
-Note: Make sure the username, password, and ports are aligned based on the questions answered when creating a bison app.
 
-Run the following command in your terminal
+and
+
+`.env.test`
+```
+DATABASE_URL="postgres://dev:dev@postgres:5433/dev?schema=testing"
+```
+
+**Note**: When creating a bison app, if you answered something else rather than `dev` when prompted, "What is the local test database
+name?" You will have to set the variable `testDabaseName` to `dev` in `test/jest.setup.js` file.
+
+Run the following command in your terminal:
 `docker-compose up -d` 
 
-and to shut it down
+To shut it down:
 `docker-compose down`
 
 ## Optional - Package.json
