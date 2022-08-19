@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.0 (2022-08-19)
+
+
+### Features
+
+* document how to run postgres in docker ([#266](https://github.com/echobind/bisonapp/issues/266)) ([43a8083](https://github.com/echobind/bisonapp/commit/43a8083d6c1178d7bd7abe18503c29a32f948cf2))
+
+
+
 ### 1.12.1-canary.2 (2022-07-15)
 
 **Note:** Version bump only for package root
