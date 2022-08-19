@@ -43,7 +43,7 @@
     "test:e2e:local": "cross-env CYPRESS_LOCAL=true CYPRESS_BASE_URL=http://localhost:3000 cypress open",
     "test:server": "next start --port 3001",
     "ts-node": "ts-node-dev --project tsconfig.cjs.json -r tsconfig-paths/register",
-    "withEnv:test": "dotenv -c test --"
+    "withEnv:test": "dotenv -c test --",
     "watch:all": "concurrently -n \"NEXUS,GQLCODEGEN,TYPESCRIPT\" -c \"black.bgGreen.dim,black.bgBlue.dim,white.bgMagenta.dim\" \"yarn watch:nexus\" \"yarn watch:codegen\" \"yarn watch:ts\"",
     "watch:codegen": "yarn codegen --watch",
     "watch:nexus": "yarn ts-node --transpile-only --respawn --watch graphql/schema.ts,prisma/schema.prisma graphql/schema.ts",
