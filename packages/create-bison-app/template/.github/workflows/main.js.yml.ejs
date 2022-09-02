@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          # This will cache the packages that yarn installs
           cache: yarn
 
       # Yarn install
