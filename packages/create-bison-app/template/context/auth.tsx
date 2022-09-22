@@ -31,7 +31,7 @@ function AuthProvider({ ...props }: Props) {
   const [loadCurrentUser, { called, data, loading, refetch }] = useMeLazyQuery();
   const user = data?.me;
 
-  // Load current user if there's an item in local storage
+  // Load current user if there's a token
   useEffect(() => {
     if (called) return;
 
