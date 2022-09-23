@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.3 (2022-09-23)
+
+
+### Bug Fixes
+
+* Login session lifetime could be shorter than expected. ([#279](https://github.com/echobind/bisonapp/issues/279)) ([62522de](https://github.com/echobind/bisonapp/commit/62522deb4626525f3f44b8ea92ee3476cc69318b))
+
+
+
 ## 1.13.0-canary.2 (2022-09-07)
 
 **Note:** Version bump only for package root
