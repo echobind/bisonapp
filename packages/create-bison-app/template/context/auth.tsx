@@ -6,9 +6,9 @@ import { useMeLazyQuery, User } from '@/types';
 import { FullPageSpinner } from '@/components/FullPageSpinner';
 import { LOGIN_TOKEN_KEY } from '@/constants';
 
-const now = new Date();
-const timeValidInMs = 365 * 24 * 60 * 60 * 1000;
-const COOKIE_EXPIRE_DATE = new Date(now.getTime() + timeValidInMs);
+const oneYearMs = 365 * 24 * 60 * 60 * 1000;
+// how long a login session lasts in milliseconds
+const sessionLifetimeMs = oneYearMs;
 
 const AuthContext = createContext<AuthContextObject>({
   login: () => ({}),
@@ -53,7 +53,10 @@ function AuthProvider({ ...props }: Props) {
    * @param token the token to login with
    */
   function login(token: string) {
-    cookies().set(LOGIN_TOKEN_KEY, token, { path: '/', expires: COOKIE_EXPIRE_DATE });
+    cookies().set(LOGIN_TOKEN_KEY, token, {
+      path: '/',
+      expires: new Date(Date.now() + sessionLifetimeMs),
+    });
 
     const fetchUserData = called ? refetch : loadCurrentUser;
     return fetchUserData();
@@ -63,7 +66,7 @@ function AuthProvider({ ...props }: Props) {
    * Logs out a user by removing their token from cookies.
    */
   async function logout() {
-    cookies().remove(LOGIN_TOKEN_KEY, { path: '/', expires: COOKIE_EXPIRE_DATE });
+    cookies().remove(LOGIN_TOKEN_KEY, { path: '/' });
 
     // TODO: remove from cache rather than call API
     const fetchUserData = called ? refetch : loadCurrentUser;
