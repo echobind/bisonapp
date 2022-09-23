@@ -36,7 +36,7 @@ module.exports = async ({ name, ...answers }) => {
     {
       title: "Git init",
       task: async () => {
-        const gitOptions = { dir: targetFolder, fs };
+        const gitOptions = { dir: targetFolder, fs, defaultBranch: "main" };
         await git.init(gitOptions);
 
         const paths = await globby(
