@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-
 import { render } from '@/tests/utils';
 import { ErrorText } from '@/components/ErrorText';
 

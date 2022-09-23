@@ -3,7 +3,6 @@ to: cells/<%= [h.inflection.camelize(h.dirName(name)), h.camelizedBaseName(name)
 ---
 <% formattedPath = h.camelizedPathName(name) -%>
 <% component = h.camelizedBaseName(name) -%>
-import React from 'react';
 import gql from 'graphql-tag';
 import { Spinner, Text } from '@chakra-ui/react';
 

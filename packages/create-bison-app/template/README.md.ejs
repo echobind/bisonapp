@@ -339,7 +339,6 @@ Now that we have the API finished, we can move to the frontend changes.
 - [ ] Add a simple form with a name input. See the [React Hook Form docs](https://react-hook-form.com) for detailed information.
 
 ```tsx
-import React from 'react';
 import { useForm } from 'react-hook-form';
 
 export function OrganizationForm() {
@@ -449,7 +448,6 @@ You should now have a fully working form that creates a new database entry on su
 - [ ] Add a query to the cell that fetches organization data
 
 ```jsx
-import React from 'react';
 import gql from 'graphql-tag';
 import { Spinner, Text } from '@chakra-ui/react';
 
@@ -511,7 +509,6 @@ export const QUERY = gql`
 - [ ] Only render the `Success` component if `data.organization` is present.
 
 ```tsx
-import React from 'react';
 import gql from 'graphql-tag';
 import { Spinner, Text } from '@chakra-ui/react';
 
@@ -551,7 +548,6 @@ export const OrganizationCell = ({ organizationId }) => {
 - [ ] Add the Cell to the organization page:
 
 ```tsx
-import React from 'react';
 import Head from 'next/head';
 import { Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';

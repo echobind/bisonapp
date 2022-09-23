@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Flex, Button } from '@chakra-ui/react';
 
@@ -8,7 +8,7 @@ import { useAuth } from '@/context/auth';
 import { Footer } from '@/components/Footer';
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function LoggedInLayout({ children }: Props) {
