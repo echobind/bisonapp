@@ -2,8 +2,6 @@
 to: tests/unit/components/<%= h.camelizedBaseName(name) %>.test.tsx
 ---
 <% component = h.camelizedBaseName(name) -%>
-import React from 'react';
-
 import { render } from '@/tests/utils';
 import { <%= component %> } from '@/components/<%= component %>';
 

@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-
 import { render, waitFor, userEvent } from '@/tests/utils';
 import { SignupForm } from '@/components/SignupForm';
 
