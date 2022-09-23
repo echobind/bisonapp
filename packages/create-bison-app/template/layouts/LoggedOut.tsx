@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { ButtonLink } from '@/components/Link';
@@ -6,7 +6,7 @@ import { Logo } from '@/components/Logo';
 import { Footer } from '@/components/Footer';
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function LoggedOutLayout({ children }: Props) {

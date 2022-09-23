@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from 'react';
 import type { LinkProps as NextLinkProps } from 'next/link';
-import React from 'react';
 import NextLink from 'next/link';
 import {
   Button as ChakraButton,

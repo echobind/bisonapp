@@ -1,8 +1,8 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Box } from '@chakra-ui/react';
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /** A form with a centered box. Ex: Login, Signup */

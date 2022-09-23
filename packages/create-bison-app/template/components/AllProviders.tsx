@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { Dict } from '@chakra-ui/utils';
@@ -9,7 +9,7 @@ import defaultTheme from '@/chakra';
 
 interface Props {
   apolloClient?: ApolloClient<NormalizedCacheObject>;
-  children: React.ReactNode;
+  children: ReactNode;
   theme?: Dict<any>;
 }
 
