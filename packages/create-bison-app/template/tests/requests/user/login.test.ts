@@ -1,36 +1,17 @@
-import { GraphQLError } from 'graphql';
-
-import { graphQLRequest, resetDB, disconnect } from '@/tests/helpers';
+import { trpcRequest, resetDB, disconnect } from '@/tests/helpers';
 import { UserFactory } from '@/tests/factories/user';
-import { LoginMutationVariables } from '@/types';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
 describe('login mutation', () => {
-  const query = `
-    mutation LOGIN($email: String!, $password: String!) {
-      login(email: $email, password: $password) {
-        user {
-          email
-        }
-      }
-    }
-  `;
-
   describe('invalid email', () => {
     it('returns an Authentication error', async () => {
       await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables: LoginMutationVariables = { email: 'fake', password: 'fake' };
-      const response = await graphQLRequest({ query, variables });
-      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
-
-      expect(errorMessages).toMatchInlineSnapshot(`
-        Array [
-          "No user found for email: fake",
-        ]
-      `);
+      await expect(
+        trpcRequest().user.login({ email: 'fake', password: 'fake' })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"No user found for email: fake"`);
     });
   });
 
@@ -38,15 +19,9 @@ describe('login mutation', () => {
     it('returns an Authentication error', async () => {
       const user = await UserFactory.create({ email: 'foo@wee.net' });
 
-      const variables: LoginMutationVariables = { email: user.email, password: 'fake' };
-      const response = await graphQLRequest({ query, variables });
-      const errorMessages = response.body.errors.map((e: GraphQLError) => e.message);
-
-      expect(errorMessages).toMatchInlineSnapshot(`
-        Array [
-          "Invalid password",
-        ]
-      `);
+      await expect(
+        trpcRequest().user.login({ email: user.email, password: 'fake' })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"Invalid password"`);
     });
   });
 
@@ -59,20 +34,14 @@ describe('login mutation', () => {
         password,
       });
 
-      const variables: LoginMutationVariables = { email: user.email, password };
-      const response = await graphQLRequest({ query, variables });
+      const {
+        token,
+        user: { email, roles },
+      } = await trpcRequest().user.login({ email: user.email, password });
 
-      expect(response.body).toMatchInlineSnapshot(`
-        Object {
-          "data": Object {
-            "login": Object {
-              "user": Object {
-                "email": null,
-              },
-            },
-          },
-        }
-      `);
+      expect(token).toBeTruthy();
+      expect(typeof token).toEqual('string');
+      expect({ email, roles }).toEqual({ email: 'test@wee.net', roles: ['USER'] });
     });
   });
 });

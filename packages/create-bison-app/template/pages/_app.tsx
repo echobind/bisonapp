@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { AllProviders } from '@/components/AllProviders';
 import { useAuth } from '@/context/auth';
+import { trpc } from '@/lib/trpc';
 
 /**
  * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
@@ -40,4 +41,4 @@ function App({ pageProps, Component }: AppProps) {
   );
 }
 
-export default App;
+export default trpc.withTRPC(App);

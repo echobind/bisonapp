@@ -1,0 +1,7 @@
+---
+inject: true
+to: server/routers/_app.ts
+before: \nimport \{ t \} from '@/server/trpc';
+skip_if: import { <%= h.inflection.camelize(name).toLowerCase() %>Router } from './<%= h.inflection.camelize(name).toLowerCase() %>';
+---
+import { <%= h.inflection.camelize(name).toLowerCase() %>Router } from './<%= h.inflection.camelize(name).toLowerCase() %>';

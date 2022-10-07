@@ -1,6 +1,6 @@
 import { Role, Profile, User } from '@prisma/client';
 
-import { Context } from '@/graphql/context';
+import { Context } from '@/server/context';
 
 /**
  * Returns true if the user has a role of admin

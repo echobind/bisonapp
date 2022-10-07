@@ -6,7 +6,6 @@
     "wix.vscode-import-cost",
     "pflannery.vscode-versionlens",
     "prisma.prisma",
-    "apollographql.vscode-apollo"
   ],
   "unwantedRecommendations": []
 }

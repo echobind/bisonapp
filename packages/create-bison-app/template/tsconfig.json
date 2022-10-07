@@ -19,11 +19,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "plugins": [
-      {
-        "name": "nexus/typescript-language-service"
-      }
-    ],
     "typeRoots": [
       "node_modules/@types",
       "types"
@@ -38,7 +33,6 @@
   "include": [
     ".",
     "next-env.d.ts",
-    "types.ts",
     "types.d.ts",
     "**/*.ts",
     "**/*.tsx"

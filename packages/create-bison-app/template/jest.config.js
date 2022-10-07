@@ -16,10 +16,10 @@ const testPathIgnorePatterns = [
   'tests/e2e',
 ];
 
+/** @type {import('jest').Config} */
 module.exports = {
   preset: 'ts-jest',
   rootDir: 'tests',
-  // testEnvironment: join(__dirname, 'tests', 'nexus-test-environment.js'),
   // setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   globalSetup: '<rootDir>/jest.setup.js',
   globalTeardown: '<rootDir>/jest.teardown.js',
@@ -31,6 +31,7 @@ module.exports = {
       },
     },
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@swc|@trpc))/'],
   moduleNameMapper: {
     ...moduleNameMapper,
     // Handle image imports

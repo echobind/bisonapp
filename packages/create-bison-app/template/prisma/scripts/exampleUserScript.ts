@@ -1,7 +1,6 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
 import { hashPassword } from '@/services/auth';
-import { Role } from '@/types';
 import { seedUsers } from '@/prisma/seeds/users';
 import { prisma } from '@/lib/prisma';
 

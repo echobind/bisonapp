@@ -6,7 +6,7 @@ describe('Login', () => {
       const email = 'nowayshouldIexist@wee.net';
       const password = 'test1234';
 
-      cy.intercept('POST', '/api/graphql').as('loginMutation');
+      cy.intercept('POST', 'http://localhost:3000/api/trpc/user.login**').as('loginMutation');
       cy.visit('/');
       cy.findByText(/login/i).click();
 
@@ -16,7 +16,7 @@ describe('Login', () => {
       cy.findAllByRole('button', { name: /login/i }).click();
       cy.wait('@loginMutation');
 
-      cy.findByText(/is invalid/i).should('exist');
+      cy.findByText(/No user found/i).should('exist');
     });
   });
 
@@ -26,7 +26,7 @@ describe('Login', () => {
 
       // note: async/await breaks cypress 😭
       cy.task<User>('factory', { name: 'User', attrs }).then((user) => {
-        cy.intercept('POST', '/api/graphql').as('loginMutation');
+        cy.intercept('POST', 'http://localhost:3000/api/trpc/user.login**').as('loginMutation');
         cy.visit('/');
         cy.findByText(/login/i).click();
 

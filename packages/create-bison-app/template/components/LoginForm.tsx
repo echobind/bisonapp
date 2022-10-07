@@ -1,23 +1,17 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Flex, Text, FormControl, FormLabel, Input, Stack, Button, Circle } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { gql } from '@apollo/client';
+import { inferProcedureInput } from '@trpc/server';
 
 import { EMAIL_REGEX } from '@/constants';
 import { useAuth } from '@/context/auth';
 import { ErrorText } from '@/components/ErrorText';
 import { Link } from '@/components/Link';
-import { setErrorsFromGraphQLErrors } from '@/utils/setErrors';
-import { LoginMutationVariables, useLoginMutation } from '@/types';
+import { setErrorsFromTRPCError } from '@/utils/setErrors';
+import { AppRouter } from '@/server/routers/_app';
+import { trpc } from '@/lib/trpc';
 
-export const LOGIN_MUTATION = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`;
+type LoginInput = inferProcedureInput<AppRouter['user']['login']>;
 
 /** Form to Login */
 export function LoginForm() {
@@ -26,10 +20,10 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginMutationVariables>();
+  } = useForm<LoginInput>();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [login] = useLoginMutation();
+  const loginMutation = trpc.user.login.useMutation();
+
   const { login: loginUser } = useAuth();
   const router = useRouter();
 
@@ -37,20 +31,18 @@ export function LoginForm() {
    * Submits the login form
    * @param formData the data passed from the form hook
    */
-  async function handleLogin(formData: LoginMutationVariables) {
+  async function handleLogin(formData: LoginInput) {
     try {
-      setIsLoading(true);
-      const { data } = await login({ variables: formData });
+      const loginData = await loginMutation.mutateAsync(formData);
 
-      if (!data?.login?.token) {
+      if (!loginData?.token) {
         throw new Error('Login failed.');
       }
 
-      await loginUser(data.login.token);
+      await loginUser(loginData.token);
       await router.replace('/');
     } catch (e: any) {
-      setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
-      setIsLoading(false);
+      setErrorsFromTRPCError(setError, e);
     }
   }
 
@@ -96,7 +88,7 @@ export function LoginForm() {
         type="submit"
         marginTop={8}
         width="full"
-        isLoading={isLoading}
+        isLoading={loginMutation.isLoading}
         onClick={handleSubmit(handleLogin)}
       >
         Login

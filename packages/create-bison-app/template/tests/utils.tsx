@@ -1,13 +1,19 @@
 import '@testing-library/jest-dom';
 import { render as defaultRender } from '@testing-library/react';
-// import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
+import fetch from 'cross-fetch';
+import { createTRPCReact, loggerLink } from '@trpc/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 import '@testing-library/jest-dom/extend-expect';
 
 import { AllProviders } from '@/components/AllProviders';
-// import { ME_QUERY } from '@/context/auth';
-// import { User } from '@/types';
+import type { AppRouter } from '@/server/routers/_app';
+
+export const trpc = createTRPCReact<AppRouter>();
+
+globalThis.fetch = fetch;
 
 export * from '@testing-library/react';
 export { default as userEvent } from '@testing-library/user-event';
@@ -17,57 +23,28 @@ export { default as userEvent } from '@testing-library/user-event';
  */
 export function render(ui: RenderUI, { router = {}, ...options }: RenderOptions = {}) {
   return defaultRender(ui, {
-    wrapper: ({ children }) => {
+    wrapper: function Wrapper({ children }) {
+      const [queryClient] = useState(() => new QueryClient());
+
+      const [trpcClient] = useState(() =>
+        trpc.createClient({
+          links: [loggerLink()],
+        })
+      );
+
       return (
         <RouterContext.Provider value={{ ...mockRouter, ...router }}>
-          <AllProviders>{children}</AllProviders>
+          <trpc.Provider client={trpcClient} queryClient={queryClient}>
+            <QueryClientProvider client={queryClient}>
+              <AllProviders>{children}</AllProviders>
+            </QueryClientProvider>
+          </trpc.Provider>
         </RouterContext.Provider>
       );
     },
     ...options,
   });
 }
-
-// const createUserMock = (user?: Partial<User>) => {
-//   return {
-//     request: {
-//       query: ME_QUERY,
-//     },
-//     result: {
-//       data: {
-//         me: user || null,
-//       },
-//     },
-//   };
-// };
-
-/**
- * Returns a mock apollo provider, with an optional logged in user for convenience
- * @param currentUser if passed, automatically creates a mock for the user
- * @param apolloMocks Mocks for Apollo
- * @param router Optional router context
- * @param children
- */
-// export const WithMockedTestState = (props: WithMockedTestStateProps) => {
-//   const { currentUser, apolloMocks = [], children, router } = props;
-//   const userMock: MockedResponse = createUserMock(currentUser);
-//   const mocks = [userMock, ...apolloMocks];
-//   const routerProviderValue = { ...mockRouter, ...router } as NextRouter;
-
-//   // addTypename={false} is required if using fragments
-//   return (
-//     <MockedProvider mocks={mocks} addTypename={false}>
-//       <RouterContext.Provider value={routerProviderValue}>{children}</RouterContext.Provider>
-//     </MockedProvider>
-//   );
-// };
-
-// interface WithMockedTestStateProps {
-//   currentUser?: Partial<User>;
-//   apolloMocks?: MockedResponse[];
-//   router?: Partial<NextRouter>;
-//   children?: any;
-// }
 
 const mockRouter: NextRouter = {
   basePath: '',

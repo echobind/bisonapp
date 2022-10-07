@@ -15,8 +15,3 @@ lerna-debug.log
 .env
 
 packages/create-bison-app/dist/
-
-# symlinked files in the template directory for development
-packages/create-bison-app/template/types
-packages/create-bison-app/template/api.graphql
-packages/create-bison-app/template/types.ts
