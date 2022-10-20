@@ -16,7 +16,7 @@ export const Success = (props: inferQueryOutput<'user', 'me'>) => {
 };
 
 export const <%= component %>Cell = () => {
-  const { data, isLoading, isError } = trpc.user.me.useQuery(undefined);
+  const { data, isLoading, isError } = trpc.user.me.useQuery();
 
   if (isLoading) return <Loading />;
   if (isError) return <Error />;
