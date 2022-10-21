@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 /**
  * Instantiate prisma client for Next.js:
@@ -10,10 +10,13 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
+// Set default prisma logs. More logs in debug mode.
+const logOptions: Prisma.LogLevel[] = process.env.DEBUG ? ['query', 'error'] : ['error'];
+
 export const prisma =
   global.prisma ||
   new PrismaClient({
-    log: ['query'],
+    log: logOptions,
   });
 
 if (process.env.NODE_ENV !== 'production') {

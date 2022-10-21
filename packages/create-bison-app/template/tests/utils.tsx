@@ -3,7 +3,7 @@ import { render as defaultRender } from '@testing-library/react';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 import fetch from 'cross-fetch';
-import { createTRPCReact, loggerLink } from '@trpc/react';
+import { createTRPCReact, loggerLink } from '@trpc/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import '@testing-library/jest-dom/extend-expect';

@@ -22,7 +22,7 @@ export function SignupForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignupFormValue>();
+  } = useForm<SignupFormValue>({ mode: 'onChange' });
 
   const [isLoading, setIsLoading] = useState(false);
   const signupMutation = trpc.user.signup.useMutation();
@@ -92,7 +92,10 @@ export function SignupForm() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             type="password"
-            {...register('password', { required: 'password is required', minLength: 8 })}
+            {...register('password', {
+              required: 'password is required',
+              minLength: { value: 8, message: 'password must be at least 8 characters long' },
+            })}
             isInvalid={!!errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>
