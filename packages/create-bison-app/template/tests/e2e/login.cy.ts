@@ -6,7 +6,10 @@ describe('Login', () => {
       const email = 'nowayshouldIexist@wee.net';
       const password = 'test1234';
 
-      cy.intercept('POST', 'http://localhost:3000/api/trpc/user.login**').as('loginMutation');
+      cy.intercept({ method: 'POST', hostname: 'localhost', url: '/api/trpc/user.login**' }).as(
+        'loginMutation'
+      );
+
       cy.visit('/');
       cy.findByText(/login/i).click();
 
@@ -26,7 +29,10 @@ describe('Login', () => {
 
       // note: async/await breaks cypress 😭
       cy.task<User>('factory', { name: 'User', attrs }).then((user) => {
-        cy.intercept('POST', 'http://localhost:3000/api/trpc/user.login**').as('loginMutation');
+        cy.intercept({ method: 'POST', hostname: 'localhost', url: '/api/trpc/user.login**' }).as(
+          'loginMutation'
+        );
+
         cy.visit('/');
         cy.findByText(/login/i).click();
 
