@@ -1,26 +1,39 @@
+import {
+  ChakraProvider,
+  cookieStorageManagerSSR,
+  CSSReset,
+  localStorageManager,
+} from '@chakra-ui/react';
+import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
-import { ChakraProvider, CSSReset } from '@chakra-ui/react';
-import { Dict } from '@chakra-ui/utils';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { AuthProvider } from '@/context/auth';
-import defaultTheme from '@/chakra';
+import defaultTheme from '../styles/theme';
 
-interface Props {
+import { AppProps } from '@/pages/_app';
+
+type Props = {
+  /** pageProps from pages/_app.tsx */
+  pageProps: AppProps['pageProps'];
   children: ReactNode;
-  theme?: Dict<any>;
-}
+};
 
 /**
  * Renders all context providers
  */
-export function AllProviders({ theme = defaultTheme, children }: Props) {
-  return (
-    <ChakraProvider theme={theme}>
-      <AuthProvider>
-        <CSSReset />
+export function AllProviders({ pageProps, children }: Props) {
+  const { cookies, session } = pageProps;
 
+  const colorModeManager =
+    typeof cookies === 'string' ? cookieStorageManagerSSR(cookies) : localStorageManager;
+
+  return (
+    <ChakraProvider theme={defaultTheme} colorModeManager={colorModeManager}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <SessionProvider session={session}>
+        <CSSReset />
         {children}
-      </AuthProvider>
+      </SessionProvider>
     </ChakraProvider>
   );
 }

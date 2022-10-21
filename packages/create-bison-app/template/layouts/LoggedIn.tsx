@@ -4,7 +4,6 @@ import { Box, Flex, Button } from '@chakra-ui/react';
 
 import { Logo } from '@/components/Logo';
 import { Nav } from '@/components/Nav';
-import { useAuth } from '@/context/auth';
 import { Footer } from '@/components/Footer';
 
 interface Props {
@@ -12,12 +11,9 @@ interface Props {
 }
 
 export function LoggedInLayout({ children }: Props) {
-  const { logout } = useAuth();
   const router = useRouter();
 
   async function handleLogout() {
-    logout();
-
     await router.replace('/login');
   }
 
@@ -26,9 +22,7 @@ export function LoggedInLayout({ children }: Props) {
       <>
         <Flex p={4}>
           <Logo />
-
           <Nav />
-
           <Button
             as="a"
             ml={16}
@@ -39,11 +33,9 @@ export function LoggedInLayout({ children }: Props) {
           </Button>
         </Flex>
       </>
-
       <Box flex="1 1 auto" mt={8}>
         {children}
       </Box>
-
       <Footer />
     </Flex>
   );

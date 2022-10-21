@@ -1,44 +1,44 @@
-import { ReactNode } from 'react';
-import type { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
+import React from 'react';
+import type { AppProps as NextAppProps } from 'next/app';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-import { AllProviders } from '@/components/AllProviders';
-import { useAuth } from '@/context/auth';
-import { trpc } from '@/lib/trpc';
+import { AllProviders } from '../components/AllProviders';
 
-/**
- * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
- * included in the bundle if we're rendering the logged out layout.
- */
-const LoggedInLayout = dynamic<{ children: ReactNode }>(() =>
-  import('@/layouts/LoggedIn').then((mod) => mod.LoggedInLayout)
-);
+import { GenericError } from '@/components/errors/GenericError';
+import { LoggedInLayout } from '@/layouts/LoggedIn';
+import { LoggedOutLayout } from '@/layouts/LoggedOut';
+// import '@fontsource/inter/variable.css';
+import { trpc } from '@/utils/trpc';
 
-const LoggedOutLayout = dynamic<{ children: ReactNode }>(() =>
-  import('@/layouts/LoggedOut').then((mod) => mod.LoggedOutLayout)
-);
+type CustomAppProps = {
+  cookies: string;
+  session: Session;
+};
+
+export type AppProps = NextAppProps<CustomAppProps>;
 
 /**
  * Renders a layout depending on the result of the useAuth hook
  */
-function AppWithAuth({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+function AppWithAuth({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
 
-  return user ? (
-    <LoggedInLayout>{children}</LoggedInLayout>
-  ) : (
-    <LoggedOutLayout>{children}</LoggedOutLayout>
-  );
+  if (session) return <LoggedInLayout>{children}</LoggedInLayout>;
+
+  return <LoggedOutLayout>{children}</LoggedOutLayout>;
 }
 
 function App({ pageProps, Component }: AppProps) {
   return (
-    <AllProviders>
-      <AppWithAuth>
-        <Component {...pageProps} />
-      </AppWithAuth>
+    <AllProviders pageProps={pageProps}>
+      <ErrorBoundary FallbackComponent={GenericError}>
+        <AppWithAuth>
+          <Component {...pageProps} />
+        </AppWithAuth>
+      </ErrorBoundary>
     </AllProviders>
   );
 }
-
 export default trpc.withTRPC(App);
