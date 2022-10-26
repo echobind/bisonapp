@@ -1,9 +1,9 @@
 import {
   Button,
-  Divider,
+  Circle,
+  Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   HStack,
   Input,
@@ -15,8 +15,8 @@ import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 
+import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
-import { OAuthButtonGroup } from '@/components/auth/OAuthButtonGroup';
 import { EMAIL_REGEX } from '@/constants';
 
 export function LoginForm() {
@@ -45,6 +45,13 @@ export function LoginForm() {
 
   return (
     <Stack spacing="6" as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
+        <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
+
+        <Text as="h2" color="gray.400" fontSize="lg" textAlign="center" marginTop={2}>
+          Welcome Back!
+        </Text>
+      </Flex>
       <Stack spacing="5">
         <FormControl isInvalid={Boolean(isSubmitted && errors.email)}>
           <FormLabel htmlFor="email">Email</FormLabel>
@@ -70,9 +77,6 @@ export function LoginForm() {
             required: 'Password is required.',
           })}
         >
-          <FormHelperText>
-            Password must be 8 characters long and include a capital letter.
-          </FormHelperText>
           {isSubmitted && errors.password ? (
             <FormErrorMessage>{errors.password.message}</FormErrorMessage>
           ) : null}
@@ -89,15 +93,15 @@ export function LoginForm() {
         <Button variant="outline" type="submit" disabled={loading}>
           Sign in
         </Button>
-        <HStack>
-          <Divider />
-          <Text fontSize="sm" whiteSpace="nowrap" color="muted">
-            or continue with
-          </Text>
-          <Divider />
-        </HStack>
-        <OAuthButtonGroup />
       </Stack>
+      <Flex marginTop={8} justifyContent="center">
+        <Text color="gray.500">
+          New User?{' '}
+          <Link href="/signup" color="gray.900">
+            Sign Up
+          </Link>
+        </Text>
+      </Flex>
     </Stack>
   );
 }

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Flex, Button } from '@chakra-ui/react';
+import { signOut } from 'next-auth/react';
 
 import { Logo } from '@/components/Logo';
 import { Nav } from '@/components/Nav';
@@ -14,6 +15,7 @@ export function LoggedInLayout({ children }: Props) {
   const router = useRouter();
 
   async function handleLogout() {
+    signOut();
     await router.replace('/login');
   }
 
@@ -22,7 +24,9 @@ export function LoggedInLayout({ children }: Props) {
       <>
         <Flex p={4}>
           <Logo />
+
           <Nav />
+
           <Button
             as="a"
             ml={16}
@@ -33,9 +37,11 @@ export function LoggedInLayout({ children }: Props) {
           </Button>
         </Flex>
       </>
+
       <Box flex="1 1 auto" mt={8}>
         {children}
       </Box>
+
       <Footer />
     </Flex>
   );

@@ -1,11 +1,10 @@
 import {
   Button,
-  Divider,
+  Circle,
+  Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
-  HStack,
   Input,
   Stack,
   Text,
@@ -16,8 +15,8 @@ import { useForm } from 'react-hook-form';
 
 import { LoginFormData } from './LoginForm';
 
+import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
-import { OAuthButtonGroup } from '@/components/auth/OAuthButtonGroup';
 import { EMAIL_REGEX, MIN_PASSWORD_LENGTH } from '@/constants';
 
 export function SignUpForm() {
@@ -38,7 +37,7 @@ export function SignUpForm() {
       email,
       password,
       confirmPassword,
-      signUp: true,
+      signUp: 'true',
     };
 
     setLoading(true);
@@ -50,6 +49,13 @@ export function SignUpForm() {
 
   return (
     <Stack spacing="6" as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
+        <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
+
+        <Text as="h2" color="gray.400" fontSize="lg" textAlign="center" marginTop={2}>
+          Create an account.
+        </Text>
+      </Flex>
       <Stack spacing="5">
         <FormControl isInvalid={Boolean(isSubmitted && errors.name)}>
           <FormLabel htmlFor="name">Name</FormLabel>
@@ -91,12 +97,8 @@ export function SignUpForm() {
               value: MIN_PASSWORD_LENGTH,
               message: `Password must be ${MIN_PASSWORD_LENGTH} characters.`,
             },
-            validate: (password) => /[A-Z]/.test(password) || 'Password must have capital letters.',
           })}
         >
-          <FormHelperText>
-            Password must be 8 characters long and include a capital letter.
-          </FormHelperText>
           {isSubmitted && errors.password ? (
             <FormErrorMessage>{errors.password.message}</FormErrorMessage>
           ) : null}
@@ -121,15 +123,16 @@ export function SignUpForm() {
         <Button variant="outline" type="submit" disabled={loading}>
           Sign up
         </Button>
-        <HStack>
-          <Divider />
-          <Text fontSize="sm" whiteSpace="nowrap" color="muted">
-            or continue with
-          </Text>
-          <Divider />
-        </HStack>
-        <OAuthButtonGroup />
       </Stack>
+
+      <Flex marginTop={8} justifyContent="center">
+        <Text color="gray.500">
+          Have an account?{' '}
+          <Link href="/login" color="gray.900">
+            Sign In
+          </Link>
+        </Text>
+      </Flex>
     </Stack>
   );
 }

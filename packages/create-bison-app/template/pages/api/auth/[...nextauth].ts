@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
 import { prisma } from 'lib/prisma';
@@ -15,28 +14,22 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
   },
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: 'Credentials',
+      type: 'credentials',
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
+        name: { label: 'Name', type: 'text' },
         email: { label: 'Email', type: 'text', placeholder: 'user@domain.com' },
         password: { label: 'Password', type: 'password' },
+        confirmPassword: { label: 'Confirm Password', type: 'password' },
+        signUp: { label: 'Sign Up', type: 'button' },
       },
-      async authorize(credentials: {
-        name: string;
-        email: string;
-        password: string;
-        confirmPassword: string;
-        signUp: string;
-      }) {
+      async authorize(credentials) {
         if (!credentials) return null;
 
         const user = await prisma.user.findUnique({
@@ -80,7 +73,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token }) {
       // lookup user to ensure info is up to date
       const dbUser = await prisma.user.findUnique({ where: { id: token.sub } });
 
@@ -88,7 +81,7 @@ export const authOptions: NextAuthOptions = {
         return { ...token, roles: dbUser.roles, name: dbUser.name };
       }
 
-      token.roles = user?.roles ?? [Role.USER];
+      token.roles = [Role.USER];
 
       return token;
     },

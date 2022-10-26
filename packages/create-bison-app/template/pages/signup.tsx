@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 import { CenteredBoxForm } from '@/components/CenteredBoxForm';
-import { SignupForm } from '@/components/SignupForm';
+import { SignUpForm } from '@/components/auth/SignUpForm';
 
 function SignupPage() {
   return (
@@ -11,7 +11,7 @@ function SignupPage() {
       </Head>
 
       <CenteredBoxForm>
-        <SignupForm />
+        <SignUpForm />
       </CenteredBoxForm>
     </>
   );
