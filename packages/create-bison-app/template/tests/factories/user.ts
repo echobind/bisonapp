@@ -24,7 +24,7 @@ export const UserFactory = {
     if (includes) options.include = includes;
 
     return await prisma.user.create({
-      data: { ...user, password: hashPassword(user.password), roles: user.roles },
+      data: { ...user, password: hashPassword(user.password as string), roles: user.roles },
       ...options,
     });
   },

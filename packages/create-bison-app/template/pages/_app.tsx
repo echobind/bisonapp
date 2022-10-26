@@ -41,4 +41,5 @@ function App({ pageProps, Component }: AppProps) {
     </AllProviders>
   );
 }
+
 export default trpc.withTRPC(App);
