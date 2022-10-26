@@ -2,7 +2,7 @@ import { Prisma, Role } from '@prisma/client';
 import { z } from 'zod';
 
 import { BisonError, t } from '@/server/trpc';
-import { appJwtForUser, comparePasswords, hashPassword } from '@/services/auth';
+import { hashPassword } from '@/services/auth';
 import { adminProcedure, protectedProcedure } from '@/server/middleware/auth';
 import { isAdmin } from '@/services/permissions';
 
