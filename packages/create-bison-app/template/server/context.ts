@@ -1,8 +1,7 @@
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
-import { User } from '@prisma/client';
+import { getSession } from 'next-auth/react';
 
-import { verifyAuthHeader } from '@/services/auth';
 import { prisma } from '@/lib/prisma';
 
 /**
@@ -10,19 +9,17 @@ import { prisma } from '@/lib/prisma';
  * @link https://trpc.io/docs/context
  */
 export const createContext = async ({ req }: trpcNext.CreateNextContextOptions) => {
-  const authHeader = verifyAuthHeader(req.headers.authorization);
+  const session = await getSession({ req });
 
-  let user: User | null = null;
+  let user;
 
   // get all user props
-  if (authHeader) {
-    user = await prisma.user.findUnique({ where: { id: authHeader.userId } });
+  if (session?.user) {
+    user = await prisma.user.findUnique({ where: { email: session?.user.email ?? undefined } });
   }
 
   // for API-response caching see https://trpc.io/docs/caching
   return {
-    db: prisma,
-    prisma,
     user,
   };
 };
