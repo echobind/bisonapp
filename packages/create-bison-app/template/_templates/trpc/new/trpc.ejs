@@ -18,7 +18,7 @@ export const default<%= camelized %>Select = Prisma.validator <Prisma.<%= cameli
 });
 
 export const <%= camelized.toLowerCase() %>Router = t.router({
-  <%= plural.toLowerCase() %>: protectedProcedure
+  findMany: protectedProcedure
     .input(
       z.object({
         where: z.object({ name: z.string().optional() }).optional(),
@@ -36,19 +36,19 @@ export const <%= camelized.toLowerCase() %>Router = t.router({
         select: default<%= camelized %>Select,
       });
     }),
-  <%= camelized.toLowerCase() %>: protectedProcedure
+  find: protectedProcedure
     .input(z.object({ where: z.object({ id: z.string() }) }))
     .query(async ({ ctx, input }) => {
       const { where } = input;
       return ctx.prisma.<%= name %>.findUnique({ where, select: default<%= camelized %>Select });
     }),
-  create<%= camelized %>: adminProcedure
+  create: adminProcedure
     .input(z.object({ data: z.object({ name: z.string() }) }))
     .mutation(async ({ ctx, input }) => {
       const { data } = input;
       return await ctx.db.<%= name %>.create({ data, select: default<%= camelized %>Select });
     }),
-  update<%= camelized %>: adminProcedure
+  update: adminProcedure
     .input(
       z.object({
         where: z.object({ id: z.string() }),

@@ -108,66 +108,9 @@ export const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   email: true,
 });
 
-// User Type
-export const User = objectType({
-  name: 'User',
-  description: 'A User',
-  definition(t) {
-    t.nonNull.id('id');
-    t.nonNull.date('createdAt');
-    t.nonNull.date('updatedAt');
-    t.nonNull.string('email');
-
-    t.nonNull.list.nonNull.field('skills', {
-      type: 'Skill',
-      resolve: async (parent, _, context) => {
-        return context.prisma.user
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .skills();
-      },
-    });
-
-    t.field('profile', {
-      type: 'Profile',
-      resolve: (parent, _, context) => {
-        return context.prisma.user
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .profile();
-      },
-    });
-
-    t.list.field('posts', {
-      type: 'Post',
-      resolve: async (parent, _, context) => {
-        return context.prisma.user
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .posts();
-      },
-    });
-  },
-});
-
-// Auth Payload Type
-export const AuthPayload = objectType({
-  name: 'AuthPayload',
-  description: 'Payload returned if login is successful',
-  definition(t) {
-    t.field('user', { type: 'User', description: 'The logged in user' });
-    t.string('token', {
-      description: 'The current JWT token. Use in Authentication header',
-    });
-  },
-});
-
 export const userRouter = t.router({
   me: protectedProcedure.query(async ({ ctx }) => ctx.user),
-  users: protectedProcedure
+  findMany: protectedProcedure
     .input(
       z.object({
         where: z.object({ name: z.string().optional() }).optional(),
@@ -194,7 +137,7 @@ export const userRouter = t.router({
         include: { profile: true },
       });
     }),
-  user: protectedProcedure.input({ where: z.object({ id: z.string().optional(), email: z.string().optional() }) }).query(async ({ ctx, input }) => {
+  find: protectedProcedure.input({ where: z.object({ id: z.string().optional(), email: z.string().optional() }) }).query(async ({ ctx, input }) => {
     const { where } = input;
 
     return await ctx.db.user.findUnique({
@@ -277,7 +220,7 @@ export const userRouter = t.router({
         token,
       };
     }),
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         email: z.string(),
@@ -340,7 +283,7 @@ export const defaultSkillSelect = Prisma.validator<Prisma.SkillSelect>()({
 });
 
 export const skillRouter = t.router({
-  skills: protectedProcedure
+  findMany: protectedProcedure
     .input(
       z.object({
         where: z.object({ name: z.string().optional(), archived: z.boolean().optional() }).optional(),
@@ -358,15 +301,15 @@ export const skillRouter = t.router({
         select: defaultSkillSelect,
       });
     }),
-  skill: protectedProcedure.input(z.object({ where: z.object({ id: z.string().optional(), name: z.string.optional() }) })).query(async ({ ctx, input }) => {
+  find: protectedProcedure.input(z.object({ where: z.object({ id: z.string().optional(), name: z.string.optional() }) })).query(async ({ ctx, input }) => {
     const { where } = input;
     return ctx.prisma.skill.findUnique({ where, select: defaultSkillSelect });
   }),
-  createSkill: adminProcedure.input(z.object({ data: z.object({ name: z.string() }) })).mutation(async ({ ctx, input }) => {
+  create: adminProcedure.input(z.object({ data: z.object({ name: z.string() }) })).mutation(async ({ ctx, input }) => {
     const { data } = input;
     return await ctx.db.skill.create({ data, select: defaultSkillSelect });
   }),
-  updateSkill: adminProcedure
+  update: adminProcedure
     .input(
       z.object({
         where: z.object({ id: z.string() }),
@@ -394,7 +337,7 @@ Unlike GraphQL, by default the client can't specify which fields it wants. While
 ```typescript
 export const userRouter = t.router({
   // ...
-  userWithPosts: protectedProcedure
+  getWithPosts: protectedProcedure
     .input({
       where: z.object({ id: z.string().optional(), email: z.string().optional() }),
     })
@@ -451,7 +394,7 @@ const filterProfileFields = z.object({
 });
 
 export const userRouter = t.router({
-  users: protectedProcedure
+  findMany: protectedProcedure
     .input(
       z.object({
         where: z.object({
@@ -502,7 +445,7 @@ const profileFields = z.object({
 });
 
 export const userRouter = t.router({
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         data: z.object({
@@ -645,7 +588,7 @@ const variables = {
 
 ```typescript
 export const userRouter = t.router({
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         data: z.object({
@@ -695,7 +638,7 @@ const variables = {
 
 ```typescript
 export const userRouter = t.router({
-  users: protectedProcedure
+  findMany: protectedProcedure
     .input(
       z.object({
         where: z
@@ -759,7 +702,7 @@ In the example below, our validator gives us the `connect` and `set` options. We
 
 ```typescript
 export const userRouter = t.router({
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         data: z.object({
@@ -802,7 +745,7 @@ const variables = {
 
 ```typescript
 export const userRouter = t.router({
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         where: z.object({
