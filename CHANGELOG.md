@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.4 (2022-10-31)
+
+
+### Features
+
+* Migrate the backend from GraphQL to tRPC ([#282](https://github.com/echobind/bisonapp/issues/282)) ([60899f8](https://github.com/echobind/bisonapp/commit/60899f889344e547a2d3e680de97b20a0a754410))
+
+
+
 ## 1.13.0-canary.3 (2022-09-23)
 
 
