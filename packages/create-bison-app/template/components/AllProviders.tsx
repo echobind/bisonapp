@@ -1,12 +1,13 @@
+import { SessionProvider } from 'next-auth/react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+import { ReactNode } from 'react';
 import {
   ChakraProvider,
   cookieStorageManagerSSR,
   CSSReset,
   localStorageManager,
 } from '@chakra-ui/react';
-import { SessionProvider } from 'next-auth/react';
-import { ReactNode } from 'react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import defaultTheme from '../styles/theme';
 

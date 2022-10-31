@@ -1,6 +1,7 @@
+import { getSession } from 'next-auth/react';
+
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
-import { getSession } from 'next-auth/react';
 
 import { prisma } from '@/lib/prisma';
 
@@ -20,6 +21,8 @@ export const createContext = async ({ req }: trpcNext.CreateNextContextOptions) 
 
   // for API-response caching see https://trpc.io/docs/caching
   return {
+    db: prisma,
+    prisma,
     user,
   };
 };

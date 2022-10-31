@@ -19,10 +19,10 @@ export const userRouter = t.router({
   me: protectedProcedure.query(async function resolve({ ctx }) {
     return ctx.user;
   }),
-  users: adminProcedure
+  findMany: adminProcedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }).optional())
     .query(({ ctx, input }) => ctx.db.user.findMany({ where: input, select: defaultUserSelect })),
-  user: t.procedure
+  find: t.procedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUniqueOrThrow({ where: input, select: defaultUserSelect });
@@ -33,7 +33,7 @@ export const userRouter = t.router({
 
       return user;
     }),
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         email: z.string(),

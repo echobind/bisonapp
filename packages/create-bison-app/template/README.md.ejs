@@ -86,7 +86,7 @@ We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our
   });
 
   export const organizationRouter = t.router({
-    organizations: protectedProcedure
+    findMany: protectedProcedure
       .input(
         z.object({
           where: z.object({ name: z.string().optional() }).optional(),
@@ -104,7 +104,7 @@ We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our
           select: defaultOrganizationSelect,
         });
       }),
-    organization: protectedProcedure
+    find: protectedProcedure
       .input(z.object({ where: z.object({ id: z.string() }) }))
       .query(async ({ ctx, input }) => {
         const { where } = input;
@@ -113,7 +113,7 @@ We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our
           select: defaultOrganizationSelect,
         });
       }),
-    createOrganization: protectedProcedure
+    create: protectedProcedure
       .input(z.object({ data: z.object({ name: z.string() }) }))
       .mutation(async ({ ctx, input }) => {
         const { data } = input;
@@ -122,7 +122,7 @@ We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our
           select: defaultOrganizationSelect,
         });
       }),
-    updateOrganization: protectedProcedure
+    update: protectedProcedure
       .input(
         z.object({
           where: z.object({ id: z.string() }),
@@ -185,12 +185,12 @@ import { trpcRequest, resetDB, disconnect } from '@/tests/helpers';
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());
 
-describe('createOrganization mutation', () => {
+describe('create mutation', () => {
   it('returns an error if not logged in', async () => {
     const variables = { data: { name: 'Cool Company' } };
 
     await expect(
-      trpcRequest().organization.createOrganization(variables)
+      trpcRequest().organization.create(variables)
     ).rejects.toThrowErrorMatchingInlineSnapshot(`"UNAUTHORIZED"`);
   });
 });
@@ -205,7 +205,7 @@ describe('as a user', () => {
     const user = await UserFactory.create();
     const variables = { data: { name: 'Cool Company' } };
 
-    const { name, users } = await trpcRequest(user).organization.createOrganization(variables);
+    const { name, users } = await trpcRequest(user).organization.create(variables);
 
     expect(name).toEqual('Cool Company');
     expect(users[0].id).toEqual(user.id);
@@ -235,7 +235,7 @@ export function OrganizationForm() {
     formState: { errors },
   } = useForm<OrganizationFormData>();
 
-  const createMutation = trpc.organization.createOrganization.useMutation();
+  const createMutation = trpc.organization.create.useMutation();
 
   async function onSubmit(data: OrganizationFormData) {
     createMutation.mutate(data);
@@ -308,13 +308,13 @@ export const Error = () => <Text>Error. See dev tools.</Text>;
 export const Empty = () => <Text>No data.</Text>;
 
 export const Success = (
-  organization: NonNullable<inferQueryOutput<'organization', 'organization'>>
+  organization: NonNullable<inferQueryOutput<'organization', 'find'>>
 ) => {
   return <Text>Awesome! {organization.name}</Text>;
 };
 
 export const OrganizationCell = ({ organizationId }: { organizationId: string }) => {
-  const { data, isLoading, isError } = trpc.organization.organization.useQuery({
+  const { data, isLoading, isError } = trpc.organization.find.useQuery({
     where: { id: organizationId },
   });
 

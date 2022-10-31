@@ -1,11 +1,11 @@
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
+import { ErrorBoundary } from 'react-error-boundary';
+
 import React from 'react';
 import type { AppProps as NextAppProps } from 'next/app';
-import { ErrorBoundary } from 'react-error-boundary';
-import { useSession } from 'next-auth/react';
-import { Session } from 'next-auth';
 
-import { AllProviders } from '../components/AllProviders';
-
+import { AllProviders } from '@/components/AllProviders';
 import { GenericError } from '@/components/errors/GenericError';
 import { LoggedInLayout } from '@/layouts/LoggedIn';
 import { LoggedOutLayout } from '@/layouts/LoggedOut';
