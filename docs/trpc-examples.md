@@ -492,7 +492,7 @@ const optionalProfileFields = z.object({
 });
 
 export const userRouter = t.router({
-  createUser: adminProcedure
+  create: adminProcedure
     .input(
       z.object({
         where: z.object({
@@ -730,7 +730,7 @@ export const userRouter = t.router({
 
 ### Update (n-n)
 
-Similar to create for our updateUser call we will leverage `set` to overwrite and update the JoinTable with a list of newly expected Skills.
+Similar to create for our `update` call we will leverage `set` to overwrite and update the JoinTable with a list of newly expected Skills.
 
 ```typescript
 const variables = {
