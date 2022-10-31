@@ -1,0 +1,63 @@
+---
+to: server/routers/<%= name %>.ts
+---
+<% camelized = h.inflection.camelize(name) -%>
+<% plural = h.inflection.pluralize(camelized) -%>
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
+
+import { t } from '@/server/trpc';
+import { adminProcedure, protectedProcedure } from '@/server/middleware/auth';
+
+// <%= camelized %> default selection
+export const default<%= camelized %>Select = Prisma.validator <Prisma.<%= camelized %>Select>()({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  name: true,
+});
+
+export const <%= camelized.toLowerCase() %>Router = t.router({
+  findMany: protectedProcedure
+    .input(
+      z.object({
+        where: z.object({ name: z.string().optional() }).optional(),
+        orderBy: z
+          .object({ name: z.enum(['asc', 'desc']) })
+          .array()
+          .optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { where = {}, orderBy = [] } = input;
+      return await ctx.db.<%= name %>.findMany({
+        where,
+        orderBy,
+        select: default<%= camelized %>Select,
+      });
+    }),
+  find: protectedProcedure
+    .input(z.object({ where: z.object({ id: z.string() }) }))
+    .query(async ({ ctx, input }) => {
+      const { where } = input;
+      return ctx.prisma.<%= name %>.findUnique({ where, select: default<%= camelized %>Select });
+    }),
+  create: adminProcedure
+    .input(z.object({ data: z.object({ name: z.string() }) }))
+    .mutation(async ({ ctx, input }) => {
+      const { data } = input;
+      return await ctx.db.<%= name %>.create({ data, select: default<%= camelized %>Select });
+    }),
+  update: adminProcedure
+    .input(
+      z.object({
+        where: z.object({ id: z.string() }),
+        data: z.object({ name: z.string() }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { where, data } = input;
+
+      return await ctx.db.<%= name %>.update({ where, data, select: default<%= camelized %>Select });
+    }),
+});

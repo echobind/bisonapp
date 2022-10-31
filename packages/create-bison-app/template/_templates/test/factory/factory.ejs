@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 // import Chance from 'chance';
 
 import { buildPrismaIncludeFromAttrs } from '@/tests/helpers/buildPrismaIncludeFromAttrs';
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma';
 
 // const chance = new Chance();
 
@@ -26,7 +26,7 @@ export const <%= camelized %>Factory = {
 
     return await prisma.<%= single %>.create({
       data: { ...<%= single %> },
-      ...options
+      ...options,
     });
   },
 };

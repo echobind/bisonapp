@@ -62,11 +62,7 @@ async function copyFiles({ variables, targetFolder }) {
     copyDirectoryWithTemplate(fromPath("pages"), toPath("pages"), variables),
     copyDirectoryWithTemplate(fromPath("prisma"), toPath("prisma"), variables),
 
-    copyDirectoryWithTemplate(
-      fromPath("graphql"),
-      toPath("graphql"),
-      variables
-    ),
+    copyDirectoryWithTemplate(fromPath("server"), toPath("server"), variables),
 
     copyDirectoryWithTemplate(fromPath("tests"), toPath("tests"), variables),
 
@@ -92,7 +88,6 @@ async function copyFiles({ variables, targetFolder }) {
         ".hygen.js",
         ".nvmrc",
         ".tool-versions",
-        "codegen.yml",
         "constants.ts",
         "cypress.config.ts",
         "jest.config.js",

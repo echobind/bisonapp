@@ -78,7 +78,6 @@ describe("copyFiles", () => {
         ".eslintrc.js",
         ".hygen.js",
         ".tool-versions",
-        "codegen.yml",
         "constants.ts",
         "cypress.config.ts",
         "jest.config.js",
@@ -105,7 +104,7 @@ describe("copyFiles", () => {
 
     it("copies pages", async () => {
       const files = [
-        "api/graphql.ts",
+        "api/trpc/[trpc].ts",
         "_app.tsx",
         "index.tsx",
         "login.tsx",
@@ -141,24 +140,30 @@ describe("copyFiles", () => {
       expect(fileString).toContain(name);
     });
 
-    it("copies graphql", async () => {
+    it("copies server", async () => {
       const files = [
-        "schema.ts",
+        "trpc.ts",
         "context.ts",
-        "modules/index.ts",
-        "modules/user.ts",
-        "modules/scalars.ts",
+        "middleware/auth.ts",
+        "middleware/timing.ts",
+        "routers/_app.ts",
+        "routers/user.ts",
       ];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, "graphql", file);
+        const filePath = path.join(targetFolder, "server", file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
     });
 
     it("copies e2e tests", async () => {
-      const files = [".eslintrc.json", "login.cy.ts", "logout.cy.ts", "tsconfig.json"];
+      const files = [
+        ".eslintrc.json",
+        "login.cy.ts",
+        "logout.cy.ts",
+        "tsconfig.json",
+      ];
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, "tests", "e2e", file);
@@ -221,7 +226,7 @@ describe("copyFiles", () => {
       const files = [
         "helpers/buildPrismaIncludeFromAttrs.ts",
         "helpers/db.ts",
-        "helpers/graphQLRequest.ts",
+        "helpers/trpcRequest.ts",
         "helpers/index.ts",
         "jest.setup.js",
         "jest.teardown.js",
@@ -240,8 +245,9 @@ describe("copyFiles", () => {
       const files = [
         "cell/new/new.ejs",
         "component/new/new.ejs",
-        "graphql/new/graphql.ejs",
-        "graphql/new/injectImport.ejs",
+        "trpc/new/trpc.ejs",
+        "trpc/new/injectImport.ejs",
+        "trpc/new/injectExport.ejs",
         "page/new/new.ejs",
         "test/component/component.ejs",
         "test/factory/factory.ejs",

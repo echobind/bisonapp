@@ -1,10 +1,10 @@
-import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { gql } from '@apollo/client';
+import { createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import { User } from '@prisma/client';
 
 import { cookies } from '@/lib/cookies';
-import { useMeLazyQuery, User } from '@/types';
 import { FullPageSpinner } from '@/components/FullPageSpinner';
 import { LOGIN_TOKEN_KEY } from '@/constants';
+import { trpc } from '@/lib/trpc';
 
 const oneYearMs = 365 * 24 * 60 * 60 * 1000;
 // how long a login session lasts in milliseconds
@@ -17,63 +17,50 @@ const AuthContext = createContext<AuthContextObject>({
 
 AuthContext.displayName = 'AuthContext';
 
-export const ME_QUERY = gql`
-  query me {
-    me {
-      id
-      email
-    }
-  }
-`;
-
 function AuthProvider({ ...props }: Props) {
-  const [tokenLoaded, setTokenLoaded] = useState(true);
-  const [loadCurrentUser, { called, data, loading, refetch }] = useMeLazyQuery();
-  const user = data?.me;
+  const [token, setToken] = useState(null);
 
-  // Load current user if there's a token
   useEffect(() => {
-    if (called) return;
+    // We set the token in useEffect to make sure the page properly
+    // hydrates, since the server doesn't have access to the cookie
+    // at this point in the rendering process.
+    setToken(cookies().get(LOGIN_TOKEN_KEY));
+  }, []);
 
-    async function fetchUser() {
-      const token = cookies().get(LOGIN_TOKEN_KEY);
-      setTokenLoaded(true);
-      if (token) await loadCurrentUser();
+  const meQuery = trpc.user.me.useQuery(undefined, { enabled: !!token });
+
+  const user = meQuery.data || null;
+
+  const value = useMemo(() => {
+    /**
+     * Logs in a user by setting an auth token in a cookie. We use cookies so they are available in SSR.
+     * @param token the token to login with
+     */
+    function login(token: string) {
+      cookies().set(LOGIN_TOKEN_KEY, token, {
+        path: '/',
+        expires: new Date(Date.now() + sessionLifetimeMs),
+      });
+
+      return meQuery.refetch();
     }
 
-    fetchUser();
-  }, [loadCurrentUser, called]);
+    /**
+     * Logs out a user by removing their token from cookies.
+     */
+    async function logout() {
+      cookies().remove(LOGIN_TOKEN_KEY, { path: '/' });
+      setToken(null);
+      meQuery.remove();
+    }
 
-  if (!tokenLoaded || (tokenLoaded && loading)) {
+    return { user, login, logout };
+  }, [meQuery, user]);
+
+  if (!!token && meQuery.isInitialLoading) {
     return <FullPageSpinner />;
   }
 
-  /**
-   * Logs in a user by setting an auth token in a cookie. We use cookies so they are available in SSR.
-   * @param token the token to login with
-   */
-  function login(token: string) {
-    cookies().set(LOGIN_TOKEN_KEY, token, {
-      path: '/',
-      expires: new Date(Date.now() + sessionLifetimeMs),
-    });
-
-    const fetchUserData = called ? refetch : loadCurrentUser;
-    return fetchUserData();
-  }
-
-  /**
-   * Logs out a user by removing their token from cookies.
-   */
-  async function logout() {
-    cookies().remove(LOGIN_TOKEN_KEY, { path: '/' });
-
-    // TODO: remove from cache rather than call API
-    const fetchUserData = called ? refetch : loadCurrentUser;
-    return fetchUserData();
-  }
-
-  const value = { user, login, logout };
   return <AuthContext.Provider value={value} {...props} />;
 }
 

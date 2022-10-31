@@ -2,27 +2,28 @@
 
 You're not required to follow this exact workflow, but we've found it gives a good developer experience.
 
-We start from the API and then create the frontend. The reason for this is that Bison will generate types for your GraphQL operations which you will leverage in your components on the frontend.
+We start from the API and then create the frontend. The reason for this is that Bison will infer types for your API procedures which you will leverage in your components on the frontend.
 
 ## API
 
-### Generate a new GraphQL module
+### Generate a new tRPC router
 
-To generate a new GraphQL module we can run the command `yarn g:graphql MODULE_NAME`, replacing MODULE_NAME with the name of your module. In our example, we'll be using the concept of an `Organization`.
+To generate a new tRPC router we can run the command `yarn g:trpc ROUTER_NAME`, replacing ROUTER_NAME with the name of your router. In our example, we'll be using the concept of an `Organization`.
 
 ```shell
-yarn g:graphql organization
+yarn g:trpc organization
 ```
 
 This should output something like:
 
 ```shell
 yarn run v1.22.10
-$ hygen graphql new --name organization
+$ hygen trpc new --name organization
 
 Loaded templates: _templates
-       added: graphql/organization.ts
-      inject: graphql/schema.ts
+       added: server/routers/organization.ts
+      inject: server/routers/_app.ts
+      inject: server/routers/_app.ts
 ✨  Done in 0.34s.
 ```
 
@@ -62,25 +63,21 @@ model User {
 
 Note that we have defined `organizations` as `Organization[]`.
 
-### Run your migrations
-
-This is currently a two step process, 1) generate the migration and 2) execute the migration
-
-**Generate the migration**
-
-```shell
-yarn g:migration
-```
-
-**Execute the migration**
+### Generate and execute the migration
 
 ```shell
 yarn db:migrate
 ```
 
-## Write a type, query, input, or mutation using [Nexus](https://nexusjs.org/guides/schema)
+If you want to create the migration without executing it, run
 
-[See Nexus Examples](./nexus-examples.md)
+```shell
+yarn db:migrate --create-only
+```
+
+## Write a query or mutation using [tRPC](https://trpc.io)
+
+[See tRPC Examples](./trpc-examples.md)
 
 ## Create a new request test
 
@@ -90,58 +87,31 @@ yarn g:test:request
 
 ## Run `yarn test` to start the test watcher
 
-1. Add tests cases and update schema code accordingly. The GraphQL playground (localhost:3000/api/graphql) can be helpful to form the proper queries to use in tests.
-
-1. `types.ts` and `api.graphql` should update automatically as you change files. Sometimes it's helpful to open these as a sanity check before moving on to the frontend code.
+Add tests cases and update tRPC code accordingly.
 
 ## Frontend
 
 1. Generate a new page using `yarn g:page`
 1. Generate a new component using `yarn g:component`
 1. If you need to fetch data in your component, use a cell. Generate one using `yarn g:cell`
-1. To generate a typed GraphQL query, simply add it to the component or page:
-
-```ts
-export const SIGNUP_MUTATION = gql`
-  mutation signup($data: SignupInput!) {
-    signup(data: $data) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
-```
-
-5. Use the newly generated hooks from Codegen instead of the typical `useQuery` or `useMutation` hook. For the example above, that would be `useSignupMutation`. You'll now have a fully typed response to work with!
+1. Use the hooks from tRPC, such as `trpc.user.signup.useMutation()`. You'll now have a fully typed response to work with!
 
 ```tsx
-import { User, useMeQuery } from './types';
+import { trpc, inferQueryOutput } from '@/lib/trpc';
 
-// adding this will auto-generate a custom hook in ./types.
-export const ME_QUERY = gql`
-  query me {
-    me {
-      id
-      email
-    }
-  }
-`;
-
-// an example of taking a user as an argument with optional attributes
-function noIdea(user: Partial<User>) {
+// an example of inferring the output of a query
+function noIdea(user: Partial<inferQueryOutput<"user","me">>) {
   console.log(user.email);
 }
 
 function fakeCell() {
   // use the generated hook
-  const { data, loading, error } = useMeQuery();
+  const { data, isLoading, isError } = trpc.user.me.useQuery();
 
-  if (loading) return <Loading />;
+  if (isLoading) return <Loading />;
 
-  // data.user will be fully typed
-  return <Success user={data.user}>
+  // data will be fully typed
+  return <Success user={data}>
 }
 ```
 

@@ -12,9 +12,6 @@
 .next/
 out/
 
-# nexus
-.nexus
-
 # typescript
 tsconfig.tsbuildinfo
 
@@ -45,8 +42,3 @@ cypress/logs*
 !cypress/videos/.gitkeep
 !cypress/screenshots/.gitkeep
 !cypress/logs/.gitkeep
-
-# generated files
-/api.graphql
-/types.ts
-/types/nexus.d.ts

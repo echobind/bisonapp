@@ -46,6 +46,7 @@ describe('SignupForm', () => {
 
       await waitFor(() => expect(passwordInput).toHaveAttribute('aria-invalid', 'true'));
 
+      userEvent.clear(passwordInput);
       userEvent.type(passwordInput, 'ihave8characters');
 
       await waitFor(() => expect(passwordInput).not.toHaveAttribute('aria-invalid', 'true'));

@@ -1,29 +1,19 @@
 import { useState } from 'react';
 import { Flex, Text, FormControl, FormLabel, Input, Stack, Button, Circle } from '@chakra-ui/react';
-import { gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { inferProcedureInput } from '@trpc/server';
 
 import { useAuth } from '@/context/auth';
-import { setErrorsFromGraphQLErrors } from '@/utils/setErrors';
-import { SignupMutationVariables, useSignupMutation } from '@/types';
+import { setErrorsFromTRPCError } from '@/utils/setErrors';
 import { EMAIL_REGEX } from '@/constants';
 import { Link } from '@/components/Link';
 import { ErrorText } from '@/components/ErrorText';
+import { AppRouter } from '@/server/routers/_app';
+import { trpc } from '@/lib/trpc';
 
-export const SIGNUP_MUTATION = gql`
-  mutation signup($data: SignupInput!) {
-    signup(data: $data) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
-
-type SignupFormValue = Pick<SignupMutationVariables['data'], 'email' | 'password'> &
-  Pick<SignupMutationVariables['data']['profile']['create'], 'firstName' | 'lastName'>;
+type SignupInput = inferProcedureInput<AppRouter['user']['signup']>;
+type SignupFormValue = Omit<SignupInput, 'profile'> & Pick<SignupInput, 'profile'>['profile'];
 
 /** Form to sign up */
 export function SignupForm() {
@@ -32,10 +22,11 @@ export function SignupForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignupFormValue>();
+  } = useForm<SignupFormValue>({ mode: 'onChange' });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [signup] = useSignupMutation();
+  const signupMutation = trpc.user.signup.useMutation();
+
   const { login } = useAuth();
   const router = useRouter();
 
@@ -48,21 +39,23 @@ export function SignupForm() {
       setIsLoading(true);
       const { email, password, ...profile } = formData;
 
-      const variables: SignupMutationVariables = {
-        data: { email, password, profile: { create: profile } },
+      const input: SignupInput = {
+        email,
+        password,
+        profile,
       };
 
-      const { data } = await signup({ variables });
+      const data = await signupMutation.mutateAsync(input);
 
-      if (!data?.signup?.token) {
+      if (!data?.token) {
         throw new Error('Signup failed.');
       }
 
-      await login(data.signup.token);
+      await login(data.token);
 
       router.replace('/');
     } catch (e: any) {
-      setErrorsFromGraphQLErrors(setError, e.graphQLErrors);
+      setErrorsFromTRPCError(setError, e);
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +92,10 @@ export function SignupForm() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             type="password"
-            {...register('password', { required: 'password is required', minLength: 8 })}
+            {...register('password', {
+              required: 'password is required',
+              minLength: { value: 8, message: 'password must be at least 8 characters long' },
+            })}
             isInvalid={!!errors.password}
           />
           <ErrorText>{errors.password && errors.password.message}</ErrorText>

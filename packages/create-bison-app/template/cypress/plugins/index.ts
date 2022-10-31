@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 
 import { cookies } from '@/lib/cookies';
 import { LOGIN_TOKEN_KEY } from '@/constants';
-import { resetDB, disconnect, setupDB, graphQLRequest } from '@/tests/helpers';
+import { resetDB, disconnect, setupDB, trpcRequest } from '@/tests/helpers';
 import * as Factories from '@/tests/factories';
 
 export interface LoginTaskObject {
@@ -43,7 +43,7 @@ export const setupNodeEvents: Cypress.ConfigOptions['setupNodeEvents'] = (on, _c
     disconnectDB: () => {
       return disconnect();
     },
-    factory: ({ name, attrs }: { name: FactoryNames, attrs: any }) => {
+    factory: ({ name, attrs }: { name: FactoryNames; attrs: any }) => {
       const Factory = Factories[`${name}Factory`];
 
       return Factory.create(attrs);
@@ -52,16 +52,8 @@ export const setupNodeEvents: Cypress.ConfigOptions['setupNodeEvents'] = (on, _c
       const { email, password } = attrs;
       const variables = { email, password };
 
-      const query = `
-        mutation login($email: String!, $password: String!) {
-          login(email: $email, password: $password) {
-            token
-          }
-        }
-      `;
-
-      const response = await graphQLRequest({ query, variables });
-      const { token } = response.body.data.login;
+      const response = await trpcRequest().user.login(variables);
+      const { token } = response;
       cookies().set(LOGIN_TOKEN_KEY, token);
       return { token };
     },

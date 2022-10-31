@@ -11,9 +11,8 @@ We're always improving on this, and we welcome suggestions from the community!
 
 - [Next.js](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
-- GraphQL API built with [Nexus](https://nexusjs.org/)
+- [tRPC](https://trpc.io) API for end-to-end type safety
 - [Prisma](https://www.prisma.io/) w/ Postgres
-- [GraphQL Codegen](https://graphql-code-generator.com/) to generate TypeScript types (Schema types and query/mutation hooks)
 - [Chakra UI](https://chakra-ui.com/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Cypress](https://www.cypress.io/) for E2E tests
@@ -29,8 +28,7 @@ We're always improving on this, and we welcome suggestions from the community!
 ## Conventions
 
 - Don't copy/paste files, use generators and Hygen templates. Need to update the generator as your project evolves? they are all in the `_templates` folder.
-- Use a single command to run Next, generate Nexus types, and GraphQL types for the frontend. By doing this you can ensure your types are always up-to-date.
-- Don't manually write types for GraphQL responses... use the generated query hooks from GraphQL Codegen.
+- Don't manually write types for tRPC procedures. Infer the types from the router definition.
 - All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in any Next app.
 
 ## Tradeoffs
@@ -75,11 +73,7 @@ Please refer to: [Set up Postgres](/docs/postgres.md).
 
 ## Run the app locally
 
-From the root, run `yarn dev`. This:
-
-- runs `next dev` to run the frontend and serverless functions locally
-- starts a watcher to generate the Prisma client on schema changes
-- starts a watcher to generate TypeScript types for GraphQL files
+From the root, run `yarn dev`. This runs `next dev` to run the frontend and serverless functions locally.
 
 ## Next Steps
 
@@ -89,7 +83,6 @@ After the app is running locally, you'll want to [set up deployment](/docs/deplo
 
 - [Recommended Dev Workflow](/docs/devWorkflow.md)
 - [Deployment](/docs/deployment.md)
-- [FAQ](/docs/faq.md)
 
 Have an idea to improve Bison? [Let us know!](https://github.com/echobind/bisonapp/issues/new)
 

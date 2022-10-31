@@ -81,7 +81,7 @@ async function init() {
  */
 async function createTemplateSymlinks(appPath) {
   // Files and directories that do not exist in template that need to be linked
-  const relativeAppPaths = ["api.graphql", "node_modules", "types", "types.ts"];
+  const relativeAppPaths = ["node_modules"];
 
   for (const relativePath of relativeAppPaths) {
     await fs.promises.symlink(
@@ -97,20 +97,12 @@ async function createTemplateSymlinks(appPath) {
 async function removeTemplateSymlinks() {
   const templatePath = (relativePath) =>
     path.join(templateFolder, relativePath);
-  const unlinkFile = async (filename) => {
-    const filePath = templatePath(filename);
-    const lstat = fs.lstatSync(filePath, { throwIfNoEntry: false });
-    if (lstat && lstat.isSymbolicLink()) {
-      await fs.promises.unlink(filePath);
-    }
-  };
-
-  await unlinkFile("api.graphql");
-  await unlinkFile("types.ts");
 
   // Directories cannot be "unlinked" so they must be removed
-  await fs.promises.rm(templatePath("node_modules"), { force: true, recursive: true });
-  await fs.promises.rm(templatePath("types"), { force: true, recursive: true });
+  await fs.promises.rm(templatePath("node_modules"), {
+    force: true,
+    recursive: true,
+  });
 }
 
 if (require.main === module) {

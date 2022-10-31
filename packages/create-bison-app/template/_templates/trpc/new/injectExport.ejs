@@ -1,0 +1,7 @@
+---
+inject: true
+to: server/routers/_app.ts
+before: \}\);\n\nexport type AppRouter
+skip_if:   "<%= name %>: <%= name %>Router,"
+---
+  <%= name %>: <%= name %>Router,
