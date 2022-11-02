@@ -3,7 +3,6 @@ import React from 'react';
 import type { AppProps as NextAppProps } from 'next/app';
 
 import { AllProviders } from '@/components/AllProviders';
-// import '@fontsource/inter/variable.css';
 import { trpc } from '@/utils/trpc';
 
 export type CustomAppProps = {
