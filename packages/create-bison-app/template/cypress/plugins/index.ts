@@ -47,7 +47,7 @@ export const setupNodeEvents: Cypress.ConfigOptions['setupNodeEvents'] = (on, _c
       return {
         user,
         isAdmin,
-        expires: new Date(Date.now() + 2 * 86400).toISOString(),
+        expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
         idToken: 'id_token',
         accessToken: 'accessToken',
       };
