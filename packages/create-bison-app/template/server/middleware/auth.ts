@@ -31,5 +31,6 @@ const adminMiddleware = t.middleware(({ ctx, next }) => {
   });
 });
 
+export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(authMiddleware);
 export const adminProcedure = t.procedure.use(adminMiddleware);

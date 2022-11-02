@@ -1,15 +1,9 @@
 import path from 'path';
 
-import { User } from '@prisma/client';
+import { Role } from '@prisma/client';
 
-import { cookies } from '@/lib/cookies';
-import { LOGIN_TOKEN_KEY } from '@/constants';
 import { resetDB, disconnect, setupDB, trpcRequest } from '@/tests/helpers';
 import * as Factories from '@/tests/factories';
-
-export interface LoginTaskObject {
-  token: string;
-}
 
 type FactoryNames = keyof typeof Factories extends `${infer T}Factory` ? T : never;
 
@@ -48,14 +42,15 @@ export const setupNodeEvents: Cypress.ConfigOptions['setupNodeEvents'] = (on, _c
 
       return Factory.create(attrs);
     },
-    login: async (attrs: Pick<User, 'email' | 'password'>): Promise<LoginTaskObject> => {
-      const { email, password } = attrs;
-      const variables = { email, password };
-
-      const response = await trpcRequest().user.login(variables);
-      const { token } = response;
-      cookies().set(LOGIN_TOKEN_KEY, token);
-      return { token };
+    mockValidSession: ({ user }: { user: NextAuthSession['user'] }): NextAuthSession => {
+      const isAdmin = user.roles.includes(Role.ADMIN);
+      return {
+        user,
+        isAdmin,
+        expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        idToken: 'id_token',
+        accessToken: 'accessToken',
+      };
     },
   });
 };

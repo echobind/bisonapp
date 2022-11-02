@@ -183,13 +183,7 @@ describe("copyFiles", () => {
     });
 
     it("copies request tests", async () => {
-      const files = [
-        "createUser.test.ts",
-        "login.test.ts",
-        "me.test.ts",
-        "signup.test.ts",
-        "users.test.ts",
-      ];
+      const files = ["createUser.test.ts", "me.test.ts", "users.test.ts"];
 
       files.forEach((file) => {
         const filePath = path.join(

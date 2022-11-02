@@ -6,7 +6,7 @@ import { Context } from '@/server/context';
  * Returns true if the user has a role of admin
  * @param user The user to check the role for
  */
-export const isAdmin = (user: Partial<User> | null): boolean => {
+export const isAdmin = (user?: Partial<User> | null): boolean => {
   if (!user?.roles) {
     return false;
   }

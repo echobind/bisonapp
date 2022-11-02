@@ -4,6 +4,7 @@
 
 import { render } from '@/tests/utils';
 import { Logo } from '@/components/Logo';
+import '@/tests/matchMedia.mock';
 
 describe('Logo', () => {
   it('loads', async () => {

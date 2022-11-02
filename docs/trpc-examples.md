@@ -94,14 +94,18 @@ model Post {
 </summary>
 
 ```typescript
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import { Prisma } from "@prisma/client";
+import { z } from "zod";
 
-import { t } from '@/server/trpc';
-import { adminProcedure, protectedProcedure } from '@/server/middleware/auth';
+import { t } from "@/server/trpc";
+import { adminProcedure, protectedProcedure } from "@/server/middleware/auth";
 
-import { isAdmin } from '../../services/permissions';
-import { appJwtForUser, comparePasswords, hashPassword } from '../../services/auth';
+import { isAdmin } from "../../services/permissions";
+import {
+  appJwtForUser,
+  comparePasswords,
+  hashPassword,
+} from "../../services/auth";
 
 export const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
@@ -115,7 +119,7 @@ export const userRouter = t.router({
       z.object({
         where: z.object({ name: z.string().optional() }).optional(),
         orderBy: z
-          .object({ name: z.enum(['asc', 'desc']) })
+          .object({ name: z.enum(["asc", "desc"]) })
           .array()
           .optional(),
       })
@@ -137,49 +141,58 @@ export const userRouter = t.router({
         include: { profile: true },
       });
     }),
-  find: protectedProcedure.input({ where: z.object({ id: z.string().optional(), email: z.string().optional() }) }).query(async ({ ctx, input }) => {
-    const { where } = input;
+  find: protectedProcedure
+    .input({
+      where: z.object({
+        id: z.string().optional(),
+        email: z.string().optional(),
+      }),
+    })
+    .query(async ({ ctx, input }) => {
+      const { where } = input;
 
-    return await ctx.db.user.findUnique({
-      where,
-      select: defaultUserSelect,
-      include: { profile: true },
-    });
-  }),
-  login: t.procedure.input(z.object({ email: z.string(), password: z.string() })).mutation(async ({ ctx, input: { email, password } }) => {
-    const result = await ctx.db.user.findUnique({
-      where: { email },
-      select: { ...defaultUserSelect, password: true },
-      include: { profile: true },
-    });
-
-    if (!result) {
-      throw new BisonError({
-        message: `No user found for email: ${email}`,
-        code: 'BAD_REQUEST',
-        invalidArgs: { email: `No user found for email: ${email}` },
+      return await ctx.db.user.findUnique({
+        where,
+        select: defaultUserSelect,
+        include: { profile: true },
       });
-    }
-
-    const { password: userPassword, ...user } = result;
-
-    const valid = comparePasswords(password, userPassword);
-
-    if (!valid) {
-      throw new BisonError({
-        message: 'Invalid password',
-        code: 'BAD_REQUEST',
-        invalidArgs: { password: 'Invalid password' },
+    }),
+  login: t.procedure
+    .input(z.object({ email: z.string(), password: z.string() }))
+    .mutation(async ({ ctx, input: { email, password } }) => {
+      const result = await ctx.db.user.findUnique({
+        where: { email },
+        select: { ...defaultUserSelect, password: true },
+        include: { profile: true },
       });
-    }
 
-    const token = appJwtForUser(user);
+      if (!result) {
+        throw new BisonError({
+          message: `No user found for email: ${email}`,
+          code: "BAD_REQUEST",
+          invalidArgs: { email: `No user found for email: ${email}` },
+        });
+      }
 
-    return {
-      token,
-      user,
-    };
-  }),
+      const { password: userPassword, ...user } = result;
+
+      const valid = comparePasswords(password, userPassword);
+
+      if (!valid) {
+        throw new BisonError({
+          message: "Invalid password",
+          code: "BAD_REQUEST",
+          invalidArgs: { password: "Invalid password" },
+        });
+      }
+
+      const token = appJwtForUser(user);
+
+      return {
+        token,
+        user,
+      };
+    }),
   signup: t.procedure
     .input(
       z.object({
@@ -196,9 +209,9 @@ export const userRouter = t.router({
 
       if (existingUser) {
         throw new BisonError({
-          message: 'Email already exists.',
-          code: 'BAD_REQUEST',
-          invalidArgs: { email: 'Email already exists.' },
+          message: "Email already exists.",
+          code: "BAD_REQUEST",
+          invalidArgs: { email: "Email already exists." },
         });
       }
 
@@ -226,35 +239,42 @@ export const userRouter = t.router({
         email: z.string(),
         password: z.string(),
         roles: z.array(z.nativeEnum(Role)).optional(),
-        profile: z.object({ firstName: z.string(), lastName: z.string() }).optional(),
+        profile: z
+          .object({ firstName: z.string(), lastName: z.string() })
+          .optional(),
       })
     )
-    .mutation(async ({ ctx, input: { email, password, roles = [Role.USER], profile } }) => {
-      const existingUser = await ctx.db.user.findUnique({ where: { email } });
+    .mutation(
+      async ({
+        ctx,
+        input: { email, password, roles = [Role.USER], profile },
+      }) => {
+        const existingUser = await ctx.db.user.findUnique({ where: { email } });
 
-      if (existingUser) {
-        throw new BisonError({
-          message: 'Email already exists.',
-          code: 'BAD_REQUEST',
-          invalidArgs: { email: 'Email already exists.' },
-        });
+        if (existingUser) {
+          throw new BisonError({
+            message: "Email already exists.",
+            code: "BAD_REQUEST",
+            invalidArgs: { email: "Email already exists." },
+          });
+        }
+
+        // force role to user and hash the password
+        const updatedArgs = {
+          data: {
+            email,
+            roles,
+            profile,
+            password: hashPassword(password),
+          },
+          select: defaultUserSelect,
+        };
+
+        const user = await ctx.db.user.create(updatedArgs);
+
+        return user;
       }
-
-      // force role to user and hash the password
-      const updatedArgs = {
-        data: {
-          email,
-          roles,
-          profile,
-          password: hashPassword(password),
-        },
-        select: defaultUserSelect,
-      };
-
-      const user = await ctx.db.user.create(updatedArgs);
-
-      return user;
-    }),
+    ),
 });
 ```
 
@@ -266,11 +286,11 @@ export const userRouter = t.router({
 </summary>
 
 ```typescript
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import { Prisma } from "@prisma/client";
+import { z } from "zod";
 
-import { t } from '@/server/trpc';
-import { adminProcedure, protectedProcedure } from '@/server/middleware/auth';
+import { t } from "@/server/trpc";
+import { adminProcedure, protectedProcedure } from "@/server/middleware/auth";
 
 // Skill default selection
 export const defaultSkillSelect = Prisma.validator<Prisma.SkillSelect>()({
@@ -286,9 +306,14 @@ export const skillRouter = t.router({
   findMany: protectedProcedure
     .input(
       z.object({
-        where: z.object({ name: z.string().optional(), archived: z.boolean().optional() }).optional(),
+        where: z
+          .object({
+            name: z.string().optional(),
+            archived: z.boolean().optional(),
+          })
+          .optional(),
         orderBy: z
-          .object({ name: z.enum(['asc', 'desc']) })
+          .object({ name: z.enum(["asc", "desc"]) })
           .array()
           .optional(),
       })
@@ -301,14 +326,25 @@ export const skillRouter = t.router({
         select: defaultSkillSelect,
       });
     }),
-  find: protectedProcedure.input(z.object({ where: z.object({ id: z.string().optional(), name: z.string.optional() }) })).query(async ({ ctx, input }) => {
-    const { where } = input;
-    return ctx.prisma.skill.findUnique({ where, select: defaultSkillSelect });
-  }),
-  create: adminProcedure.input(z.object({ data: z.object({ name: z.string() }) })).mutation(async ({ ctx, input }) => {
-    const { data } = input;
-    return await ctx.db.skill.create({ data, select: defaultSkillSelect });
-  }),
+  find: protectedProcedure
+    .input(
+      z.object({
+        where: z.object({
+          id: z.string().optional(),
+          name: z.string.optional(),
+        }),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { where } = input;
+      return ctx.prisma.skill.findUnique({ where, select: defaultSkillSelect });
+    }),
+  create: adminProcedure
+    .input(z.object({ data: z.object({ name: z.string() }) }))
+    .mutation(async ({ ctx, input }) => {
+      const { data } = input;
+      return await ctx.db.skill.create({ data, select: defaultSkillSelect });
+    }),
   update: adminProcedure
     .input(
       z.object({
@@ -339,7 +375,10 @@ export const userRouter = t.router({
   // ...
   getWithPosts: protectedProcedure
     .input({
-      where: z.object({ id: z.string().optional(), email: z.string().optional() }),
+      where: z.object({
+        id: z.string().optional(),
+        email: z.string().optional(),
+      }),
     })
     .query(async ({ ctx, input }) => {
       const { where } = input;
@@ -367,7 +406,7 @@ const input = {
   where: {
     profile: {
       firstName: {
-        equals: 'Matt',
+        equals: "Matt",
       },
     },
   },
@@ -427,11 +466,11 @@ For our current `User` model, you'll notice Profile is required for user creatio
 ```typescript
 const input = {
   data: {
-    email: 'bob@gmail.com',
+    email: "bob@gmail.com",
     profile: {
       create: {
-        firstName: 'Bob',
-        lastName: 'Smith',
+        firstName: "Bob",
+        lastName: "Smith",
       },
     },
   },
@@ -477,8 +516,8 @@ const variables = {
   data: {
     profile: {
       update: {
-        firstName: 'Jane',
-        lastName: 'Doe',
+        firstName: "Jane",
+        lastName: "Doe",
       },
     },
   },
@@ -529,7 +568,7 @@ const variables = {
   where: {
     posts: {
       title: {
-        contains: 'Up and Running',
+        contains: "Up and Running",
       },
     },
   },
@@ -552,7 +591,7 @@ export const userRouter = t.router({
           })
           .optional(),
         orderBy: z
-          .object({ name: z.enum(['asc', 'desc']) })
+          .object({ name: z.enum(["asc", "desc"]) })
           .array()
           .optional(),
       })
@@ -578,9 +617,9 @@ This is similar to our one-to-one creation, but adds a `.array` to the post inpu
 ```typescript
 const variables = {
   data: {
-    email: 'bob@gmail.com',
+    email: "bob@gmail.com",
     posts: {
-      create: [{ title: 'tRPC Examples' }, { title: 'Vercel.. A look back' }],
+      create: [{ title: "tRPC Examples" }, { title: "Vercel.. A look back" }],
     },
   },
 };
@@ -660,7 +699,7 @@ export const userRouter = t.router({
           })
           .optional(),
         orderBy: z
-          .object({ name: z.enum(['asc', 'desc']) })
+          .object({ name: z.enum(["asc", "desc"]) })
           .array()
           .optional(),
       })
@@ -737,7 +776,11 @@ const variables = {
   where: { id: user.id },
   data: {
     skills: {
-      connect: [{ id: 'asdfqwerty1234' }, { name: 'React' }, { name: 'Elixir' }],
+      connect: [
+        { id: "asdfqwerty1234" },
+        { name: "React" },
+        { name: "Elixir" },
+      ],
     },
   },
 };

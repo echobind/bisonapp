@@ -83,6 +83,8 @@ async function copyFiles({ variables, targetFolder }) {
         "public",
         "scripts",
         "services",
+        "styles",
+        "types",
         "utils",
         ".eslintrc.js",
         ".hygen.js",

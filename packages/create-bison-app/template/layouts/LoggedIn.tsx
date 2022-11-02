@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Flex, Button } from '@chakra-ui/react';
+import { signOut } from 'next-auth/react';
 
 import { Logo } from '@/components/Logo';
 import { Nav } from '@/components/Nav';
-import { useAuth } from '@/context/auth';
 import { Footer } from '@/components/Footer';
 
 interface Props {
@@ -12,12 +12,10 @@ interface Props {
 }
 
 export function LoggedInLayout({ children }: Props) {
-  const { logout } = useAuth();
   const router = useRouter();
 
   async function handleLogout() {
-    logout();
-
+    signOut();
     await router.replace('/login');
   }
 

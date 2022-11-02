@@ -1,42 +1,21 @@
-import { ReactNode } from 'react';
-import type { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
+import { Session } from 'next-auth';
+import React from 'react';
+import type { AppProps as NextAppProps } from 'next/app';
 
 import { AllProviders } from '@/components/AllProviders';
-import { useAuth } from '@/context/auth';
-import { trpc } from '@/lib/trpc';
+import { trpc } from '@/utils/trpc';
 
-/**
- * Dynamically load layouts. This codesplits and prevents code from the logged in layout from being
- * included in the bundle if we're rendering the logged out layout.
- */
-const LoggedInLayout = dynamic<{ children: ReactNode }>(() =>
-  import('@/layouts/LoggedIn').then((mod) => mod.LoggedInLayout)
-);
+export type CustomAppProps = {
+  cookies: string;
+  session: Session | null | undefined; // Account for anonymous first time users
+};
 
-const LoggedOutLayout = dynamic<{ children: ReactNode }>(() =>
-  import('@/layouts/LoggedOut').then((mod) => mod.LoggedOutLayout)
-);
-
-/**
- * Renders a layout depending on the result of the useAuth hook
- */
-function AppWithAuth({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
-
-  return user ? (
-    <LoggedInLayout>{children}</LoggedInLayout>
-  ) : (
-    <LoggedOutLayout>{children}</LoggedOutLayout>
-  );
-}
+export type AppProps = NextAppProps<CustomAppProps>;
 
 function App({ pageProps, Component }: AppProps) {
   return (
-    <AllProviders>
-      <AppWithAuth>
-        <Component {...pageProps} />
-      </AppWithAuth>
+    <AllProviders pageProps={pageProps}>
+      <Component {...pageProps} />
     </AllProviders>
   );
 }
