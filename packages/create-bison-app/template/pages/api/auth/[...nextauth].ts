@@ -1,9 +1,10 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import { prisma } from 'lib/prisma';
+import { comparePasswords, hashPassword } from 'services/auth';
+
+import NextAuth, { NextAuthOptions, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
-import { prisma } from 'lib/prisma';
-import { comparePasswords, hashPassword } from 'services/auth';
 
 export const authOptions: NextAuthOptions = {
   adapter: CustomPrismaAdapter(prisma),
@@ -23,17 +24,19 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        name: { label: 'Name', type: 'text' },
+        firstName: { label: 'Name', type: 'text' },
+        lastName: { label: 'Name', type: 'text' },
         email: { label: 'Email', type: 'text', placeholder: 'user@domain.com' },
         password: { label: 'Password', type: 'password' },
         confirmPassword: { label: 'Confirm Password', type: 'password' },
         signUp: { label: 'Sign Up', type: 'button' },
       },
       async authorize(credentials) {
-        if (!credentials) return null;
+        if (!credentials || !credentials.email) return null;
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email.toLocaleLowerCase() },
+          include: { profile: true },
         });
 
         if (credentials.signUp === 'true') {
@@ -48,11 +51,17 @@ export const authOptions: NextAuthOptions = {
 
           const newUser = await prisma.user.create({
             data: {
-              name: credentials.name,
+              profile: {
+                create: {
+                  firstName: credentials.firstName || '',
+                  lastName: credentials.lastName || '',
+                },
+              },
               email: credentials.email,
               password: hashedPassword,
               roles: [Role.USER],
             },
+            include: { profile: true },
           });
 
           return newUser;
@@ -75,19 +84,40 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token }) {
       // lookup user to ensure info is up to date
-      const dbUser = await prisma.user.findUnique({ where: { id: token.sub } });
+      const dbUser = await prisma.user.findUnique({
+        where: { id: token.sub },
+        include: { profile: true },
+      });
 
-      if (dbUser) {
-        return { ...token, roles: dbUser.roles, name: dbUser.name };
+      if (!dbUser) {
+        throw new Error('User Not Found!');
       }
 
-      token.roles = [Role.USER];
+      token.user = dbUser;
 
       return token;
     },
     async session({ session, token }) {
       // fill in session user from the token above
-      session.user.roles = token.roles as Role[];
+
+      // Drop fields we don't want client side...
+      const sessionUser: Session['user'] = {
+        ...token.user,
+        createdAt: undefined,
+        updatedAt: undefined,
+        password: undefined,
+        profile: {
+          ...token.user.profile,
+          createdAt: undefined,
+          updatedAt: undefined,
+        },
+      };
+
+      session.user = sessionUser;
+      const roles = token?.user?.roles || [];
+      session.isAdmin = roles.includes(Role.ADMIN);
+      session.idToken = token.idToken;
+      session.accessToken = token.accessToken;
 
       return session;
     },

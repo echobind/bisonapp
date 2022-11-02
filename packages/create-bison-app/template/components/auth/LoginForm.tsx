@@ -9,11 +9,13 @@ import {
   Input,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
@@ -27,6 +29,9 @@ export function LoginForm() {
   } = useForm<LoginFormData>({ mode: 'onChange' });
 
   const [loading, setLoading] = useState(false);
+  const [signInError, setSignInError] = useState<string | null>(null);
+  const router = useRouter();
+  const toast = useToast();
 
   async function onSubmit({ email, password }: LoginFormData) {
     if (!isValid || loading) return;
@@ -38,9 +43,24 @@ export function LoginForm() {
 
     setLoading(true);
 
-    await signIn('credentials', payload);
+    // https://next-auth.js.org/getting-started/client#using-the-redirect-false-option
+    const response = await signIn('credentials', { redirect: false, ...payload });
 
     setLoading(false);
+
+    if (response) {
+      if (response?.error) {
+        return setSignInError(response.error);
+      }
+
+      if (response.ok === true) {
+        toast({ status: 'success', title: 'Welcome!' });
+
+        return router.push('/');
+      }
+    }
+
+    return;
   }
 
   return (
@@ -93,6 +113,7 @@ export function LoginForm() {
         <Button variant="outline" type="submit" disabled={loading}>
           Sign in
         </Button>
+        {signInError && <Text color="red.700">No User Found</Text>}
       </Stack>
       <Flex marginTop={8} justifyContent="center">
         <Text color="gray.500">

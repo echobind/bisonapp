@@ -8,16 +8,24 @@ import {
   Input,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 import { LoginFormData } from './LoginForm';
 
 import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
 import { EMAIL_REGEX, MIN_PASSWORD_LENGTH } from '@/constants';
+
+export interface SignUpFormData extends LoginFormData {
+  firstName: string;
+  lastName: string;
+  confirmPassword: string;
+}
 
 export function SignUpForm() {
   const {
@@ -27,13 +35,22 @@ export function SignUpForm() {
     formState: { errors, isValid, isSubmitted },
   } = useForm<SignUpFormData>({ mode: 'onChange' });
 
+  const toast = useToast();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  async function onSubmit({ name, email, password, confirmPassword }: SignUpFormData) {
+  async function onSubmit({
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+  }: SignUpFormData) {
     if (!isValid || loading) return;
 
     const payload = {
-      name,
+      firstName,
+      lastName,
       email,
       password,
       confirmPassword,
@@ -41,10 +58,30 @@ export function SignUpForm() {
     };
 
     setLoading(true);
-
-    await signIn('credentials', payload);
-
+    // https://next-auth.js.org/getting-started/client#using-the-redirect-false-option
+    const response = await signIn('credentials', { redirect: false, ...payload });
     setLoading(false);
+
+    if (response) {
+      const {
+        error,
+        ok,
+        // status,
+        url: redirectUrl, // null if error
+      } = response;
+
+      if (error) {
+        return toast({ status: 'error', isClosable: true, title: `Error`, description: error });
+      }
+
+      if (ok && redirectUrl) {
+        toast({ status: 'success', isClosable: true, title: `Welcome, ${firstName}!` });
+
+        return router.push('/');
+      }
+
+      return;
+    }
   }
 
   return (
@@ -57,17 +94,30 @@ export function SignUpForm() {
         </Text>
       </Flex>
       <Stack spacing="5">
-        <FormControl isInvalid={Boolean(isSubmitted && errors.name)}>
-          <FormLabel htmlFor="name">Name</FormLabel>
+        <FormControl isInvalid={Boolean(isSubmitted && errors.firstName)}>
+          <FormLabel htmlFor="firstName">First Name</FormLabel>
           <Input
-            id="name"
+            id="firstName"
             type="text"
-            {...register('name', {
-              required: 'Name is required.',
+            {...register('firstName', {
+              required: 'First Name is required.',
             })}
           />
-          {isSubmitted && errors.name ? (
-            <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+          {isSubmitted && errors.firstName ? (
+            <FormErrorMessage>{errors.firstName.message}</FormErrorMessage>
+          ) : null}
+        </FormControl>
+        <FormControl isInvalid={Boolean(isSubmitted && errors.lastName)}>
+          <FormLabel htmlFor="lastName">Last Name</FormLabel>
+          <Input
+            id="lastName"
+            type="text"
+            {...register('lastName', {
+              required: 'Last Name is required.',
+            })}
+          />
+          {isSubmitted && errors.lastName ? (
+            <FormErrorMessage>{errors.lastName.message}</FormErrorMessage>
           ) : null}
         </FormControl>
         <FormControl isInvalid={Boolean(isSubmitted && errors.email)}>
@@ -88,6 +138,7 @@ export function SignUpForm() {
           ) : null}
         </FormControl>
         <PasswordField
+          id="password"
           label="Password"
           isInvalid={Boolean(isSubmitted && errors.password)}
           autoComplete="new-password"
@@ -104,6 +155,7 @@ export function SignUpForm() {
           ) : null}
         </PasswordField>
         <PasswordField
+          id="confirmPassword"
           label="Confirm Password"
           isInvalid={Boolean(isSubmitted && errors.confirmPassword)}
           autoComplete="new-password"
@@ -135,9 +187,4 @@ export function SignUpForm() {
       </Flex>
     </Stack>
   );
-}
-
-export interface SignUpFormData extends LoginFormData {
-  name: string;
-  confirmPassword: string;
 }

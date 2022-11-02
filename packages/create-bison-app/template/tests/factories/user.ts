@@ -13,6 +13,12 @@ export const UserFactory = {
       email: chance.email(),
       password: 'test1234',
       roles: { set: [Role.USER] },
+      profile: {
+        create: {
+          firstName: chance.first(),
+          lastName: chance.last(),
+        },
+      },
       ...attrs,
     };
   },
@@ -22,6 +28,8 @@ export const UserFactory = {
     const options: Partial<Prisma.UserCreateArgs> = {};
     const includes = buildPrismaIncludeFromAttrs(attrs);
     if (includes) options.include = includes;
+    // Always return profile to match Next Session Type
+    options.include = { ...options.include, profile: true };
 
     return await prisma.user.create({
       data: { ...user, password: hashPassword(user.password as string), roles: user.roles },

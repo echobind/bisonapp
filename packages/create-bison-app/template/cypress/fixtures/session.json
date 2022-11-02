@@ -1,0 +1,9 @@
+{
+  "user": {
+    "name": "Peter Parker",
+    "email": "peter@spidy.web",
+    "image": "/path/to/your/mock/user.jpg"
+  },
+  "accessToken": "accessToken",
+  "id_token": "id_token"
+}
