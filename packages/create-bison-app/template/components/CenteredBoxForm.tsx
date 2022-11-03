@@ -14,7 +14,7 @@ export function CenteredBoxForm({ children }: Props) {
       width={{ base: 'auto', lg: 400 }}
       boxShadow={{ base: 'none', sm: useColorModeValue('md', 'md-dark') }}
       padding={8}
-      bg={useColorModeValue('white', 'gray.800')}
+      bg="bg-surface"
       marginY={{ base: 4, lg: 16 }}
       marginX={{ base: 8, lg: 'auto' }}
     >
