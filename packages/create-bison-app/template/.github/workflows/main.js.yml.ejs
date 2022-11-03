@@ -76,7 +76,6 @@ jobs:
         env:
           NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_SECRET: foo
           DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
 
       - name: Upload Cypress Screenshots

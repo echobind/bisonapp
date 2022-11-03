@@ -6,7 +6,7 @@
     }
   },
   "env": {
-    "APP_SECRET": {
+    "NEXTAUTH_SECRET": {
       "description": "Server secret for generating JWT tokens",
       "generator": "secret"
     }

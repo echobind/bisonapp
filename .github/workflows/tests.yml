@@ -112,7 +112,6 @@ jobs:
           start: yarn test:server
           wait-on: "http://localhost:3001"
         env:
-          APP_SECRET: foo
           DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
