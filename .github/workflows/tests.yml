@@ -86,7 +86,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install bison app packages
-        run: yarn install
+        run: yarn install --immutable
 
       - name: Build production bison app
         run: yarn build
