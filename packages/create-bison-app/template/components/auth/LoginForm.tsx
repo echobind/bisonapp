@@ -68,7 +68,7 @@ export function LoginForm() {
       <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
         <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
 
-        <Text as="h2" color="gray.400" fontSize="lg" textAlign="center" marginTop={2}>
+        <Text as="h2" fontSize="lg" textAlign="center" marginTop={2}>
           Welcome Back!
         </Text>
       </Flex>
@@ -118,7 +118,7 @@ export function LoginForm() {
       <Flex marginTop={8} justifyContent="center">
         <Text color="gray.500">
           New User?{' '}
-          <Link href="/signup" color="gray.900">
+          <Link href="/signup" color="muted">
             Sign Up
           </Link>
         </Text>
