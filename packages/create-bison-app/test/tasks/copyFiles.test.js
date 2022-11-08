@@ -64,7 +64,7 @@ describe("copyFiles", () => {
     });
 
     it("copies and renames .github", async () => {
-      const files = ["workflows/main.js.yml", "PULL_REQUEST_TEMPLATE.md"];
+      const files = ["workflows/main.yml", "PULL_REQUEST_TEMPLATE.md"];
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, ".github", file);

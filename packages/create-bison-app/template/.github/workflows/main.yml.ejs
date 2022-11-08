@@ -41,7 +41,7 @@ jobs:
       # Yarn install
       - name: Install packages
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable
 
       # Setup & configure database
       - name: Setup test database
