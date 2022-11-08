@@ -17,7 +17,7 @@ jobs:
       NODE_ENV: test
     services:
       postgres:
-        image: postgres:11.5
+        image: postgres:15
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           # This will cache the packages that yarn installs
           cache: yarn
 
