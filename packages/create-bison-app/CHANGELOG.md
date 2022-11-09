@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.6 (2022-11-09)
+
+
+### Features
+
+* Markdown standard for client docs ([#288](https://github.com/echobind/bisonapp/issues/288)) ([959f104](https://github.com/echobind/bisonapp/commit/959f104be98dfcc6c175925f750eb8aa40e739dc))
+
+
+
 ## 1.13.0-canary.5 (2022-11-02)
 
 **Note:** Version bump only for package create-bison-app
