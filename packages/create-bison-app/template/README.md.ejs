@@ -1,25 +1,37 @@
+# <%= name %>
+
 <p align="center" style="text-align:center">
-  <h1><%= name %></h1>
+  <p><%= name %></p>
   <p><img alt="CI STATUS" src="https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/main.yml/badge.svg"/></p>
 </p>
 
-# Getting Started Tutorial
+## Getting Started Tutorial
+
 This checklist and mini-tutorial will make sure you make the most of your shiny new Bison app.
 
 ## Migrate your database and start the dev server
-- [ ] Run `yarn setup:dev` to prep and migrate your local database, as well as generate the prisma client. If this fails, make sure you have Postgres running and the generated `DATABASE_URL` values are correct in your `.env` files.
+
+- [ ] Run `yarn setup:dev` to prep and migrate your local database, as well as
+  generate the prisma client. If this fails, make sure you have Postgres running and
+  the generated `DATABASE_URL` values are correct in your `.env` files.
 - [ ] Run `yarn dev` to start your development server
 
 ## Complete a Bison workflow
-While not a requirement, Bison works best when you start development with the database and API layer. We will illustrate how to use this by adding the concept of an organization to our app. The workflow below assumes you already have `yarn dev` running.
+
+While not a requirement, Bison works best when you start development with the database and API layer.
+We will illustrate how to use this by adding the concept of an organization to our app.
+The workflow below assumes you already have `yarn dev` running.
 
 ### The Database
-Bison uses Prisma for database operations. We've added a few conveniences around the default Prisma setup, but if you're familiar with Prisma, you're familiar with databases in Bison.
+
+Bison uses Prisma for database operations. We've added a few conveniences around the default Prisma
+setup, but if you're familiar with Prisma, you're familiar with databases in Bison.
 
 - [ ] Define an Organization table in `prisma/schema.prisma`.
 
 We suggest copying the `id`, `createdAt` and `updatedAt` fields from the `User` model.
-```
+
+```prisma
 model Organization {
   id        String   @id @default(cuid())
   name      String
@@ -29,9 +41,10 @@ model Organization {
 }
 ```
 
-If you use VSCode and have the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) installed, saving the file should automatically add the inverse relationship to the `User` model!
+If you use VSCode and have the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)
+installed, saving the file should automatically add the inverse relationship to the `User` model!
 
-```
+```prisma
 model User {
   id             String        @id @default(cuid())
   email          String        @unique
@@ -48,21 +61,31 @@ model User {
 - [ ] Generate a migration with `yarn g:migration`.
 
 You should see a new folder in `prisma/migrations`.
+
 - [ ] Migrate the database with `yarn db:migrate`
 
 For more on Prisma, [view the docs](https://www.prisma.io/docs/).
 
 ### The tRPC API
-With the database changes complete, we need to decide what types, queries, and mutations to expose in our tRPC API.
 
-Bison uses [tRPC](https://trpc.io) to create an end-to-end typed API which you can easily use throughout your app. The [HTTP specification](https://trpc.io/docs/v10/rpc) is simple enough that you can easily query the API from third-party apps as well, though any apps outside of your app's monorepo lose the benefit of end-to-end type safety.
+With the database changes complete, we need to decide what types, queries,
+and mutations to expose in our tRPC API.
+
+Bison uses [tRPC](https://trpc.io) to create an end-to-end typed API which you can easily use
+throughout your app. The [HTTP specification](https://trpc.io/docs/v10/rpc) is simple enough that
+you can easily query the API from third-party apps as well, though any apps outside of your app's
+monorepo lose the benefit of end-to-end type safety.
 
 tRPC organizes its API using routers and procedures. Here's how to create a new router.
 
 - [ ] Create a new Router module using `yarn g:trpc organization`
-- [ ] Edit the new module to reflect what you want to expose via the API. Be as granular as you want with the query and mutation procedures.
+- [ ] Edit the new module to reflect what you want to expose via the API. Be as granular as you want
+  with the query and mutation procedures.
 
-We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our inputs and the `t` utility provided by tRPC to create our routers. We use the `protectedProcedure` for procedures that require users to be logged in and `adminProcedure` for procedures that require the `ADMIN` role. Unprotected procedures can be added with `t.procedure`.
+We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our inputs and
+the `t` utility provided by tRPC to create our routers. We use the `protectedProcedure` for
+procedures that require users to be logged in and `adminProcedure` for procedures that require
+the `ADMIN` role. Unprotected procedures can be added with `t.procedure`.
 
 <details>
   <summary>File: ./server/routers/organization.ts</summary>
@@ -149,17 +172,22 @@ We'll use [zod](https://github.com/colinhacks/zod) to ensure type safety for our
 
 
   ```
+
 </details>
 
 > **Where are my types?**
 >
-> tRPC doesn't require type code generation - all of the types are inferred using the router and procedure definitions. This means you don't have to run a separate process to watch for changes to your schema to generate types.
-
+> tRPC doesn't require type code generation - all of the types are inferred using the router and
+> procedure definitions. This means you don't have to run a separate process to watch for changes
+> to your schema to generate types.
 
 ### API Request Tests
+
 Let's confirm the API changes using a request test. To do this:
+
 - [ ] Generate a new factory: `yarn g:test:factory organization`
-- [ ] Add a default value for organization name in the `build` function. You can use any of the methods from the [`chance` library](https://chancejs.com).
+- [ ] Add a default value for organization name in the `build` function. You can use any of the
+    methods from the [`chance` library](https://chancejs.com).
 
 ```ts
 export const OrganizationFactory = {
@@ -173,9 +201,11 @@ export const OrganizationFactory = {
 ```
 
 - [ ] Generate a new API request test: `yarn g:test:request createOrganization`
-- [ ] Update the API request test to call the new mutation and ensure that we get an error if not logged in. TypeScript can help you make sure you get the right inputs for the procedures.
+- [ ] Update the API request test to call the new mutation and ensure that we get an error if not
+  logged in. TypeScript can help you make sure you get the right inputs for the procedures.
 
-Here we use inline snapshots to confirm the error message content, but you can also manually assert the content.
+Here we use inline snapshots to confirm the error message content,
+but you can also manually assert the content.
 
 ```ts
 import { UserFactory } from '../factories';
@@ -214,11 +244,13 @@ describe('as a user', () => {
 ```
 
 ### Add a Frontend page and form that creates an organization
+
 Now that we have the API finished, we can move to the frontend changes.
 
 - [ ] Create a new page to create organizations: `yarn g:page organizations/new`
 - [ ] Create an `OrganizationForm` component: `yarn g:component OrganizationForm`
-- [ ] Add a simple form with a name input. See the [React Hook Form docs](https://react-hook-form.com) for detailed information.
+- [ ] Add a simple form with a name input. See the [React Hook Form docs](https://react-hook-form.com)
+  for detailed information.
 - [ ] Use tRPC to call the create organization mutation.
 
 ```tsx
@@ -292,7 +324,8 @@ You should now have a fully working form that creates a new database entry on su
 
 ### Adding a new page that shows the organization
 
-- [ ] Generate a new page: `yarn g:page "organizations/[:id]"`. This uses the dynamic page capability of Next.js.
+- [ ] Generate a new page: `yarn g:page "organizations/[:id]"`. This uses the dynamic page capability
+  of Next.js.
 - [ ] Add a new "cell" to fetch data. While not required, it keeps things clean. `yarn g:cell Organization`
 - [ ] Add a prop to the cell for `organizationId` and pass the value to a tRPC `useQuery` call.
 - [ ] Update the `Success` component to take the proper return type of the query, but make it NonNullable.
@@ -355,9 +388,10 @@ function OrganizationPage() {
 export default OrganizationPage;
 ```
 
-## Congrats!
+## Congrats
 
-Outside of e2e tests, you've used just about every feature in Bison. But don't worry. We've got your back there too.
+Outside of e2e tests, you've used just about every feature in Bison. But don't worry.
+We've got your back there too.
 
 Bonus:
 
