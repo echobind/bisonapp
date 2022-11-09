@@ -89,7 +89,7 @@ export function SignUpForm() {
       <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
         <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
 
-        <Text as="h2" color="gray.400" fontSize="lg" textAlign="center" marginTop={2}>
+        <Text as="h2" fontSize="lg" textAlign="center" marginTop={2}>
           Create an account.
         </Text>
       </Flex>
@@ -180,7 +180,7 @@ export function SignUpForm() {
       <Flex marginTop={8} justifyContent="center">
         <Text color="gray.500">
           Have an account?{' '}
-          <Link href="/login" color="gray.900">
+          <Link href="/login" color="muted">
             Sign In
           </Link>
         </Text>
