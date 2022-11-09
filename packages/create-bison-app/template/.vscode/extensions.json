@@ -6,6 +6,8 @@
     "wix.vscode-import-cost",
     "pflannery.vscode-versionlens",
     "prisma.prisma",
+    "DavidAnson.vscode-markdownlint",
+    "yzhang.markdown-all-in-one"
   ],
   "unwantedRecommendations": []
 }
