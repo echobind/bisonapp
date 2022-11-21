@@ -54,18 +54,16 @@ export const userRouter = t.router({
       }
 
       // force role to user and hash the password
-      const updatedArgs = {
+      const user = await ctx.db.user.create({
         data: {
           email,
           roles,
-          profile,
+          profile: { create: profile },
           password: hashPassword(password),
         },
         select: defaultUserSelect,
-      };
-
-      const user = await ctx.db.user.create(updatedArgs);
-
+      });
+      
       return user;
     }),
 });
