@@ -58,7 +58,7 @@ export const userRouter = t.router({
         data: {
           email,
           roles,
-          profile,
+          create: profile,
           password: hashPassword(password),
         },
         select: defaultUserSelect,
