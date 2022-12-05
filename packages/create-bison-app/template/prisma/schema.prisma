@@ -6,6 +6,13 @@ generator prisma_client {
   provider = "prisma-client-js"
 }
 
+generator factories {
+  provider = "prisma-factory"
+  // The factories need to be outputted to a custom location due to bug:
+  // https://github.com/echobind/prisma-factory/issues/17
+  output   = "./generated/factories"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

@@ -42,3 +42,5 @@ cypress/logs*
 !cypress/videos/.gitkeep
 !cypress/screenshots/.gitkeep
 !cypress/logs/.gitkeep
+
+prisma/factories
