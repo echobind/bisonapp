@@ -7,7 +7,8 @@
     "pflannery.vscode-versionlens",
     "prisma.prisma",
     "DavidAnson.vscode-markdownlint",
-    "yzhang.markdown-all-in-one"
+    "yzhang.markdown-all-in-one",
+    "ms-playwright.playwright"
   ],
   "unwantedRecommendations": []
 }

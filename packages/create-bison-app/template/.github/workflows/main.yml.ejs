@@ -64,31 +64,26 @@ jobs:
         env:
           NODE_ENV: test
           DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
         run: yarn test:ci
 
-      # E2E Tests via Cypress
-      - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v4
-        with:
-          # build: yarn build
-          start: yarn test:server
-          wait-on: 'http://localhost:3001'
+      # Install Playwright Browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # Playwright E2E tests
+      - name: E2E (Playwright)
         env:
           NODE_ENV: test
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DATABASE_URL: postgresql://postgres:postgres@localhost/myapp_test
-
-      - name: Upload Cypress Screenshots
-        uses: actions/upload-artifact@v1
-        # Only capture images on failure
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-      - name: Upload Cypress Videos
-        uses: actions/upload-artifact@v1
-        # Test run video was always captured, so this action uses "always()" condition
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+        timeout-minutes: 60
+        run: yarn test:e2e:ci
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: cypress-videos
-          path: cypress/videos
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

@@ -1,7 +1,5 @@
 {
-  "extends": "../../cypress/tsconfig.json",
-  "compilerOptions": {
-    "isolatedModules": false
-  },
-  "include": ["../../cypress/**/*.ts", "../../cypress.config.ts", "../**/*.ts"]
+  "extends": "../../tsconfig.json",
+  "exclude": [],
+  "include": ["**/*.d.ts", "**/*.ts", "../playwrightExamples/demo-todo-app.spec.ts"]
 }

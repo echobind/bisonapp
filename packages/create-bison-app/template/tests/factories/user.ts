@@ -53,12 +53,13 @@ export const UserFactory = {
   upsert: async ({ where, createArgs = {}, updateArgs = {}, select = {} }: FactoryUpsertArgs) => {
     // Grab Build Defaults for Create
     const userArgs = UserFactory.build(createArgs, select);
+    const password = updateArgs.password ? hashPassword(updateArgs.password as string) : undefined;
 
     return await prisma.user.upsert({
       where,
       create: userArgs.data,
       select: userArgs.select,
-      update: updateArgs,
+      update: { ...updateArgs, password },
     });
   },
 };

@@ -34,9 +34,8 @@ yarn-error.log*
 
 .vercel
 
-cypress/videos*
-cypress/screenshots*
-cypress/logs*
-!cypress/videos/.gitkeep
-!cypress/screenshots/.gitkeep
-!cypress/logs/.gitkeep
+# Playwright
+/tests/e2e/temp/*.json
+/test-results/
+/playwright-report/
+/playwright/.cache/

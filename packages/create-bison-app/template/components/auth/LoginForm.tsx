@@ -78,6 +78,7 @@ export function LoginForm() {
           <Input
             id="email"
             type="email"
+            data-testid="login-email"
             {...register('email', {
               required: 'Email is required.',
               pattern: {
@@ -92,6 +93,7 @@ export function LoginForm() {
         </FormControl>
         <PasswordField
           label="Password"
+          data-testid="login-password"
           isInvalid={Boolean(isSubmitted && errors.password)}
           {...register('password', {
             required: 'Password is required.',
@@ -110,7 +112,7 @@ export function LoginForm() {
         </NextLink>
       </HStack>
       <Stack spacing="6">
-        <Button variant="outline" type="submit" disabled={loading}>
+        <Button variant="outline" type="submit" disabled={loading} data-testid="login-submit">
           Sign in
         </Button>
         {signInError && <Text color="red.700">No User Found</Text>}
