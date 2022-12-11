@@ -39,7 +39,7 @@ export const userRouter = t.router({
         email: z.string(),
         password: z.string(),
         roles: z.array(z.nativeEnum(Role)).optional(),
-        profile: z.object({ firstName: z.string(), lastName: z.string() }).optional(),
+        profile: z.object({ firstName: z.string(), lastName: z.string() }),
       })
     )
     .mutation(async ({ ctx, input: { email, password, roles = [Role.USER], profile } }) => {
@@ -58,7 +58,7 @@ export const userRouter = t.router({
         data: {
           email,
           roles,
-          profile,
+          profile: { create: profile },
           password: hashPassword(password),
         },
         select: defaultUserSelect,

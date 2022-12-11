@@ -1,7 +1,7 @@
 import { prisma } from 'lib/prisma';
 import { comparePasswords, hashPassword } from 'services/auth';
 
-import NextAuth, { NextAuthOptions, Session } from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
@@ -53,8 +53,8 @@ export const authOptions: NextAuthOptions = {
             data: {
               profile: {
                 create: {
-                  firstName: credentials.firstName || '',
-                  lastName: credentials.lastName || '',
+                  firstName: credentials.firstName,
+                  lastName: credentials.lastName,
                 },
               },
               email: credentials.email,
@@ -86,6 +86,7 @@ export const authOptions: NextAuthOptions = {
       // lookup user to ensure info is up to date
       const dbUser = await prisma.user.findUnique({
         where: { id: token.sub },
+        // Always return profile to match NextAuth Session
         include: { profile: true },
       });
 
@@ -98,23 +99,8 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      // fill in session user from the token above
-
-      // Drop fields we don't want client side...
-      const sessionUser: Session['user'] = {
-        ...token.user,
-        createdAt: undefined,
-        updatedAt: undefined,
-        password: undefined,
-        profile: {
-          ...token.user.profile,
-          createdAt: undefined,
-          updatedAt: undefined,
-        },
-      };
-
-      session.user = sessionUser;
       const roles = token?.user?.roles || [];
+
       session.isAdmin = roles.includes(Role.ADMIN);
       session.idToken = token.idToken;
       session.accessToken = token.accessToken;

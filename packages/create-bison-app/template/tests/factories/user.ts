@@ -1,39 +1,61 @@
 import Chance from 'chance';
-import { Role, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-import { buildPrismaIncludeFromAttrs } from '@/tests/helpers/buildPrismaIncludeFromAttrs';
-import { prisma } from '@/lib/prisma';
+import { prisma, UserWithRelations } from '@/lib/prisma';
 import { hashPassword } from '@/services/auth';
 
 const chance = new Chance();
 
+type FactoryUpsertArgs = {
+  where: Prisma.UserUpsertArgs['where'];
+  createArgs: Partial<Prisma.UserUpsertArgs['create']>;
+  updateArgs: Prisma.UserUpsertArgs['update'];
+  include?: Prisma.UserUpsertArgs['include'];
+};
+
 export const UserFactory = {
-  build: (attrs: Partial<Prisma.UserCreateInput> = {}) => {
+  build: (
+    args: Partial<Prisma.UserCreateArgs['data']> = {},
+    include: Prisma.UserCreateArgs['include'] = {}
+  ): Prisma.UserCreateArgs => {
+    const password = args.password ? hashPassword(args.password) : hashPassword('test1234');
+
     return {
-      email: chance.email(),
-      password: 'test1234',
-      roles: { set: [Role.USER] },
-      profile: {
-        create: {
-          firstName: chance.first(),
-          lastName: chance.last(),
+      data: {
+        email: chance.email(),
+        profile: {
+          create: {
+            firstName: chance.first(),
+            lastName: chance.last(),
+          },
         },
+        ...args,
+        password,
       },
-      ...attrs,
+
+      include: { ...include, profile: true },
     };
   },
 
-  create: async (attrs: Partial<Prisma.UserCreateInput> = {}) => {
-    const user = UserFactory.build(attrs);
-    const options: Partial<Prisma.UserCreateArgs> = {};
-    const includes = buildPrismaIncludeFromAttrs(attrs);
-    if (includes) options.include = includes;
-    // Always return profile to match Next Session Type
-    options.include = { ...options.include, profile: true };
+  create: async (
+    args: Partial<Prisma.UserCreateArgs['data']> = {},
+    include: Prisma.UserCreateArgs['include'] = {}
+  ): Promise<UserWithRelations> => {
+    const userArgs = UserFactory.build(args, include);
+    const user = await prisma.user.create(userArgs);
+    return user;
+  },
 
-    return await prisma.user.create({
-      data: { ...user, password: hashPassword(user.password as string), roles: user.roles },
-      ...options,
+  upsert: async ({ where, createArgs = {}, updateArgs = {}, include = {} }: FactoryUpsertArgs) => {
+    // Grab Build Defaults for Create
+    const userArgs = UserFactory.build(createArgs, include);
+    const defaultIncludes = { ...include, profile: true };
+
+    return await prisma.user.upsert({
+      where,
+      create: userArgs.data,
+      include: defaultIncludes,
+      update: updateArgs,
     });
   },
 };

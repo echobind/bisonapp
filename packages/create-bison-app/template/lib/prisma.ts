@@ -1,9 +1,15 @@
+import { Profile, User } from '@prisma/client';
 import { Prisma, PrismaClient } from '@prisma/client';
 
 /**
  * Instantiate prisma client for Next.js:
  * https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices#solution
  */
+
+export type UserWithRelations = Omit<User, 'password'> & {
+  profile?: Profile;
+  // other relations here...
+};
 
 declare global {
   // eslint-disable-next-line no-var
