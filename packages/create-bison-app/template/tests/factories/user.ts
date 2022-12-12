@@ -3,6 +3,7 @@ import { Prisma, Role } from '@prisma/client';
 
 import { prisma, UserWithRelations } from '@/lib/prisma';
 import { hashPassword } from '@/services/auth';
+import { defaultUserSelect } from '@/server/routers/user';
 
 const chance = new Chance();
 
@@ -10,15 +11,16 @@ type FactoryUpsertArgs = {
   where: Prisma.UserUpsertArgs['where'];
   createArgs: Partial<Prisma.UserUpsertArgs['create']>;
   updateArgs: Prisma.UserUpsertArgs['update'];
-  include?: Prisma.UserUpsertArgs['include'];
+  select?: Prisma.UserUpsertArgs['select'];
 };
 
 export const UserFactory = {
   build: (
     args: Partial<Prisma.UserCreateArgs['data']> = {},
-    include: Prisma.UserCreateArgs['include'] = {}
+    select: Prisma.UserCreateArgs['select'] = {}
   ): Prisma.UserCreateArgs => {
     const password = args.password ? hashPassword(args.password) : hashPassword('test1234');
+    const defaultSelect = { select, ...defaultUserSelect };
 
     return {
       data: {
@@ -34,28 +36,28 @@ export const UserFactory = {
         password,
       },
 
-      include: { ...include, profile: true },
+      select: defaultSelect,
     };
   },
 
   create: async (
     args: Partial<Prisma.UserCreateArgs['data']> = {},
-    include: Prisma.UserCreateArgs['include'] = {}
+    select: Prisma.UserCreateArgs['select'] = {}
   ): Promise<UserWithRelations> => {
-    const userArgs = UserFactory.build(args, include);
-    const user = await prisma.user.create(userArgs);
+    const userArgs = UserFactory.build(args, select);
+
+    const user = (await prisma.user.create(userArgs)) as unknown as UserWithRelations;
     return user;
   },
 
-  upsert: async ({ where, createArgs = {}, updateArgs = {}, include = {} }: FactoryUpsertArgs) => {
+  upsert: async ({ where, createArgs = {}, updateArgs = {}, select = {} }: FactoryUpsertArgs) => {
     // Grab Build Defaults for Create
-    const userArgs = UserFactory.build(createArgs, include);
-    const defaultIncludes = { ...include, profile: true };
+    const userArgs = UserFactory.build(createArgs, select);
 
     return await prisma.user.upsert({
       where,
       create: userArgs.data,
-      include: defaultIncludes,
+      include: userArgs.select,
       update: updateArgs,
     });
   },

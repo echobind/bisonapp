@@ -6,9 +6,10 @@ import { Prisma, PrismaClient } from '@prisma/client';
  * https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices#solution
  */
 
-export type UserWithRelations = Omit<User, 'password'> & {
-  profile?: Profile;
-  // other relations here...
+type UserSessionFields = 'email' | 'emailVerified' | 'id' | 'roles';
+
+export type UserWithRelations = Pick<User, UserSessionFields> & {
+  profile: Pick<Profile, 'firstName' | 'lastName' | 'image'>;
 };
 
 declare global {

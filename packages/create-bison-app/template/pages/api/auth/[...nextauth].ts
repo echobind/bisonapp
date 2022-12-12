@@ -1,10 +1,12 @@
-import { prisma, UserWithRelations } from 'lib/prisma';
+import { prisma } from 'lib/prisma';
 import { comparePasswords, hashPassword } from 'services/auth';
 
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import NextAuth, { NextAuthOptions, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
+
+import { defaultUserSelect } from '@/server/routers/user';
 
 export const authOptions: NextAuthOptions = {
   adapter: CustomPrismaAdapter(prisma),
@@ -36,7 +38,7 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email.toLocaleLowerCase() },
-          include: { profile: true },
+          select: { ...defaultUserSelect, password: true },
         });
 
         if (credentials.signUp === 'true') {
@@ -61,7 +63,7 @@ export const authOptions: NextAuthOptions = {
               password: hashedPassword,
               roles: [Role.USER],
             },
-            include: { profile: true },
+            select: defaultUserSelect,
           });
 
           return newUser;
@@ -70,7 +72,9 @@ export const authOptions: NextAuthOptions = {
             const isValid = comparePasswords(credentials.password, user.password);
             if (!isValid) return null;
 
-            return user;
+            user.password = null;
+
+            return user as unknown as Session['user'];
           } else {
             // If you return null then an error will be displayed advising the user to check their details.
             return null;
@@ -84,23 +88,23 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token }) {
       // lookup user to ensure info is up to date
-      const dbUser = await prisma.user.findUnique({
+      const dbUser = (await prisma.user.findUnique({
         where: { id: token.sub },
-        // Always return profile to match NextAuth Session
-        include: { profile: true },
-      });
+        select: defaultUserSelect,
+      })) as unknown as Session['user'];
 
       if (!dbUser) {
         throw new Error('User Not Found!');
       }
 
-      token.user = dbUser as UserWithRelations;
+      token.user = dbUser;
 
       return token;
     },
     async session({ session, token }) {
       const roles = token?.user?.roles || [];
 
+      session.user = token.user;
       session.isAdmin = roles.includes(Role.ADMIN);
       session.user = token.user;
       session.idToken = token.idToken;

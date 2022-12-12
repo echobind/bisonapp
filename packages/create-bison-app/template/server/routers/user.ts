@@ -12,7 +12,7 @@ export const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   createdAt: true,
   updatedAt: true,
   roles: true,
-  profile: { select: { firstName: true, lastName: true } },
+  profile: { select: { firstName: true, lastName: true, image: true } },
 });
 
 export const userRouter = t.router({
