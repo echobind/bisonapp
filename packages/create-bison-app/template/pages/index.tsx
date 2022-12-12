@@ -1,17 +1,17 @@
 import Head from 'next/head';
 import { Heading, Center } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+import { Session } from 'next-auth';
 
 import { translator } from '@/utils/i18n-translator';
+import { getServerAuthSession } from '@/utils/getDefaultServerSideProps';
 
-function Home() {
-  const { data: session } = useSession();
+type PageProps = {
+  welcomeMessage: string;
+  user?: Session['user'];
+};
 
-  const firstName = session?.user?.profile?.firstName;
-
-  const t = translator({ ns: ['common'] });
-  const welcomeMsg = t('welcome', { firstName });
-
+function Home({ welcomeMessage }: PageProps) {
   return (
     <>
       <Head>
@@ -21,7 +21,7 @@ function Home() {
 
       <Center>
         <Heading size="lg" data-testid="welcome-header">
-          {welcomeMsg}
+          {welcomeMessage}
         </Heading>
       </Center>
     </>
@@ -29,3 +29,21 @@ function Home() {
 }
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: any) => {
+  const session = await getServerAuthSession(context);
+
+  const firstName = session?.user?.profile?.firstName || 'Guest';
+
+  const t = translator({ ns: ['common'] });
+  const welcomeMessage = t('welcome', { firstName });
+
+  const props: PageProps = {
+    welcomeMessage,
+    user: session?.user,
+  };
+
+  return {
+    props,
+  };
+};
