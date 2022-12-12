@@ -1,5 +1,5 @@
 import Chance from 'chance';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
 import { prisma, UserWithRelations } from '@/lib/prisma';
 import { hashPassword } from '@/services/auth';
@@ -23,6 +23,7 @@ export const UserFactory = {
     return {
       data: {
         email: chance.email(),
+        roles: { set: [Role.USER] },
         profile: {
           create: {
             firstName: chance.first(),

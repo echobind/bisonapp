@@ -25,7 +25,10 @@ export const userRouter = t.router({
   find: t.procedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }))
     .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUniqueOrThrow({ where: input, select: defaultUserSelect });
+      const user = await ctx.db.user.findUniqueOrThrow({
+        where: input,
+        select: defaultUserSelect,
+      });
 
       if (!isAdmin(ctx.user) && user.id !== ctx.user?.id) {
         return { ...user, email: null };

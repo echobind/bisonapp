@@ -10,10 +10,7 @@ declare module 'next-auth/jwt' {
     idToken?: string;
     // For OAuth Refresh
     accessToken?: string;
-    // Match Prisma Return
-    user: User & {
-      profile: Profile | null;
-    };
+    user: UserWithRelations;
   }
 }
 
@@ -28,4 +25,3 @@ declare module 'next-auth' {
     accessToken?: string;
   }
 }
-Copy;

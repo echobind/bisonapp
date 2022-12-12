@@ -1,4 +1,4 @@
-import { prisma } from 'lib/prisma';
+import { prisma, UserWithRelations } from 'lib/prisma';
 import { comparePasswords, hashPassword } from 'services/auth';
 
 import NextAuth, { NextAuthOptions } from 'next-auth';
@@ -94,7 +94,7 @@ export const authOptions: NextAuthOptions = {
         throw new Error('User Not Found!');
       }
 
-      token.user = dbUser;
+      token.user = dbUser as UserWithRelations;
 
       return token;
     },
@@ -102,6 +102,7 @@ export const authOptions: NextAuthOptions = {
       const roles = token?.user?.roles || [];
 
       session.isAdmin = roles.includes(Role.ADMIN);
+      session.user = token.user;
       session.idToken = token.idToken;
       session.accessToken = token.accessToken;
 

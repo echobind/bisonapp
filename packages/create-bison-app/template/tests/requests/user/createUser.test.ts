@@ -15,6 +15,10 @@ describe('User create mutation', () => {
         trpcRequest(user).user.create({
           email: user.email,
           password: 'fake',
+          profile: {
+            firstName: 'Peter',
+            lastName: 'Parker',
+          },
         })
       ).rejects.toThrowErrorMatchingInlineSnapshot(`"UNAUTHORIZED"`);
     });
@@ -28,6 +32,10 @@ describe('User create mutation', () => {
         email: 'hello@wee.net',
         password: 'fake',
         roles: [Role.ADMIN],
+        profile: {
+          firstName: 'Peter',
+          lastName: 'Parker',
+        },
       });
 
       const expectedRoles = [Role.ADMIN];
