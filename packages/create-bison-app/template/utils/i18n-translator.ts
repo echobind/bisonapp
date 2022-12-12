@@ -1,6 +1,5 @@
 // https://discord.com/channels/752553802359505017/1046900384481951754/1047052679492419614
 import path from 'path';
-import { readdirSync, lstatSync } from 'fs';
 
 import i18n, { InitOptions } from 'i18next';
 import i18nextFSBackend from 'i18next-fs-backend';
@@ -39,10 +38,11 @@ const createI18nClient = ({ namespaces }: CreateInstanceProps): CreateClientRetu
     // lng: i18nConfig.locales.includes(locale) ? locale : i18nConfig.defaultLocale,
     lng: 'en',
     // preload for server side -- preload ['en']
-    preload: readdirSync(localesFolder).filter((fileName) => {
-      const joinedPath = path.join(localesFolder, fileName);
-      return lstatSync(joinedPath).isDirectory();
-    }),
+    // preload: readdirSync(localesFolder).filter((fileName) => {
+    //   const joinedPath = path.join(localesFolder, fileName);
+    //   return lstatSync(joinedPath).isDirectory();
+    // }),
+    preload: ['en'],
     backend: {
       loadPath: path.join(localesFolder, '{{lng}}/{{ns}}.json'),
     },
