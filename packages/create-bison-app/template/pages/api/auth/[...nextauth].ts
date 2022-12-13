@@ -74,7 +74,7 @@ export const authOptions: NextAuthOptions = {
 
             user.password = null;
 
-            return user as unknown as Session['user'];
+            return user as Session['user'];
           } else {
             // If you return null then an error will be displayed advising the user to check their details.
             return null;
@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
       const dbUser = (await prisma.user.findUnique({
         where: { id: token.sub },
         select: defaultUserSelect,
-      })) as unknown as Session['user'];
+      })) as Session['user'];
 
       if (!dbUser) {
         throw new Error('User Not Found!');
