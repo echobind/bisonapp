@@ -20,7 +20,7 @@ export const UserFactory = {
     select: Prisma.UserCreateArgs['select'] = {}
   ): Prisma.UserCreateArgs => {
     const password = args.password ? hashPassword(args.password) : hashPassword('test1234');
-    const defaultSelect = { select, ...defaultUserSelect };
+    const defaultSelect = { ...select, ...defaultUserSelect };
 
     return {
       data: {
@@ -46,7 +46,7 @@ export const UserFactory = {
   ): Promise<UserWithRelations> => {
     const userArgs = UserFactory.build(args, select);
 
-    const user = (await prisma.user.create(userArgs)) as unknown as UserWithRelations;
+    const user = (await prisma.user.create(userArgs)) as UserWithRelations;
     return user;
   },
 
@@ -57,7 +57,7 @@ export const UserFactory = {
     return await prisma.user.upsert({
       where,
       create: userArgs.data,
-      include: userArgs.select,
+      select: userArgs.select,
       update: updateArgs,
     });
   },
