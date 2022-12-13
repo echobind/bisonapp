@@ -48,7 +48,25 @@ async function copyFiles({ variables, targetFolder }) {
     ),
 
     copyWithTemplate(
+      fromPath("_.env.development.ejs"),
+      toPath(".env.local"),
+      variables
+    ),
+
+    copyWithTemplate(
+      fromPath("_.env.development.local.ejs"),
+      toPath(".env.local"),
+      variables
+    ),
+
+    copyWithTemplate(
       fromPath("_.env.test.ejs"),
+      toPath(".env.test"),
+      variables
+    ),
+
+    copyWithTemplate(
+      fromPath("_.env.test.local.ejs"),
       toPath(".env.test"),
       variables
     ),
