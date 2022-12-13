@@ -218,7 +218,6 @@ describe("copyFiles", () => {
 
     it("copies test utils", async () => {
       const files = [
-        "helpers/buildPrismaIncludeFromAttrs.ts",
         "helpers/db.ts",
         "helpers/trpcRequest.ts",
         "helpers/index.ts",

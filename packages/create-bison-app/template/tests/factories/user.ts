@@ -1,39 +1,64 @@
 import Chance from 'chance';
-import { Role, Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
-import { buildPrismaIncludeFromAttrs } from '@/tests/helpers/buildPrismaIncludeFromAttrs';
-import { prisma } from '@/lib/prisma';
+import { prisma, UserWithRelations } from '@/lib/prisma';
 import { hashPassword } from '@/services/auth';
+import { defaultUserSelect } from '@/server/routers/user';
 
 const chance = new Chance();
 
+type FactoryUpsertArgs = {
+  where: Prisma.UserUpsertArgs['where'];
+  createArgs: Partial<Prisma.UserUpsertArgs['create']>;
+  updateArgs: Prisma.UserUpsertArgs['update'];
+  select?: Prisma.UserUpsertArgs['select'];
+};
+
 export const UserFactory = {
-  build: (attrs: Partial<Prisma.UserCreateInput> = {}) => {
+  build: (
+    args: Partial<Prisma.UserCreateArgs['data']> = {},
+    select: Prisma.UserCreateArgs['select'] = {}
+  ): Prisma.UserCreateArgs => {
+    const password = args.password ? hashPassword(args.password) : hashPassword('test1234');
+    const defaultSelect = { ...select, ...defaultUserSelect };
+
     return {
-      email: chance.email(),
-      password: 'test1234',
-      roles: { set: [Role.USER] },
-      profile: {
-        create: {
-          firstName: chance.first(),
-          lastName: chance.last(),
+      data: {
+        email: chance.email(),
+        roles: { set: [Role.USER] },
+        profile: {
+          create: {
+            firstName: chance.first(),
+            lastName: chance.last(),
+          },
         },
+        ...args,
+        password,
       },
-      ...attrs,
+
+      select: defaultSelect,
     };
   },
 
-  create: async (attrs: Partial<Prisma.UserCreateInput> = {}) => {
-    const user = UserFactory.build(attrs);
-    const options: Partial<Prisma.UserCreateArgs> = {};
-    const includes = buildPrismaIncludeFromAttrs(attrs);
-    if (includes) options.include = includes;
-    // Always return profile to match Next Session Type
-    options.include = { ...options.include, profile: true };
+  create: async (
+    args: Partial<Prisma.UserCreateArgs['data']> = {},
+    select: Prisma.UserCreateArgs['select'] = {}
+  ): Promise<UserWithRelations> => {
+    const userArgs = UserFactory.build(args, select);
 
-    return await prisma.user.create({
-      data: { ...user, password: hashPassword(user.password as string), roles: user.roles },
-      ...options,
+    const user = (await prisma.user.create(userArgs)) as UserWithRelations;
+    return user;
+  },
+
+  upsert: async ({ where, createArgs = {}, updateArgs = {}, select = {} }: FactoryUpsertArgs) => {
+    // Grab Build Defaults for Create
+    const userArgs = UserFactory.build(createArgs, select);
+
+    return await prisma.user.upsert({
+      where,
+      create: userArgs.data,
+      select: userArgs.select,
+      update: updateArgs,
     });
   },
 };

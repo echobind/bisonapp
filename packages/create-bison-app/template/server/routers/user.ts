@@ -12,7 +12,7 @@ export const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   createdAt: true,
   updatedAt: true,
   roles: true,
-  profile: { select: { firstName: true, lastName: true } },
+  profile: { select: { firstName: true, lastName: true, image: true } },
 });
 
 export const userRouter = t.router({
@@ -25,7 +25,10 @@ export const userRouter = t.router({
   find: t.procedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }))
     .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUniqueOrThrow({ where: input, select: defaultUserSelect });
+      const user = await ctx.db.user.findUniqueOrThrow({
+        where: input,
+        select: defaultUserSelect,
+      });
 
       if (!isAdmin(ctx.user) && user.id !== ctx.user?.id) {
         return { ...user, email: null };
@@ -39,7 +42,7 @@ export const userRouter = t.router({
         email: z.string(),
         password: z.string(),
         roles: z.array(z.nativeEnum(Role)).optional(),
-        profile: z.object({ firstName: z.string(), lastName: z.string() }).optional(),
+        profile: z.object({ firstName: z.string(), lastName: z.string() }),
       })
     )
     .mutation(async ({ ctx, input: { email, password, roles = [Role.USER], profile } }) => {
@@ -58,7 +61,7 @@ export const userRouter = t.router({
         data: {
           email,
           roles,
-          profile,
+          profile: { create: profile },
           password: hashPassword(password),
         },
         select: defaultUserSelect,

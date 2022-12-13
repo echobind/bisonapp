@@ -6,27 +6,41 @@ to: tests/factories/<%= name %>.ts
 import { Prisma } from '@prisma/client';
 // import Chance from 'chance';
 
-import { buildPrismaIncludeFromAttrs } from '@/tests/helpers/buildPrismaIncludeFromAttrs';
 import { prisma } from '@/lib/prisma';
 
 // const chance = new Chance();
 
 export const <%= camelized %>Factory = {
-  build: (attrs: Partial<Prisma.<%= camelized %>CreateInput> = {}) => {
+  build: (
+    args: Partial<Prisma.<%= camelized %>CreateArgs['data']> = {},
+    include: Prisma.<%= camelized %>CreateArgs['include'] = {}
+  ): Prisma.UserCreateArgs => {
+    const password = args.password ? hashPassword(args.password) : hashPassword('test1234');
+
     return {
-      ...attrs,
+      data: {
+        email: chance.email(),
+        profile: {
+          create: {
+            firstName: chance.first(),
+            lastName: chance.last(),
+          },
+        },
+        ...args,
+        password,
+      },
+
+      // return profile for Next-Auth
+      include: { ...include, profile: true },
     };
   },
 
-  create: async (attrs: Partial<Prisma.<%= camelized %>CreateInput> = {}) => {
-    const <%= single %> = <%= camelized %>Factory.build(attrs);
-    const options: Record<string, any> = {};
-    const includes = buildPrismaIncludeFromAttrs(attrs);
-    if (includes) options.include = includes;
-
-    return await prisma.<%= single %>.create({
-      data: { ...<%= single %> },
-      ...options,
-    });
+  create: async (
+    args: Partial<Prisma.<%= camelized %>CreateArgs['data']> = {},
+    include: Prisma.<%= camelized %>CreateArgs['include'] = {}
+  ) => {
+    const args = <%= camelized %>Factory.build(args, include);
+    const <%= single %> = await prisma.<%= single %>.create(args);
+    return <%= single %>;
   },
 };
