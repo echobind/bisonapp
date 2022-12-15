@@ -80,7 +80,7 @@ jobs:
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
         timeout-minutes: 60
-        run: yarn test:e2e:ci
+        run: yarn test:e2e
       - uses: actions/upload-artifact@v3
         if: always()
         with:

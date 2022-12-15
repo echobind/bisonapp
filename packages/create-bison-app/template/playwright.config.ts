@@ -1,6 +1,9 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
+const TEST_SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
+const IS_CI = process.env.CI === 'true';
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -101,10 +104,10 @@ const config: PlaywrightTestConfig = {
   // outputDir: 'test-results/',
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'yarn test:server',
-  //   port: 3001,
-  // },
+  webServer: {
+    command: IS_CI ? `yarn start` : `yarn dev`,
+    port: TEST_SERVER_PORT,
+  },
 };
 
 export default config;
