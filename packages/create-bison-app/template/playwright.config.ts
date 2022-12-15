@@ -105,7 +105,9 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: IS_CI ? `yarn withEnv:test yarn start` : `yarn withEnv:test yarn dev`,
+    command: IS_CI
+      ? `PORT=${TEST_SERVER_PORT} NEXTAUTH_URL=http://localhost:${TEST_SERVER_PORT} yarn start`
+      : `PORT=${TEST_SERVER_PORT} NEXTAUTH_URL=http://localhost:${TEST_SERVER_PORT} yarn dev`,
     port: TEST_SERVER_PORT,
   },
 };
