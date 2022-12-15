@@ -91,17 +91,17 @@ jobs:
       - name: Install bison app packages
         run: yarn install --immutable
 
-      - name: Build production bison app
-        run: yarn build
-
-      - name: Lint bison app
-        run: yarn lint
-
       - name: Set up test database
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           NODE_ENV: test
         run: yarn db:migrate
+
+      - name: Build production bison app
+        run: yarn build
+
+      - name: Lint bison app
+        run: yarn lint
 
       - name: Run bison app unit tests
         env:
