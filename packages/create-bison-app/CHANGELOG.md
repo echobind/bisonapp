@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.9 (2022-12-22)
+
+
+### Features
+
+* Playwright > Cypress ([#295](https://github.com/echobind/bisonapp/issues/295)) ([75132f0](https://github.com/echobind/bisonapp/commit/75132f0d44e8ac50c8c6fff48d54157a51018bec))
+
+
+
 ## 1.13.0-canary.8 (2022-12-15)
 
 **Note:** Version bump only for package create-bison-app
