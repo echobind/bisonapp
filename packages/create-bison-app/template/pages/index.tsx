@@ -17,7 +17,9 @@ function Home() {
       </Head>
 
       <Center>
-        <Heading size="lg">{welcomeMsg}</Heading>
+        <Heading size="lg" data-testid="welcome-header">
+          {welcomeMsg}
+        </Heading>
       </Center>
     </>
   );

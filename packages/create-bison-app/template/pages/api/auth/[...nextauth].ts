@@ -122,6 +122,22 @@ export const authOptions: NextAuthOptions = {
         return baseUrl;
       }
     },
+    async signIn({ user, account }) {
+      if (account?.type === 'credentials' && user.id) {
+        const isAllowedToSignIn = !!(account.providerAccountId === user.id);
+        return Promise.resolve(isAllowedToSignIn);
+      }
+
+      if (account?.provider === 'google' && user.id) {
+        // TODO: Session would need to include Account Info
+        // const isAllowedToSignIn = !!(account.providerAccountId === user.account.providerAccountId);
+        return Promise.resolve(true);
+      }
+
+      // Do different verification for other providers here or throw...
+
+      throw new Error('Not a known provider');
+    },
   },
 };
 

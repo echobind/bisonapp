@@ -1,0 +1,49 @@
+{
+  "cookies": [
+    {
+      "name": "next-auth.csrf-token",
+      "value": "c6f90b4879ba7065866c7e205a935c5017630a72d5fa57c0cd29f8af0ac04611%7C0b621e4d6291fc41671ffcb6fc65869ad9faa9f8e190f9f3f889256a0e67d5e0",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "next-auth.callback-url",
+      "value": "http%3A%2F%2Flocalhost%3A3001",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "next-auth.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..w5SMOHrke8sre-Mb.8-cQwbtrAjy9y1HMWxQN5uV_say0gejeNbDh3WiDtyhBRC8M3DupI9OqbTzCEnKNIujf0t1s5BcCMwiB0y20WT65zMMulY0vjGGu2IABFw_5IZsaKQPLNcWcINEIxKTGr5nkWYaGHjxlCFRtyfyXkskJOgbY800aNOuTdv7EAz7NTZAKj33RSTyw68ZTw1X3Y2hkESlwHSKXtZqDrfKLneit-1zX4IVD78zkBJzL93hOCNQdesPxntaUWTHX4FnUlSu42_xjAZ5tTu7OLBYBCfuRC4P-kzJrr-QQCcL8sQSZASpqNqdzyCXgK-A1AbO3DaGKY2RnC-gQGQSZ_9WjXP6UVjfzf2oDyLOrmpGAQm_166o-gofeytiumFjstk31-w6yQNdP-5G_oAaONdl7OyW9VON-Q85uq7W3AbayouExecuVuMEf8KlRqSUdEAwdGxKEXYQv3xkItVf-jQ6jBiB_F4Av5ACdEmjdCySlcKdyoz3p_5JR7pS7pzXFQdVUoYuQniR2rCJQ6spyxG0WR5HpSdTFNFi34uE5o9Oi9gznFcos56AseRDxxDF4jFfi8lMxcmRgY7xC8L5d91IsvuW6W7V-r6LvsC1hZDUSZH5lOuHhcITXi-A5h-3HcsaWN3vTH_-CgjTnPjxxVpY8IQtKYFdDTDpmuwVTwg3qLPTsXrJv0k02CbANND_LVurMUF2YWNn7nHOBRmy0G14z6TY-RPZ_u36Vh-nX6FfsARS3ZomI2Q2nwbODUdaebCESGVsD14VgsJkLeVQpp3q73Vgsauo5rHYlIEzgSYL4AtT2RLjeMOhJw7M223CEgjMCOblD4sfcnl40AA.AGtYDlc2VrLhnBg6o-5L-Q",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1672518307.237139,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "nextauth.message",
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1669926306}"
+        },
+        {
+          "name": "chakra-ui-color-mode",
+          "value": "dark"
+        }
+      ]
+    }
+  ]
+}

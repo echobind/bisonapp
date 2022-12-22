@@ -55,7 +55,7 @@ async function copyFiles({ variables, targetFolder }) {
 
     copyWithTemplate(
       fromPath("_.env.development.local.ejs"),
-      toPath(".env.local"),
+      toPath(".env.development.local"),
       variables
     ),
 
@@ -94,7 +94,6 @@ async function copyFiles({ variables, targetFolder }) {
         "chakra",
         "components",
         "context",
-        "cypress",
         "layouts",
         "lib",
         "prisma",
@@ -109,8 +108,8 @@ async function copyFiles({ variables, targetFolder }) {
         ".nvmrc",
         ".tool-versions",
         "constants.ts",
-        "cypress.config.ts",
         "jest.config.js",
+        "playwright.config.ts",
         "next-env.d.ts",
         "prettier.config.js",
         "tsconfig.json",

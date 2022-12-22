@@ -79,8 +79,8 @@ describe("copyFiles", () => {
         ".hygen.js",
         ".tool-versions",
         "constants.ts",
-        "cypress.config.ts",
         "jest.config.js",
+        "playwright.config.ts",
         "next-env.d.ts",
         "prettier.config.js",
         "README.md",
@@ -159,9 +159,13 @@ describe("copyFiles", () => {
 
     it("copies e2e tests", async () => {
       const files = [
+        "temp/",
         ".eslintrc.json",
-        "login.cy.ts",
-        "logout.cy.ts",
+        "auth.play.ts",
+        "playwrightExamples/",
+        "constants.ts",
+        "global-setup.ts",
+        "global-teardown.ts",
         "tsconfig.json",
       ];
 

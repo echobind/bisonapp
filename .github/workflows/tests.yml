@@ -88,17 +88,17 @@ jobs:
       - name: Install bison app packages
         run: yarn install --immutable
 
-      - name: Build production bison app
-        run: yarn build
-
-      - name: Lint bison app
-        run: yarn lint
-
       - name: Set up test database
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           NODE_ENV: test
         run: yarn db:migrate
+
+      - name: Build production bison app
+        run: yarn build
+
+      - name: Lint bison app
+        run: yarn lint
 
       - name: Run bison app unit tests
         env:
@@ -106,14 +106,17 @@ jobs:
           NODE_ENV: test
         run: yarn test:ci
 
-      - name: Run bison app E2E tests
-        uses: cypress-io/github-action@v4
-        with:
-          start: yarn test:server
-          wait-on: "http://localhost:3001"
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+        run: yarn test:e2e
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

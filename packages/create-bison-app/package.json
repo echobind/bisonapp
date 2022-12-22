@@ -55,7 +55,6 @@
   "jest": {
     "testPathIgnorePatterns": [
       "node_modules",
-      "cypress",
       "template",
       "dist"
     ]
