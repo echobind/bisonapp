@@ -1,14 +1,12 @@
 import Head from 'next/head';
 import { Heading, Center } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
 
 import { translator } from '@/utils/i18n-translator';
 import { getServerAuthSession } from '@/utils/getDefaultServerSideProps';
 
 type PageProps = {
   welcomeMessage: string;
-  user?: Session['user'];
 };
 
 function Home({ welcomeMessage }: PageProps) {
@@ -38,10 +36,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context:
   const t = translator({ ns: ['common'] });
   const welcomeMessage = t('welcome', { firstName });
 
-  const props: PageProps = {
-    welcomeMessage,
-    user: session?.user,
-  };
+  const props: PageProps = { welcomeMessage };
 
   return {
     props,

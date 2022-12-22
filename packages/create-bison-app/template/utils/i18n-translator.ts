@@ -1,3 +1,5 @@
+// SERVER SIDE!!
+
 // https://discord.com/channels/752553802359505017/1046900384481951754/1047052679492419614
 import path from 'path';
 
@@ -51,10 +53,10 @@ const createI18nClient = ({ namespaces }: CreateInstanceProps): CreateClientRetu
     saveMissing: true,
     saveMissingTo: 'all',
     missingKeyNoValueFallbackToKey: true,
-    parseMissingKeyHandler: (key) => {
+    parseMissingKeyHandler: (key, defaultValue) => {
       console.log('Missing Key:', key);
 
-      return '';
+      return defaultValue || '';
     },
     // useSuspense to avoid first render issues
     react: { useSuspense: true },
