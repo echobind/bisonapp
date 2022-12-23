@@ -67,8 +67,6 @@ export const userRouter = t.router({
         select: defaultUserSelect,
       };
 
-      const user = await ctx.db.user.create(updatedArgs);
-
-      return user;
+      return await ctx.db.user.create(updatedArgs);
     }),
 });
