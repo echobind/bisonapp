@@ -1,11 +1,10 @@
-import { prisma } from 'lib/prisma';
-import { comparePasswords, hashPassword } from 'services/auth';
-
 import NextAuth, { NextAuthOptions, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient, Role } from '@prisma/client';
 
+import { prisma } from '@/lib/prisma';
+import { comparePasswords, hashPassword } from '@/services/auth';
 import { defaultUserSelect } from '@/server/routers/user';
 
 export const authOptions: NextAuthOptions = {
