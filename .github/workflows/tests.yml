@@ -50,7 +50,7 @@ jobs:
         run: node ./packages/create-bison-app/scripts/createApp bison-ci-app --acceptDefaults
 
       - name: Upload bison app
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: matrix.os == 'ubuntu-latest'
         with:
           name: ${{ steps.create-app.outputs.appName }}
