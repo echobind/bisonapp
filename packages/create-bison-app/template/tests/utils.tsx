@@ -1,3 +1,4 @@
+import superjson from 'superjson';
 import { createTRPCReact, loggerLink } from '@trpc/react-query';
 import { useState } from 'react';
 import '@testing-library/jest-dom';
@@ -8,12 +9,11 @@ import fetch from 'cross-fetch';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@testing-library/jest-dom/extend-expect';
 import '@/tests/matchMedia.mock';
-// import { Role } from '@prisma/client';
-// import { Session } from 'next-auth';
 
 import { AllProviders } from '@/components/AllProviders';
 import type { AppRouter } from '@/server/routers/_app';
 import type { CustomAppProps } from '@/pages/_app';
+export const transformer = superjson;
 
 export const trpc = createTRPCReact<AppRouter>();
 
@@ -64,6 +64,7 @@ export function render(ui: RenderUI, { router = {}, ...options }: RenderOptions 
 
       const [trpcClient] = useState(() =>
         trpc.createClient({
+          transformer,
           links: [loggerLink()],
         })
       );
