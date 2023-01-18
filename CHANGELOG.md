@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.14 (2023-01-18)
+
+**Note:** Version bump only for package root
+
+
+
+
+
 ## 1.13.0-canary.13 (2022-12-23)
 
 **Note:** Version bump only for package root
