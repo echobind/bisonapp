@@ -331,7 +331,7 @@ You should now have a fully working form that creates a new database entry on su
 ```tsx
 import { Spinner, Text } from '@chakra-ui/react';
 
-import { trpc, inferQueryOutput } from '@/lib/trpc';
+import { trpc, inferQueryOutput } from '@/utils/trpc';
 
 export const Loading = () => <Spinner />;
 export const Error = () => <Text>Error. See dev tools.</Text>;

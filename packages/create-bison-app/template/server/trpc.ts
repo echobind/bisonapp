@@ -3,7 +3,7 @@ import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 
 import type { Context } from './context';
 
-import { transformer } from '@/lib/trpc';
+import { transformer } from '@/utils/trpc';
 
 export const t = initTRPC.context<Context>().create({
   transformer,
