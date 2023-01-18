@@ -5,7 +5,7 @@ to: cells/<%= [h.inflection.camelize(h.dirName(name)), h.camelizedBaseName(name)
 <% component = h.camelizedBaseName(name) -%>
 import { Spinner, Text } from '@chakra-ui/react';
 
-import { trpc, inferQueryOutput } from '@/lib/trpc';
+import { trpc, inferQueryOutput } from '@/utils/trpc';
 
 export const Loading = () => <Spinner />;
 export const Error = () => <Text>Error. See dev tools.</Text>;
