@@ -1,0 +1,18 @@
+{
+	"info": {
+		"_postman_id": "8b867e52-205d-4357-be21-2261658e1cfb",
+		"name": "User Router",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5269406"
+	},
+	"item": [
+		{
+			"name": "findUsers",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

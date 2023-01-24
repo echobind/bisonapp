@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "cd131870-6a46-4ec5-a979-1e418dce5acf",
+		"name": "Translations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5269406"
+	},
+	"item": [
+		{
+			"name": "Welcome Test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Johnny\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_api_url}}/testTranslator",
+					"host": [
+						"{{base_api_url}}"
+					],
+					"path": [
+						"testTranslator"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

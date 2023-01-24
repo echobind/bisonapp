@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "6e77546a-8880-4eb2-8683-919b4ab84e8e",
+		"name": "OpenAPI Docs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5269406"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_api_url}}/openapi",
+					"host": [
+						"{{base_api_url}}"
+					],
+					"path": [
+						"openapi"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
