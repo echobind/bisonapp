@@ -28,6 +28,8 @@ export const <%= camelized.toLowerCase() %>Router = t.router({
           .optional(),
       })
     )
+    .meta({ openapi: { method: 'POST', path: '/create-an-endpoint', private: true } })
+    .output(z.promise(z.any())) // required for OpenAPI
     .query(async ({ ctx, input }) => {
       const { where = {}, orderBy = [] } = input;
       return await ctx.db.<%= name %>.findMany({
@@ -38,12 +40,16 @@ export const <%= camelized.toLowerCase() %>Router = t.router({
     }),
   find: protectedProcedure
     .input(z.object({ where: z.object({ id: z.string() }) }))
+    .meta({ openapi: { method: 'POST', path: '/create-an-endpoint', private: true } })
+    .output(z.promise(z.any())) // required for OpenAPI
     .query(async ({ ctx, input }) => {
       const { where } = input;
       return ctx.prisma.<%= name %>.findUnique({ where, select: default<%= camelized %>Select });
     }),
   create: adminProcedure
     .input(z.object({ data: z.object({ name: z.string() }) }))
+    .meta({ openapi: { method: 'POST', path: '/create-an-endpoint', private: true } })
+    .output(z.promise(z.any())) // required for OpenAPI
     .mutation(async ({ ctx, input }) => {
       const { data } = input;
       return await ctx.db.<%= name %>.create({ data, select: default<%= camelized %>Select });
@@ -55,6 +61,8 @@ export const <%= camelized.toLowerCase() %>Router = t.router({
         data: z.object({ name: z.string() }),
       })
     )
+    .meta({ openapi: { method: 'POST', path: '/create-an-endpoint', private: true } })
+    .output(z.promise(z.any())) // required for OpenAPI
     .mutation(async ({ ctx, input }) => {
       const { where, data } = input;
 

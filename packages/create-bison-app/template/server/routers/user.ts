@@ -16,14 +16,22 @@ export const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
 });
 
 export const userRouter = t.router({
-  me: protectedProcedure.query(async function resolve({ ctx }) {
-    return ctx.user;
-  }),
+  me: protectedProcedure
+    .input(z.object({})) // required for openAPI
+    .meta({ openapi: { method: 'GET', path: '/me', private: true } })
+    .output(z.promise(z.any()))
+    .query(async function resolve({ ctx }) {
+      return ctx.user;
+    }),
   findMany: adminProcedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }).optional())
+    .meta({ openapi: { method: 'GET', path: '/users', private: true } })
+    .output(z.promise(z.any()))
     .query(({ ctx, input }) => ctx.db.user.findMany({ where: input, select: defaultUserSelect })),
   find: t.procedure
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }))
+    .meta({ openapi: { method: 'GET', path: '/user', private: true } })
+    .output(z.promise(z.any()))
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUniqueOrThrow({
         where: input,
@@ -45,6 +53,8 @@ export const userRouter = t.router({
         profile: z.object({ firstName: z.string(), lastName: z.string() }),
       })
     )
+    .meta({ openapi: { method: 'POST', path: '/user/create', private: true } })
+    .output(z.promise(z.any()))
     .mutation(async ({ ctx, input: { email, password, roles = [Role.USER], profile } }) => {
       const existingUser = await ctx.db.user.findUnique({ where: { email } });
 

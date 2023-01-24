@@ -9,6 +9,7 @@ import { prisma } from '@/lib/prisma';
  * @link https://trpc.io/docs/context
  */
 export const createContext = async ({ req }: trpcNext.CreateNextContextOptions) => {
+  // TODO: POSTMAN if JWT Header...
   const session = await getSession({ req });
 
   let user;
