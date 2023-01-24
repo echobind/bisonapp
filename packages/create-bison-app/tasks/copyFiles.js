@@ -76,11 +76,6 @@ async function copyFiles({ variables, targetFolder }) {
       toPath(".github"),
       variables
     ),
-    copyDirectoryWithTemplate(
-      fromPath("postman"),
-      toPath("postman"),
-      variables
-    ),
     copyDirectoryWithTemplate(fromPath("pages"), toPath("pages"), variables),
     copyDirectoryWithTemplate(fromPath("prisma"), toPath("prisma"), variables),
     copyDirectoryWithTemplate(fromPath("server"), toPath("server"), variables),
