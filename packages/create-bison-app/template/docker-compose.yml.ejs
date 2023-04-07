@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    container_name: <%= name %>-db
+    image: 'postgres:14'
+    volumes:
+      - './.data/db:/var/lib/postgresql/data'
+    restart: 'always'
+    ports:
+      - <%= db.dev.port %>:5432
+    environment:
+      POSTGRES_USER: <%= db.dev.user %>
+      POSTGRES_DB: <%= db.dev.name %>
+<% if (db.dev.password) { -%>
+      POSTGRES_PASSWORD: <%= db.dev.password %>
+<% } -%>
+      TZ: 'Etc/UTC'

@@ -43,7 +43,9 @@
     "test:e2e:debug": "PWDEBUG=1 yarn test:e2e",
     "ts-node": "ts-node-dev --project tsconfig.cjs.json -r tsconfig-paths/register",
     "withEnv:test": "dotenv -c test --",
-    "watch:ts": "yarn dev:typecheck --watch"
+    "watch:ts": "yarn dev:typecheck --watch",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down" 
   },
   "dependencies": {
     "@chakra-ui/pro-theme": "^0.0.57",

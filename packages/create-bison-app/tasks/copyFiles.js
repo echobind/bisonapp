@@ -71,6 +71,12 @@ async function copyFiles({ variables, targetFolder }) {
       variables
     ),
 
+    copyWithTemplate(
+      fromPath("docker-compose.yml.ejs"),
+      toPath("docker-compose.yml"),
+      variables
+    ),
+
     copyDirectoryWithTemplate(
       fromPath(".github"),
       toPath(".github"),
