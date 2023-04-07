@@ -25,8 +25,8 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isSubmitted },
-  } = useForm<LoginFormData>({ mode: 'onChange' });
+    formState: { errors, isValid },
+  } = useForm<LoginFormData>();
 
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export function LoginForm() {
         </Text>
       </Flex>
       <Stack spacing="5">
-        <FormControl isInvalid={Boolean(isSubmitted && errors.email)}>
+        <FormControl isInvalid={Boolean(errors.email)}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
@@ -87,21 +87,17 @@ export function LoginForm() {
               },
             })}
           />
-          {isSubmitted && errors.email ? (
-            <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-          ) : null}
+          {errors.email ? <FormErrorMessage>{errors.email.message}</FormErrorMessage> : null}
         </FormControl>
         <PasswordField
           label="Password"
           data-testid="login-password"
-          isInvalid={Boolean(isSubmitted && errors.password)}
+          isInvalid={Boolean(errors.password)}
           {...register('password', {
             required: 'Password is required.',
           })}
         >
-          {isSubmitted && errors.password ? (
-            <FormErrorMessage>{errors.password.message}</FormErrorMessage>
-          ) : null}
+          {errors.password ? <FormErrorMessage>{errors.password.message}</FormErrorMessage> : null}
         </PasswordField>
       </Stack>
       <HStack justify="space-between">

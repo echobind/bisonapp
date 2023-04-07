@@ -28,7 +28,7 @@ export const resetDB = async (): Promise<boolean> => {
       (SELECT 'TRUNCATE TABLE ' || string_agg(oid::regclass::text, ', ') || ' CASCADE'
         FROM   pg_class
         WHERE  relkind = 'r'  -- only tables
-        AND    relname != '_Migration'
+        AND    relname NOT LIKE '%_migration%'
         AND    relnamespace = '${schema}'::regnamespace
       );
     END
