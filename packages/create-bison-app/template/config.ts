@@ -41,7 +41,7 @@ export function isStaging() {
   return stage === 'staging';
 }
 
-export function isDeveloping() {
+export function isDevelopment() {
   return stage === 'development';
 }
 
@@ -50,7 +50,7 @@ export function isTesting() {
 }
 
 export function isLocal() {
-  return isDeveloping() || isTesting();
+  return isDevelopment() || isTesting();
 }
 
 // a bit more versatile form of boolean coercion than zod provides
