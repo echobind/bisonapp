@@ -6,13 +6,6 @@ const { nanoid } = require('nanoid');
 const exec = util.promisify(childProcess.exec);
 
 module.exports = async () => {
-  // console.log(`\n[jest] waiting for server's health check...`);
-  // let isUp = false;
-  // while (isUp === false) {
-  //   await new Promise((r) => setTimeout(r, 250));
-  //   isUp = await statusCheck();
-  // }
-  // console.log(`[jest] server is up...`);
   const testDatabaseName = '<%= db.test.name %>';
   const testSchema = `test_${nanoid().toLowerCase()}`;
   const testDatabaseUrl = new URL(process.env.DATABASE_URL);

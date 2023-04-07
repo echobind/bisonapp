@@ -16,8 +16,8 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isSubmitted },
-  } = useForm<LoginFormData>({ mode: 'onChange' });
+    formState: { errors, isValid },
+  } = useForm<LoginFormData>();
 
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ export function LoginForm() {
             id="email"
             type="email"
             data-testid="login-email"
-            isInvalid={Boolean(isSubmitted && errors.email)}
+            isInvalid={Boolean(errors.email)}
             {...register('email', {
               required: 'Email is required.',
               pattern: {
@@ -77,21 +77,17 @@ export function LoginForm() {
               },
             })}
           />
-          {isSubmitted && errors.email ? (
-            <p className="text-red-500">{errors.email.message}</p>
-          ) : null}
+          {errors.email ? <p className="text-red-500">{errors.email.message}</p> : null}
         </div>
         <PasswordField
           label="Password"
           data-testid="login-password"
-          isInvalid={Boolean(isSubmitted && errors.password)}
+          isInvalid={Boolean(errors.password)}
           {...register('password', {
             required: 'Password is required.',
           })}
         >
-          {isSubmitted && errors.password ? (
-            <p className="text-red-500">{errors.password.message}</p>
-          ) : null}
+          {errors.password ? <p className="text-red-500">{errors.password.message}</p> : null}
         </PasswordField>
       </div>
       <div className="flex justify-between">

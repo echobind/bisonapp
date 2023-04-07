@@ -24,8 +24,8 @@ export function SignUpForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitted },
-  } = useForm<SignUpFormData>({ mode: 'onChange' });
+    formState: { errors, isValid },
+  } = useForm<SignUpFormData>();
 
   const { toast } = useToast();
   const router = useRouter();
@@ -89,35 +89,31 @@ export function SignUpForm() {
           <Input
             id="firstName"
             type="text"
-            isInvalid={Boolean(isSubmitted && errors.email)}
+            isInvalid={Boolean(errors.email)}
             {...register('firstName', {
               required: 'First Name is required.',
             })}
           />
-          {isSubmitted && errors.firstName ? (
-            <p className="text-red-500">{errors.firstName.message}</p>
-          ) : null}
+          {errors.firstName ? <p className="text-red-500">{errors.firstName.message}</p> : null}
         </div>
         <div>
           <Label htmlFor="lastName">Last Name</Label>
           <Input
             id="lastName"
             type="text"
-            isInvalid={Boolean(isSubmitted && errors.lastName)}
+            isInvalid={Boolean(errors.lastName)}
             {...register('lastName', {
               required: 'Last Name is required.',
             })}
           />
-          {isSubmitted && errors.lastName ? (
-            <p className="text-red-500">{errors.lastName.message}</p>
-          ) : null}
+          {errors.lastName ? <p className="text-red-500">{errors.lastName.message}</p> : null}
         </div>
         <div>
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
-            isInvalid={Boolean(isSubmitted && errors.email)}
+            isInvalid={Boolean(errors.email)}
             {...register('email', {
               required: 'Email is required.',
               pattern: {
@@ -126,14 +122,12 @@ export function SignUpForm() {
               },
             })}
           />
-          {isSubmitted && errors.email ? (
-            <p className="text-red-500">{errors.email.message}</p>
-          ) : null}
+          {errors.email ? <p className="text-red-500">{errors.email.message}</p> : null}
         </div>
         <PasswordField
           id="password"
           label="Password"
-          isInvalid={Boolean(isSubmitted && errors.password)}
+          isInvalid={Boolean(errors.password)}
           autoComplete="new-password"
           {...register('password', {
             required: 'Password is required.',
@@ -143,22 +137,19 @@ export function SignUpForm() {
             },
           })}
         >
-          {isSubmitted && errors.password ? (
-            <p className="text-red-500">{errors.password.message}</p>
-          ) : null}
+          {errors.password ? <p className="text-red-500">{errors.password.message}</p> : null}
         </PasswordField>
         <PasswordField
           id="confirmPassword"
           label="Confirm Password"
-          isInvalid={Boolean(isSubmitted && errors.confirmPassword)}
+          isInvalid={Boolean(errors.confirmPassword)}
           autoComplete="new-password"
           {...register('confirmPassword', {
             required: 'Confirmation password is required.',
             validate: (value) => value === watch('password') || "Passwords don't match.",
           })}
         >
-          {' '}
-          {isSubmitted && errors.confirmPassword ? (
+          {errors.confirmPassword ? (
             <p className="text-red-500">{errors.confirmPassword.message}</p>
           ) : null}
         </PasswordField>
