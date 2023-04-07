@@ -1,6 +1,3 @@
-export const APP_URL = process.env.BASE_URL || 'http://localhost:3001';
-export const LOGIN_URL = `${APP_URL}/login`;
-
 export const storageDir = './tests/e2e/temp';
 
 export const ADMIN = {
