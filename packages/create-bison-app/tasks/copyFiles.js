@@ -114,6 +114,7 @@ async function copyFiles({ variables, targetFolder }) {
         "prettier.config.js",
         "tsconfig.json",
         "tsconfig.cjs.json",
+        "config.ts",
       ],
       targetFolder,
       {

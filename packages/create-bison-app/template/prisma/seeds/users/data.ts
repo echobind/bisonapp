@@ -1,6 +1,8 @@
 import { Prisma, Role } from '@prisma/client';
 
 import { hashPassword } from '@/services/auth';
+import { isProduction } from '@/config';
+
 // *********************************************
 // ** DEVELOPMENT DATA SET
 // *********************************************
@@ -45,7 +47,6 @@ const initialProdUsers: Prisma.UserCreateInput[] = [
 // ** MAIN DATA EXPORT
 // *********************************************
 
-const appEnv = process.env.APP_ENV || 'development';
-
-export const userSeedData: Prisma.UserCreateInput[] =
-  appEnv === 'production' ? initialProdUsers : initialDevUsers;
+export const userSeedData: Prisma.UserCreateInput[] = isProduction()
+  ? initialProdUsers
+  : initialDevUsers;
