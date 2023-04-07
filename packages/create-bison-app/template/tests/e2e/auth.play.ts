@@ -1,7 +1,13 @@
 // https://playwright.dev/docs/next/auth#multiple-signed-in-roles
 import { Page, test, expect } from '@playwright/test';
 
+import { resetDB } from '@/tests/helpers/db';
+import { disconnect } from '@/lib/prisma';
+
 import { ADMIN, USER } from './constants';
+
+test.beforeEach(async () => resetDB());
+test.afterAll(async () => disconnect());
 
 test.describe(() => {
   test.use({ storageState: USER.storageState });

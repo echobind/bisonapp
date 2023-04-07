@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+import { resetDB } from '@/tests/helpers/db';
+import { disconnect } from '@/lib/prisma';
+
+test.beforeEach(async () => resetDB());
+test.afterAll(async () => disconnect());
+
 test('homepage has title and links to intro page', async ({ page }) => {
   await page.goto('https://playwright.dev/');
 
