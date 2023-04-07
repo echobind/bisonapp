@@ -33,7 +33,7 @@ export function SignUpForm() {
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm<SignUpFormData>({ mode: 'onChange' });
+  } = useForm<SignUpFormData>();
 
   const toast = useToast();
   const router = useRouter();

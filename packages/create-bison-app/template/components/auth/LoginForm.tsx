@@ -26,7 +26,7 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<LoginFormData>({ mode: 'onChange' });
+  } = useForm<LoginFormData>();
 
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState<string | null>(null);
