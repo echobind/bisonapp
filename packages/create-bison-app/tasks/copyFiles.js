@@ -102,7 +102,6 @@ async function copyFiles({ variables, targetFolder }) {
         "__mocks__",
         "_templates",
         ".vscode",
-        "chakra",
         "components",
         "context",
         "hooks",

@@ -284,8 +284,11 @@ export function OrganizationForm() {
 - [ ] Update the form to use Tailwind components
 
 ```tsx
-import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+
+import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 import { ErrorText } from './ErrorText';
 
@@ -294,13 +297,13 @@ export function OrganizationForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl id="name">
-        <FormLabel htmlFor="name">Name</FormLabel>
+      <div>
+        <Label htmlFor="name">Name</Label>
         <Input type="text" {...register('name', { required: true })} isInvalid={!!errors.name} />
-        <ErrorText>{errors.name && errors.name.message}</ErrorText>
-      </FormControl>
+        {errors.name ? <p className="text-red-500">{errors.name && errors.name.message}</p> : null}
+      </div>
 
-      <Button type="submit" marginTop={8} width="full">
+      <Button type="submit" className="mt-8 w-full">
         Submit
       </Button>
     </form>
@@ -329,18 +332,18 @@ You should now have a fully working form that creates a new database entry on su
 - [ ] Only render the `Success` component if `data` is present.
 
 ```tsx
-import { Spinner, Text } from '@chakra-ui/react';
+import { Loader } from 'lucide-react';
 
 import { trpc, inferQueryOutput } from '@/utils/trpc';
 
-export const Loading = () => <Spinner />;
-export const Error = () => <Text>Error. See dev tools.</Text>;
-export const Empty = () => <Text>No data.</Text>;
+export const Loading = () => <Loader className="animate-spin" />;
+export const Error = () => <span>Error. See dev tools.</span>;
+export const Empty = () => <span>No data.</span>;
 
 export const Success = (
   organization: NonNullable<inferQueryOutput<'organization', 'find'>>
 ) => {
-  return <Text>Awesome! {organization.name}</Text>;
+  return <span>Awesome! {organization.name}</span>;
 };
 
 export const OrganizationCell = ({ organizationId }: { organizationId: string }) => {
@@ -360,7 +363,6 @@ export const OrganizationCell = ({ organizationId }: { organizationId: string })
 
 ```tsx
 import Head from 'next/head';
-import { Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { OrganizationCell } from '@/cells/Organization';
@@ -375,9 +377,9 @@ function OrganizationPage() {
         <title>An organization</title>
       </Head>
 
-      <Flex direction={{ base: 'column', lg: 'row' }}>
+      <div className="flex flex-col lg:flex-row">
         <OrganizationCell organizationId={id} />
-      </Flex>
+      </div>
     </>
   );
 }

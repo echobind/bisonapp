@@ -5,7 +5,6 @@ to: pages/<%= name %>.tsx
 <% pageName = `${formattedPath}Page` -%>
 <% base = h.camelizedBaseName(name) -%>
 import Head from 'next/head';
-import { Heading, Center, Flex } from '@chakra-ui/react';
 
 function <%= pageName %>() {
   return (
@@ -14,11 +13,11 @@ function <%= pageName %>() {
         <title><%= pageName %></title>
       </Head>
 
-      <Flex direction={{ base: 'column', lg: 'row' }}>
-        <Center>
-          <Heading size="lg">I am <%= name %> page</Heading>
-        </Center>
-      </Flex>
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex justify-center items-center">
+          <h1 className="text-2xl font-bold">I am <%= name %> page</h1>
+        </div>
+      </div>
     </>
   );
 }
