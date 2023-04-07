@@ -32,7 +32,7 @@ export function SignUpForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitted },
+    formState: { errors, isValid },
   } = useForm<SignUpFormData>({ mode: 'onChange' });
 
   const toast = useToast();
@@ -94,7 +94,7 @@ export function SignUpForm() {
         </Text>
       </Flex>
       <Stack spacing="5">
-        <FormControl isInvalid={Boolean(isSubmitted && errors.firstName)}>
+        <FormControl isInvalid={Boolean(errors.firstName)}>
           <FormLabel htmlFor="firstName">First Name</FormLabel>
           <Input
             id="firstName"
@@ -103,11 +103,11 @@ export function SignUpForm() {
               required: 'First Name is required.',
             })}
           />
-          {isSubmitted && errors.firstName ? (
+          {errors.firstName ? (
             <FormErrorMessage>{errors.firstName.message}</FormErrorMessage>
           ) : null}
         </FormControl>
-        <FormControl isInvalid={Boolean(isSubmitted && errors.lastName)}>
+        <FormControl isInvalid={Boolean(errors.lastName)}>
           <FormLabel htmlFor="lastName">Last Name</FormLabel>
           <Input
             id="lastName"
@@ -116,11 +116,9 @@ export function SignUpForm() {
               required: 'Last Name is required.',
             })}
           />
-          {isSubmitted && errors.lastName ? (
-            <FormErrorMessage>{errors.lastName.message}</FormErrorMessage>
-          ) : null}
+          {errors.lastName ? <FormErrorMessage>{errors.lastName.message}</FormErrorMessage> : null}
         </FormControl>
-        <FormControl isInvalid={Boolean(isSubmitted && errors.email)}>
+        <FormControl isInvalid={Boolean(errors.email)}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
@@ -133,14 +131,12 @@ export function SignUpForm() {
               },
             })}
           />
-          {isSubmitted && errors.email ? (
-            <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-          ) : null}
+          {errors.email ? <FormErrorMessage>{errors.email.message}</FormErrorMessage> : null}
         </FormControl>
         <PasswordField
           id="password"
           label="Password"
-          isInvalid={Boolean(isSubmitted && errors.password)}
+          isInvalid={Boolean(errors.password)}
           autoComplete="new-password"
           {...register('password', {
             required: 'Password is required.',
@@ -150,14 +146,12 @@ export function SignUpForm() {
             },
           })}
         >
-          {isSubmitted && errors.password ? (
-            <FormErrorMessage>{errors.password.message}</FormErrorMessage>
-          ) : null}
+          {errors.password ? <FormErrorMessage>{errors.password.message}</FormErrorMessage> : null}
         </PasswordField>
         <PasswordField
           id="confirmPassword"
           label="Confirm Password"
-          isInvalid={Boolean(isSubmitted && errors.confirmPassword)}
+          isInvalid={Boolean(errors.confirmPassword)}
           autoComplete="new-password"
           {...register('confirmPassword', {
             required: 'Confirmation password is required.',
@@ -165,7 +159,7 @@ export function SignUpForm() {
           })}
         >
           {' '}
-          {isSubmitted && errors.confirmPassword ? (
+          {errors.confirmPassword ? (
             <FormErrorMessage>{errors.confirmPassword.message}</FormErrorMessage>
           ) : null}
         </PasswordField>
