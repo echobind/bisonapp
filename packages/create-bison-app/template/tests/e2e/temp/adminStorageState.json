@@ -38,10 +38,6 @@
         {
           "name": "nextauth.message",
           "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1669926306}"
-        },
-        {
-          "name": "chakra-ui-color-mode",
-          "value": "dark"
         }
       ]
     }

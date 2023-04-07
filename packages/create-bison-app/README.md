@@ -13,7 +13,7 @@ We're always improving on this, and we welcome suggestions from the community!
 - [TypeScript](https://www.typescriptlang.org/)
 - [tRPC](https://trpc.io) API for end-to-end type safety
 - [Prisma](https://www.prisma.io/) w/ Postgres
-- [Chakra UI](https://chakra-ui.com/)
+- [Tailwind](https://tailwindcss.com/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Playwright](https://www.playwright.dev/) for E2E tests
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io/) for unit and API request tests

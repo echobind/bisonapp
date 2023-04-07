@@ -1,16 +1,11 @@
-import {
-  FormControl,
-  FormLabel,
-  IconButton,
-  Input,
-  InputGroup,
-  InputProps,
-  InputRightElement,
-  useDisclosure,
-  useMergeRefs,
-} from '@chakra-ui/react';
 import * as React from 'react';
-import { HiEye, HiEyeOff } from 'react-icons/hi';
+import { Eye, EyeOff } from 'lucide-react';
+
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/Button';
+import { Label } from '@/components/ui/Label';
+import { InputProps, inputVariants } from '@/components/ui/Input';
 
 type PasswordFieldProps = InputProps & {
   id?: string;
@@ -19,46 +14,45 @@ type PasswordFieldProps = InputProps & {
 };
 
 export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
-  ({ name, id, label, children, isInvalid, ...props }, ref) => {
+  ({ name, id, label, children, isInvalid, className, ...props }, ref) => {
     id = id || name;
 
     const { isOpen, onToggle } = useDisclosure();
-    const inputRef = React.useRef<HTMLInputElement>(null);
-
-    const mergeRef = useMergeRefs(inputRef, ref);
 
     const onClickReveal = () => {
       onToggle();
-
-      if (inputRef.current) {
-        inputRef.current.focus({ preventScroll: true });
-      }
     };
 
     return (
-      <FormControl isInvalid={isInvalid}>
-        <FormLabel htmlFor={id}>{label}</FormLabel>
-        <InputGroup>
-          <Input
+      <div>
+        <Label htmlFor={id}>{label}</Label>
+        <div className="relative">
+          <input
             id={id}
-            ref={mergeRef}
+            ref={ref}
             name={name}
             type={isOpen ? 'text' : 'password'}
             autoComplete="current-password"
             required
+            aria-invalid={isInvalid}
+            className={cn(
+              inputVariants({ variant: isInvalid ? 'error' : 'default' }),
+              'flex items-center pr-16',
+              className
+            )}
             {...props}
           />
-          <InputRightElement>
-            <IconButton
-              variant="link"
-              aria-label={isOpen ? 'Mask password' : 'Reveal password'}
-              icon={isOpen ? <HiEyeOff /> : <HiEye />}
-              onClick={onClickReveal}
-            />
-          </InputRightElement>
-        </InputGroup>
+          <Button
+            variant="link"
+            type="button"
+            className="absolute right-0 top-0 h-full flex items-center justify-center"
+            aria-label={isOpen ? 'Mask password' : 'Reveal password'}
+            children={isOpen ? <EyeOff /> : <Eye />}
+            onClick={onClickReveal}
+          />
+        </div>
         {children}
-      </FormControl>
+      </div>
     );
   }
 );

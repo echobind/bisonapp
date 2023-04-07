@@ -39,6 +39,17 @@ async function copyFiles({ variables, targetFolder }) {
     copyWithTemplate(fromPath("README.md.ejs"), toPath("README.md"), variables),
     copyWithTemplate(fromPath("_.gitignore"), toPath(".gitignore"), variables),
 
+    copyWithTemplate(
+      fromPath("tailwind.config.js"),
+      toPath("tailwind.config.js"),
+      variables
+    ),
+    copyWithTemplate(
+      fromPath("postcss.config.js"),
+      toPath("postcss.config.js"),
+      variables
+    ),
+
     copyWithTemplate(fromPath("_.env.ejs"), toPath(".env"), variables),
 
     copyWithTemplate(
@@ -94,6 +105,7 @@ async function copyFiles({ variables, targetFolder }) {
         "chakra",
         "components",
         "context",
+        "hooks",
         "layouts",
         "lib",
         "prisma",
