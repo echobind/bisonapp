@@ -4,7 +4,7 @@ import { notEmpty } from './lib/type-witchcraft';
 
 const stages = ['production', 'staging', 'development', 'test'] as const;
 
-type Stage = typeof stages[number];
+type Stage = (typeof stages)[number];
 
 function getStage(stages: Stage[]) {
   if (!stages.length) return 'development';
