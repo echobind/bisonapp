@@ -38,7 +38,7 @@ function AppWithAuth({ children }: { children: React.ReactNode }) {
  * Renders all context providers
  */
 export function AllProviders({ pageProps, children }: Props) {
-  const { cookies, session } = pageProps;
+  const { cookies, session } = pageProps || {};
 
   const colorModeManager =
     typeof cookies === 'string' ? cookieStorageManagerSSR(cookies) : localStorageManager;
