@@ -19,6 +19,8 @@
     "db:setup": "yarn db:reset",
     "dev": "next dev",
     "dev:typecheck": "tsc --noEmit",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
     "g:cell": "hygen cell new --name",
     "g:component": "hygen component new --name",
     "g:trpc": "hygen trpc new --name",
@@ -43,9 +45,7 @@
     "test:e2e:debug": "PWDEBUG=1 yarn test:e2e",
     "ts-node": "ts-node-dev --project tsconfig.cjs.json -r tsconfig-paths/register",
     "withEnv:test": "dotenv -c test --",
-    "watch:ts": "yarn dev:typecheck --watch",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down" 
+    "watch:ts": "yarn dev:typecheck --watch"
   },
   "dependencies": {
     "@chakra-ui/pro-theme": "^0.0.57",
