@@ -207,7 +207,6 @@ describe("copyFiles", () => {
         "utils/.gitkeep",
         "components/CenteredBoxForm.test.tsx",
         "components/ErrorText.test.tsx",
-        "components/LoginForm.test.tsx",
         "components/Logo.test.tsx",
         "components/Nav.test.tsx",
         "components/SignupForm.test.tsx",

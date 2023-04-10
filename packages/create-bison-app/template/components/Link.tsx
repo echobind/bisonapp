@@ -46,7 +46,9 @@ export const Link = ({
       prefetch={prefetch}
       locale={locale}
     >
-      <ChakraLink {...chakraProps}>{children}</ChakraLink>
+      <ChakraLink as="span" {...chakraProps}>
+        {children}
+      </ChakraLink>
     </NextLink>
   );
 };
@@ -73,7 +75,7 @@ export const ButtonLink = ({
       prefetch={prefetch}
       locale={locale}
     >
-      <ChakraButton as="a" {...chakraProps}>
+      <ChakraButton as="span" {...chakraProps}>
         {children}
       </ChakraButton>
     </NextLink>
