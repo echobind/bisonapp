@@ -85,6 +85,9 @@ jobs:
 
       - name: Build production bison app
         run: yarn build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
+          NODE_ENV: test
 
       - name: Lint bison app
         run: yarn lint
