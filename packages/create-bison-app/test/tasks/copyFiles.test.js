@@ -53,8 +53,8 @@ describe("copyFiles", () => {
       expect(() => fs.statSync(target)).not.toThrowError();
     });
 
-    it("copies and renames .env.local and env.test", async () => {
-      const files = [".env.local", ".env.test"];
+    it("copies and renames .env.development and env.test", async () => {
+      const files = [".env.development", ".env.test"];
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, file);
@@ -129,7 +129,7 @@ describe("copyFiles", () => {
     });
 
     it("copies env with the correct contents", async () => {
-      const target = path.join(targetFolder, ".env");
+      const target = path.join(targetFolder, ".env.development");
       const file = await fs.promises.readFile(target);
       const fileString = file.toString();
       const { user, password, host, port, name } = variables.db.dev;
