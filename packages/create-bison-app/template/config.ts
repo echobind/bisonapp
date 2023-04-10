@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 import { notEmpty } from './lib/type-witchcraft';
 
-const stages = ['production', 'staging', 'development', 'test'] as const;
+const stages = ['production', 'development', 'test'] as const;
 
-type Stage = (typeof stages)[number];
+type Stage = typeof stages[number];
 
 function getStage(stages: Stage[]) {
   if (!stages.length) return 'development';
@@ -35,10 +35,6 @@ function envToBoolean(value: string | undefined, defaultValue = false): boolean 
 
 export function isProduction() {
   return stage === 'production';
-}
-
-export function isStaging() {
-  return stage === 'staging';
 }
 
 export function isDevelopment() {
