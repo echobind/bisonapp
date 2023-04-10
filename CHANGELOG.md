@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.17 (2023-04-10)
+
+
+### Features
+
+* Add docker-compose.yml to the Bison template. ([#310](https://github.com/echobind/bisonapp/issues/310)) ([5f732e0](https://github.com/echobind/bisonapp/commit/5f732e0f5a8bfc706b63aff1a82dbabc31789f72))
+
+
+
 ## 1.13.0-canary.16 (2023-04-10)
 
 **Note:** Version bump only for package root
