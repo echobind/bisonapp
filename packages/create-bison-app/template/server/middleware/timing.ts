@@ -1,8 +1,11 @@
 import { t } from '@/server/trpc';
+import { isTesting } from '@/config';
 
 const timingMiddleware = t.middleware(async ({ path, type, next }) => {
   // Don't log timing in tests.
-  if (process.env.NODE_ENV === 'test') return await next();
+  if (isTesting()) {
+    return await next();
+  }
 
   const start = Date.now();
   const result = await next();

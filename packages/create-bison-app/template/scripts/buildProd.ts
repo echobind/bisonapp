@@ -1,32 +1,17 @@
-export {};
-const spawn = require('child_process').spawn;
+import { spawn } from 'child_process';
+import { config } from '@/config';
 
 const DEFAULT_BUILD_COMMAND = `yarn build:prisma && yarn build:next`;
 
-/**
- * This builds the production app.
- * if the current branch should be migrated, it runs migrations first.
- */
-function buildProd() {
-  let buildCommand = DEFAULT_BUILD_COMMAND;
-  const shouldMigrate = process.env.NODE_ENV === 'production';
+const buildCommand = config.database.shouldMigrate
+  ? `yarn db:deploy && ${DEFAULT_BUILD_COMMAND}`
+  : DEFAULT_BUILD_COMMAND;
 
-  if (shouldMigrate) {
-    buildCommand = `yarn db:deploy && ${buildCommand}`;
-  }
+const child = spawn(buildCommand, {
+  shell: true,
+  stdio: 'inherit',
+});
 
-  const child = spawn(buildCommand, {
-    shell: true,
-    stdio: 'inherit',
-  });
-
-  child.on('exit', function (code: number) {
-    process.exit(code);
-  });
-}
-
-if (require.main === module) {
-  buildProd();
-}
-
-module.exports = { buildProd };
+child.on('exit', function (code: number) {
+  process.exit(code);
+});
