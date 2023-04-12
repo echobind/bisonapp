@@ -3,6 +3,8 @@ import util from 'util';
 
 import { Client } from 'pg';
 
+import { config, isProduction } from '@/config';
+
 const exec = util.promisify(childProcess.exec);
 
 /**
@@ -10,14 +12,16 @@ const exec = util.promisify(childProcess.exec);
  * Truncates all tables except for _Migrations
  */
 export const resetDB = async (): Promise<boolean> => {
-  if (process.env.NODE_ENV === 'production') return Promise.resolve(false);
+  if (isProduction()) {
+    return Promise.resolve(false);
+  }
 
-  const match = process.env.DATABASE_URL?.match(/schema=(.*)(&.*)*$/);
+  const match = config.database.url.match(/schema=(.*)(&.*)*$/);
   const schema = match ? match[1] : 'public';
 
   // NOTE: the prisma client does not handle this query well, use pg instead
   const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: config.database.url,
   });
 
   await client.connect();

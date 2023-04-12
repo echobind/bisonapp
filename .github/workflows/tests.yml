@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["ubuntu-latest", "windows-latest"]
+        os: ['ubuntu-latest', 'windows-latest']
         node-version: [16.x, 18.x]
     outputs:
       appName: ${{ steps.create-app.outputs.appName }}
@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: 'yarn'
 
       - name: Install packages
         run: yarn && yarn lerna bootstrap
@@ -56,7 +56,7 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_PASSWORD: postgres
-        ports: ["5432:5432"]
+        ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     strategy:
@@ -85,6 +85,8 @@ jobs:
 
       - name: Build production bison app
         run: yarn build
+        env:
+          DATABASE_URL: not_used_but_needs_to_be_set_to_pass_zod_config_check
 
       - name: Lint bison app
         run: yarn lint

@@ -6,16 +6,16 @@
   "cacheDirectories": [".next/cache"],
 <% } -%>
   "scripts": {
-    "build": "yarn ts-node ./scripts/buildProd",
+    "build": "yarn ts-node-wrap ./scripts/buildProd",
     "build:prisma": "prisma generate",
     "build:next": "next build",
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
-    "db:deploy": "yarn prisma migrate deploy",
-    "db:reset": "yarn prisma migrate reset",
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
     "db:reset:test": "yarn withEnv:test prisma migrate reset",
-    "db:seed": "yarn prisma db seed",
-    "db:seed:prod": "cross-env APP_ENV=production prisma db seed",
+    "db:seed": "prisma db seed",
+    "db:seed:prod": "cross-env NODE_ENV=production prisma db seed",
     "db:setup": "yarn db:reset",
     "dev": "next dev",
     "dev:typecheck": "tsc --noEmit",
@@ -29,10 +29,10 @@
     "g:test:factory": "hygen test factory --name",
     "g:test:request": "hygen test request --name",
     "g:test:util": "hygen test util --name",
-    "g:e2e": "yarn playwright codegen",
-    "lint": "yarn eslint . --ext .ts,.tsx --ignore-pattern tmp",
+    "g:e2e": "playwright codegen",
+    "lint": "eslint . --ext .ts,.tsx --ignore-pattern tmp",
     "lint:fix": "yarn lint --fix",
-    "run:script": "yarn ts-node prisma/scripts/run.ts -f",
+    "run:script": "yarn ts-node-wrap prisma/scripts/run.ts -f",
     "setup": "yarn setup:dev && yarn setup:test",
     "setup:dev": "yarn build:prisma && yarn db:deploy && yarn db:seed",
     "setup:test": "yarn withEnv:test -- yarn db:deploy",
@@ -43,7 +43,7 @@
     "test:db:reset": "yarn withEnv:test prisma migrate reset --force",
     "test:e2e": "yarn withEnv:test playwright test --workers 1",
     "test:e2e:debug": "PWDEBUG=1 yarn test:e2e",
-    "ts-node": "ts-node-dev --project tsconfig.cjs.json -r tsconfig-paths/register",
+    "ts-node-wrap": "ts-node --project tsconfig.cjs.json -r tsconfig-paths/register",
     "withEnv:test": "dotenv -c test --",
     "watch:ts": "yarn dev:typecheck --watch"
   },
@@ -117,7 +117,7 @@
     "prisma": "^4.12.0",
     "start-server-and-test": "^2.0.0",
     "ts-jest": "^29.1.0",
-    "ts-node-dev": "^2.0.0",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.3"
   },
@@ -133,6 +133,6 @@
     "*.{ts,tsx}": "yarn lint"
   },
   "prisma": {
-    "seed": "yarn ts-node prisma/seed.ts"
+    "seed": "yarn ts-node-wrap prisma/seed.ts"
   }
 }

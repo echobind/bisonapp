@@ -7,7 +7,7 @@
 - `yarn db:seed` (DEV)
 - `yarn db:seed:prod` (PROD)
 
-We use `APP_ENV` in the scripts to determine the dataset returned for seeds.
+We use `NODE_ENV` in the scripts to determine the dataset returned for seeds.
 This ENV is set in your .env.local file as well, and can be manually set as an ENV in your deploy environment if needed for other scripts.
 
 ### File Breakdown (Seeds)
@@ -20,7 +20,7 @@ This ENV is set in your .env.local file as well, and can be manually set as an E
 ----/index.ts
 ```
 
-**data.ts** contains the exported function `seedModelData: ModelCreateInput[]` this function leverages APP_ENV to return the dataset expected for Dev vs Prod. In the case of `users` this returns `initialDevUsers: UserCreateInput[]` or `initalProdUsers: UserCreateInput[]`.
+**data.ts** contains the exported function `seedModelData: ModelCreateInput[]` this function leverages `NODE_ENV` to return the dataset expected for Dev vs Prod. In the case of `users` this returns `initialDevUsers: UserCreateInput[]` or `initalProdUsers: UserCreateInput[]`.
 
 **prismaRunner.ts** this file contains the Prisma `UPSERT` call for the model. We leverage upsert here so that seeds can potentially be ran more than once as your models and data expand over time.
 
