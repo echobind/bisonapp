@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { config } from '@/config';
 import { prisma } from '@/lib/prisma';
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
@@ -11,6 +12,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   } catch (err) {}
 
   const data = {
+    stage: config.stage,
     env: {
       NODE_ENV: process.env.NODE_ENV,
       NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
