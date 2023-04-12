@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.19 (2023-04-12)
+
+
+### Features
+
+* Add a health check endpoint. ([#311](https://github.com/echobind/bisonapp/issues/311)) ([862bb59](https://github.com/echobind/bisonapp/commit/862bb59d04ddb83fa11568d64a3cc3b99edfb8ac))
+
+
+
 ## 1.13.0-canary.18 (2023-04-11)
 
 **Note:** Version bump only for package create-bison-app
