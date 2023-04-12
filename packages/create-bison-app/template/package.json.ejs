@@ -15,7 +15,7 @@
     "db:reset": "prisma migrate reset",
     "db:reset:test": "yarn withEnv:test prisma migrate reset",
     "db:seed": "prisma db seed",
-    "db:seed:prod": "cross-env NEXT_PUBLIC_APP_ENV=production prisma db seed",
+    "db:seed:prod": "cross-env NODE_ENV=production prisma db seed",
     "db:setup": "yarn db:reset",
     "dev": "next dev",
     "dev:typecheck": "tsc --noEmit",
