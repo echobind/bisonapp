@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 import { notEmpty } from './lib/type-witchcraft';
 
 const stages = ['production', 'development', 'test'] as const;
@@ -37,6 +35,12 @@ function envToString(value: string | undefined, defaultValue = '') {
   return value === undefined ? defaultValue : value;
 }
 
+/*
+function envToNumber(value: string | undefined, defaultValue: number): number {
+  return value === undefined || value === '' ? defaultValue : Number(value);
+}
+*/
+
 export function isProduction() {
   return stage === 'production';
 }
@@ -53,56 +57,26 @@ export function isLocal() {
   return isDevelopment() || isTesting();
 }
 
-// a bit more versatile form of boolean coercion than zod provides
-const coerceBoolean = (defaultValue = false) =>
-  z
-    .string()
-    .optional()
-    .transform((value) => envToBoolean(value, defaultValue))
-    .pipe(z.boolean());
-
-const coerceString = (defaultValue = '') =>
-  z
-    .string()
-    .optional()
-    .transform((value) => envToString(value, defaultValue))
-    .pipe(z.string());
-
-const configSchema = z.object({
-  stage: z.enum(stages),
-  ci: z.object({
-    isCi: coerceBoolean(),
-    isPullRequest: coerceBoolean(),
-  }),
-  database: z.object({
-    url: coerceString(),
-    shouldMigrate: coerceBoolean(),
-  }),
-  auth: z.object({
-    secret: coerceString(),
-  }),
-});
-
 const stage = getStage(
   [process.env.NODE_ENV, process.env.NEXT_PUBLIC_APP_ENV].filter(notEmpty).filter(isStage)
 );
 
 // NOTE: Remember that only env variables that start with NEXT_PUBLIC or are
 // listed in next.config.js will be available on the client.
-export const config = configSchema.parse({
+export const config = {
   stage,
   ci: {
-    isCi: process.env.CI,
-    isPullRequest: process.env.IS_PULL_REQUEST,
+    isCi: envToBoolean(process.env.CI),
+    isPullRequest: envToBoolean(process.env.IS_PULL_REQUEST),
   },
   database: {
-    url: process.env.DATABASE_URL,
-    shouldMigrate: process.env.SHOULD_MIGRATE,
+    url: envToString(process.env.DATABASE_URL),
+    shouldMigrate: envToBoolean(process.env.SHOULD_MIGRATE),
   },
   git: {
-    commit: process.env.FC_GIT_COMMIT_SHA || process.env.RENDER_GIT_COMMIT,
+    commit: envToString(process.env.FC_GIT_COMMIT_SHA || process.env.RENDER_GIT_COMMIT),
   },
   auth: {
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: envToString(process.env.NEXTAUTH_SECRET),
   },
-});
+};
