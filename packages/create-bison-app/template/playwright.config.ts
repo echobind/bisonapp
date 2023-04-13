@@ -1,8 +1,10 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
+import { config as appConfig } from '@/config';
+
 const TEST_SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
-const IS_CI = process.env.CI === 'true';
+const IS_CI = appConfig.ci.isCi;
 
 const baseUrl = `http://localhost:${TEST_SERVER_PORT}`;
 
@@ -32,11 +34,11 @@ const config: PlaywrightTestConfig = {
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: IS_CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: IS_CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: IS_CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
