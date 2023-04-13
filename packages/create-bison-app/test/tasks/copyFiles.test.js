@@ -155,7 +155,6 @@ describe('copyFiles', () => {
       const files = [
         '.eslintrc.json',
         'auth.play.ts',
-        'constants.ts',
         'global-setup.ts',
         'global-teardown.ts',
         'tsconfig.json',
