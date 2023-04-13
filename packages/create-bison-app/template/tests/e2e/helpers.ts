@@ -26,7 +26,6 @@ const generateSessionToken = async (user: SessionUser, nowS: number): Promise<st
       user: {
         id: user.id,
         email: user.email,
-        emailVerified: null,
         roles: user.roles,
       },
       iat: nowS - 3600,
