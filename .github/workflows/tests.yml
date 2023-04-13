@@ -86,7 +86,8 @@ jobs:
       - name: Build production bison app
         run: yarn build
         env:
-          DATABASE_URL: not_used_but_needs_to_be_set_to_pass_zod_config_check
+          DATABASE_URL: postgresql://postgres:postgres@localhost/${{ needs.create-app.outputs.appName }}_test
+          NODE_ENV: test
 
       - name: Lint bison app
         run: yarn lint
