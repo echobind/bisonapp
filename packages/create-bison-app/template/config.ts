@@ -33,6 +33,10 @@ function envToBoolean(value: string | undefined, defaultValue = false): boolean 
   return ['1', 'true'].includes(value.trim().toLowerCase()) ? true : false;
 }
 
+function envToString(value: string | undefined, defaultValue = '') {
+  return value === undefined ? defaultValue : value;
+}
+
 export function isProduction() {
   return stage === 'production';
 }
@@ -50,24 +54,32 @@ export function isLocal() {
 }
 
 // a bit more versatile form of boolean coercion than zod provides
-const coerceBoolean = z
-  .string()
-  .optional()
-  .transform((value) => envToBoolean(value))
-  .pipe(z.boolean());
+const coerceBoolean = (defaultValue = false) =>
+  z
+    .string()
+    .optional()
+    .transform((value) => envToBoolean(value, defaultValue))
+    .pipe(z.boolean());
+
+const coerceString = (defaultValue = '') =>
+  z
+    .string()
+    .optional()
+    .transform((value) => envToString(value, defaultValue))
+    .pipe(z.string());
 
 const configSchema = z.object({
   stage: z.enum(stages),
   ci: z.object({
-    isCi: coerceBoolean,
-    isPullRequest: coerceBoolean,
+    isCi: coerceBoolean(),
+    isPullRequest: coerceBoolean(),
   }),
   database: z.object({
-    url: z.string(),
-    shouldMigrate: coerceBoolean,
+    url: coerceString(),
+    shouldMigrate: coerceBoolean(),
   }),
   auth: z.object({
-    secret: z.string(),
+    secret: coerceString(),
   }),
 });
 

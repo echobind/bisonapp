@@ -93,16 +93,6 @@ export async function loginAs(page: Page, userInitial: Partial<SessionUser>) {
         lastName: user.lastName,
       },
     },
-    /*
-    accounts: {
-      create: {
-        type: 'oauth',
-        provider: 'google',
-        providerAccountId: '12345',
-        token_type: 'bearer',
-      },
-    },
-    */
   };
 
   const userPrisma = await UserFactory.create(createArgs);
