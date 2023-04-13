@@ -66,6 +66,9 @@ const configSchema = z.object({
     url: z.string(),
     shouldMigrate: coerceBoolean,
   }),
+  auth: z.object({
+    secret: z.string(),
+  }),
 });
 
 const stage = getStage(

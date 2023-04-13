@@ -1,6 +1,41 @@
+import Chance from 'chance';
 import { BrowserContext, Locator, Page } from '@playwright/test';
+import { Role } from '@prisma/client';
+import { encode as encodeJwt } from 'next-auth/jwt';
+import { nanoid } from 'nanoid';
 
-import config from '@/playwright.config';
+import { UserFactory } from '@/tests/factories/user';
+import playwrightConfig from '@/playwright.config';
+import { config } from '@/config';
+
+const chance = new Chance();
+
+export type SessionUser = {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  roles: Role[];
+};
+
+const generateSessionToken = async (user: SessionUser, nowS: number): Promise<string> => {
+  return encodeJwt({
+    token: {
+      email: user.email,
+      sub: user.id,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: null,
+        roles: user.roles,
+      },
+      iat: nowS - 3600,
+      exp: nowS + 7200,
+      jti: nanoid(),
+    },
+    secret: config.auth.secret,
+  });
+};
 
 export async function clickNewPage(
   context: BrowserContext,
@@ -15,8 +50,8 @@ export async function clickNewPage(
 
   // the page doesn't seem to inherit the timeout from context, so setting it
   // here too
-  newPage.setDefaultTimeout(config.timeout || 30000);
-  newPage.setDefaultNavigationTimeout(config.timeout || 30000);
+  newPage.setDefaultTimeout(playwrightConfig.timeout || 30000);
+  newPage.setDefaultNavigationTimeout(playwrightConfig.timeout || 30000);
 
   await newPage.waitForLoadState();
 
@@ -34,4 +69,65 @@ export async function uploadFile(page: Page, clickableTarget: Locator, filePath:
   ]);
 
   await fileChooser.setFiles(filePath);
+}
+
+export async function loginAs(page: Page, userInitial: Partial<SessionUser>) {
+  const nowMs = Date.now();
+  const nowS = Math.floor(nowMs / 1000);
+
+  const user = {
+    email: chance.email(),
+    firstName: chance.first(),
+    lastName: chance.last(),
+    roles: [Role.USER],
+    ...userInitial,
+  };
+
+  const createArgs = {
+    email: user.email,
+    roles: user.roles,
+    emailVerified: new Date().toISOString(),
+    profile: {
+      create: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    },
+    /*
+    accounts: {
+      create: {
+        type: 'oauth',
+        provider: 'google',
+        providerAccountId: '12345',
+        token_type: 'bearer',
+      },
+    },
+    */
+  };
+
+  const userPrisma = await UserFactory.create(createArgs);
+
+  const sessionToken = await generateSessionToken(
+    {
+      ...userPrisma,
+      ...userPrisma.profile,
+    },
+    nowS
+  );
+
+  const context = page.context();
+
+  await context.addCookies([
+    {
+      name: 'next-auth.session-token',
+      value: sessionToken,
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+      sameSite: 'Lax',
+      expires: nowS + 7200,
+    },
+  ]);
+
+  return userPrisma;
 }
