@@ -52,3 +52,8 @@ export const setupDB = async (): Promise<boolean> => {
 
   return true;
 };
+
+export function getSchema(databaseUrl: string, defaultSchema = 'public'): string {
+  const url = new URL(databaseUrl);
+  return url.searchParams.get('schema') || defaultSchema;
+}
