@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Button } from '@chakra-ui/react';
 import { signOut } from 'next-auth/react';
 
 import { Logo } from '@/components/Logo';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
+import { Button } from '@/components/ui/Button';
 
 interface Props {
   children: ReactNode;
@@ -20,29 +20,22 @@ export function LoggedInLayout({ children }: Props) {
   }
 
   return (
-    <Flex direction="column" minH="100vh">
+    <div className="flex flex-col min-h-screen">
       <>
-        <Flex p={4}>
+        <div className="flex p-4">
           <Logo />
 
           <Nav />
 
-          <Button
-            as="a"
-            ml={16}
-            display={{ base: 'none', lg: 'inline-flex' }}
-            onClick={handleLogout}
-          >
+          <Button variant="outline" className="ml-16" onClick={handleLogout}>
             Logout
           </Button>
-        </Flex>
+        </div>
       </>
 
-      <Box flex="1 1 auto" mt={8}>
-        {children}
-      </Box>
+      <div className="flex-1 mt-8">{children}</div>
 
       <Footer />
-    </Flex>
+    </div>
   );
 }

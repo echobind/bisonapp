@@ -1,25 +1,16 @@
-import {
-  Button,
-  Circle,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  useToast,
-} from '@chakra-ui/react';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
 import { EMAIL_REGEX } from '@/constants';
+import { useToast } from '@/hooks/useToast';
+import { Button } from '@/components/ui/Button';
+import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/ui/Input';
 
 export function LoginForm() {
   const {
@@ -31,7 +22,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState<string | null>(null);
   const router = useRouter();
-  const toast = useToast();
+  const { toast } = useToast();
 
   async function onSubmit({ email, password }: LoginFormData) {
     if (!isValid || loading) return;
@@ -54,7 +45,7 @@ export function LoginForm() {
       }
 
       if (response.ok === true) {
-        toast({ status: 'success', title: 'Welcome!' });
+        toast({ title: 'Welcome!', variant: 'success' });
 
         return router.push('/');
       }
@@ -64,21 +55,20 @@ export function LoginForm() {
   }
 
   return (
-    <Stack spacing="6" as="form" onSubmit={handleSubmit(onSubmit)}>
-      <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
-        <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col justify-center mb-4">
+        <div className="w-16 h-16 bg-gray-300 text-white self-center rounded-full" />
 
-        <Text as="h2" fontSize="lg" textAlign="center" marginTop={2}>
-          Welcome Back!
-        </Text>
-      </Flex>
-      <Stack spacing="5">
-        <FormControl isInvalid={Boolean(errors.email)}>
-          <FormLabel htmlFor="email">Email</FormLabel>
+        <h2 className="text-lg text-center mt-2">Welcome Back!</h2>
+      </div>
+      <div className="flex flex-col gap-5">
+        <div>
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
             data-testid="login-email"
+            isInvalid={Boolean(errors.email)}
             {...register('email', {
               required: 'Email is required.',
               pattern: {
@@ -87,8 +77,8 @@ export function LoginForm() {
               },
             })}
           />
-          {errors.email ? <FormErrorMessage>{errors.email.message}</FormErrorMessage> : null}
-        </FormControl>
+          {errors.email ? <p className="text-red-500">{errors.email.message}</p> : null}
+        </div>
         <PasswordField
           label="Password"
           data-testid="login-password"
@@ -97,31 +87,28 @@ export function LoginForm() {
             required: 'Password is required.',
           })}
         >
-          {errors.password ? <FormErrorMessage>{errors.password.message}</FormErrorMessage> : null}
+          {errors.password ? <p className="text-red-500">{errors.password.message}</p> : null}
         </PasswordField>
-      </Stack>
-      <HStack justify="space-between">
+      </div>
+      <div className="flex justify-between">
         <NextLink href="/reset-password">
-          <Button variant="link" colorScheme="blue" size="sm">
+          <Button variant="link" size="sm">
             Forgot password?
           </Button>
         </NextLink>
-      </HStack>
-      <Stack spacing="6">
+      </div>
+      <div className="flex gap-6 flex-col">
         <Button variant="outline" type="submit" disabled={loading} data-testid="login-submit">
           Sign in
         </Button>
-        {signInError && <Text color="red.700">No User Found</Text>}
-      </Stack>
-      <Flex marginTop={8} justifyContent="center">
-        <Text color="gray.500">
-          New User?{' '}
-          <Link href="/signup" color="muted">
-            Sign Up
-          </Link>
-        </Text>
-      </Flex>
-    </Stack>
+        {signInError && <p className="text-red-700">No User Found</p>}
+      </div>
+      <div className="flex justify-center mt-8">
+        <span className="text-slate-500">
+          New User? <Link href="/signup">Sign Up</Link>
+        </span>
+      </div>
+    </form>
   );
 }
 

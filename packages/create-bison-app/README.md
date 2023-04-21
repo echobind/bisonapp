@@ -13,7 +13,7 @@ We're always improving on this, and we welcome suggestions from the community!
 - [TypeScript](https://www.typescriptlang.org/)
 - [tRPC](https://trpc.io) API for end-to-end type safety
 - [Prisma](https://www.prisma.io/) w/ Postgres
-- [Chakra UI](https://chakra-ui.com/)
+- [Tailwind](https://tailwindcss.com/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Playwright](https://www.playwright.dev/) for E2E tests
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Jest](https://jestjs.io/) for unit and API request tests
@@ -24,12 +24,14 @@ We're always improving on this, and we welcome suggestions from the community!
 - Fully wired up login/signup pages with client and server-side validation.
 - Eslint pre-configured with [Echobind best practices](https://github.com/echobind/eslint-plugin-echobind)
 - Import path alias to the root project folder (`@/`) to avoid the need for long relative import paths.
+- Set up for components from [ui.shadcn.com](https://ui.shadcn.com)
 
 ## Conventions
 
 - Don't copy/paste files, use generators and Hygen templates. Need to update the generator as your project evolves? they are all in the `_templates` folder.
 - Don't manually write types for tRPC procedures. Infer the types from the router definition.
 - All frontend pages are static by default. If you need something server rendered, just add `getServerSideProps` like you would in any Next app.
+- Instead of creating component CSS classes (like `.btn` or `.input`) or installing a component library, UI components should be copy/pasted into the `/components/ui` folder and adjusted as needed. [ui.shadcn.com](https://ui.shadcn.com) is the recommended source for these components.
 
 ## Tradeoffs
 

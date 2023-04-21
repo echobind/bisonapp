@@ -1,11 +1,9 @@
-import { Heading } from '@chakra-ui/react';
-
-import { Link } from './Link';
+import Link from 'next/link';
 
 export function Logo() {
   return (
-    <Heading as={Link} href="/" size="md">
-      MyApp
-    </Heading>
+    <Link href="/">
+      <span className="text-2xl font-bold text-gray-900">MyApp</span>
+    </Link>
   );
 }

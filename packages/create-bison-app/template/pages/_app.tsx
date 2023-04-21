@@ -4,6 +4,7 @@ import type { AppProps as NextAppProps } from 'next/app';
 
 import { AllProviders } from '@/components/AllProviders';
 import { trpc } from '@/utils/trpc';
+import '../styles/globals.css';
 
 export type CustomAppProps = {
   cookies: string;

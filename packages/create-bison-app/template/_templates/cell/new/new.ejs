@@ -3,16 +3,16 @@ to: cells/<%= [h.inflection.camelize(h.dirName(name)), h.camelizedBaseName(name)
 ---
 <% formattedPath = h.camelizedPathName(name) -%>
 <% component = h.camelizedBaseName(name) -%>
-import { Spinner, Text } from '@chakra-ui/react';
+import { Loader } from 'lucide-react';
 
 import { trpc, inferQueryOutput } from '@/utils/trpc';
 
-export const Loading = () => <Spinner />;
-export const Error = () => <Text>Error. See dev tools.</Text>;
-export const Empty = () => <Text>No data.</Text>;
+export const Loading = () => <Loader className="animate-spin" />;
+export const Error = () => <span>Error. See dev tools.</span>;
+export const Empty = () => <span>No data.</span>;
 
 export const Success = (props: inferQueryOutput<'user', 'me'>) => {
-  return <Text>Awesome! {props.email}</Text>;
+  return <span>Awesome! {props.email}</span>;
 };
 
 export const <%= component %>Cell = () => {

@@ -1,32 +1,31 @@
 import { ReactNode } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import Link from 'next/link';
 
-import { ButtonLink } from '@/components/Link';
 import { Logo } from '@/components/Logo';
 import { Footer } from '@/components/Footer';
-
+import { buttonVariants } from '@/components/ui/Button';
 interface Props {
   children: ReactNode;
 }
 
 export function LoggedOutLayout({ children }: Props) {
   return (
-    <Flex direction="column" minH="100vh">
+    <div className="flex flex-col min-h-screen">
       <>
-        <Flex p={4}>
+        <div className="flex justify-between items-center p-4">
           <Logo />
 
-          <ButtonLink href="/login" ml="auto" display={{ base: 'none', lg: 'inline-flex' }}>
-            Login
-          </ButtonLink>
-        </Flex>
+          <Link href="/login" passHref>
+            <a className={buttonVariants({ variant: 'outline' })} href="/login">
+              Login
+            </a>
+          </Link>
+        </div>
       </>
 
-      <Box flex="1 1 auto" mt={8}>
-        {children}
-      </Box>
+      <div className="flex-1 mt-8">{children}</div>
 
       <Footer />
-    </Flex>
+    </div>
   );
 }

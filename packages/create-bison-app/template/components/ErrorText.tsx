@@ -1,10 +1,16 @@
-import { Text, TextProps } from '@chakra-ui/react';
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
+
+import { cn } from '@/lib/utils';
 
 /** Renders error text under form inputs */
-export function ErrorText({ children, ...textProps }: TextProps) {
+export function ErrorText({
+  children,
+  className,
+  ...textProps
+}: DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>) {
   return (
-    <Text color="red.500" fontSize="sm" textAlign="right" mt={1} {...textProps}>
+    <span {...textProps} className={cn('text-red-500 text-sm text-right mt-1', className)}>
       {children}
-    </Text>
+    </span>
   );
 }

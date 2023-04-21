@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { Heading, Center } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 
 import { translator } from '@/utils/i18n-translator';
@@ -17,11 +16,11 @@ function Home({ welcomeMessage }: PageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Center>
-        <Heading size="lg" data-testid="welcome-header">
+      <div className="flex items-center justify-center">
+        <h1 className="text-3xl font-bold" data-testid="welcome-header">
           {welcomeMessage}
-        </Heading>
-      </Center>
+        </h1>
+      </div>
     </>
   );
 }

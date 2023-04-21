@@ -1,25 +1,17 @@
-import {
-  Button,
-  Circle,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Stack,
-  Text,
-  useToast,
-} from '@chakra-ui/react';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { LoginFormData } from './LoginForm';
 
-import { Link } from '@/components/Link';
 import { PasswordField } from '@/components/auth/PasswordField';
 import { EMAIL_REGEX, MIN_PASSWORD_LENGTH } from '@/constants';
+import { useToast } from '@/hooks/useToast';
+import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 export interface SignUpFormData extends LoginFormData {
   firstName: string;
@@ -35,7 +27,7 @@ export function SignUpForm() {
     formState: { errors, isValid },
   } = useForm<SignUpFormData>();
 
-  const toast = useToast();
+  const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -71,11 +63,11 @@ export function SignUpForm() {
       } = response;
 
       if (error) {
-        return toast({ status: 'error', isClosable: true, title: `Error`, description: error });
+        return toast({ variant: 'destructive', title: `Error`, description: error });
       }
 
       if (ok && redirectUrl) {
-        toast({ status: 'success', isClosable: true, title: `Welcome, ${firstName}!` });
+        toast({ variant: 'success', title: `Welcome, ${firstName}!` });
 
         return router.push('/');
       }
@@ -85,44 +77,43 @@ export function SignUpForm() {
   }
 
   return (
-    <Stack spacing="6" as="form" onSubmit={handleSubmit(onSubmit)}>
-      <Flex flexDirection="column" justifyContent="center" marginBottom={4}>
-        <Circle size="60px" bg="gray.300" color="white" alignSelf="center" />
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col justify-center mb-4">
+        <div className="w-16 h-16 bg-gray-300 text-white self-center rounded-full" />
 
-        <Text as="h2" fontSize="lg" textAlign="center" marginTop={2}>
-          Create an account.
-        </Text>
-      </Flex>
-      <Stack spacing="5">
-        <FormControl isInvalid={Boolean(errors.firstName)}>
-          <FormLabel htmlFor="firstName">First Name</FormLabel>
+        <h2 className="text-lg text-center mt-2"> Create an account.</h2>
+      </div>
+      <div className="flex flex-col gap-5">
+        <div>
+          <Label htmlFor="firstName">First Name</Label>
           <Input
             id="firstName"
             type="text"
+            isInvalid={Boolean(errors.email)}
             {...register('firstName', {
               required: 'First Name is required.',
             })}
           />
-          {errors.firstName ? (
-            <FormErrorMessage>{errors.firstName.message}</FormErrorMessage>
-          ) : null}
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.lastName)}>
-          <FormLabel htmlFor="lastName">Last Name</FormLabel>
+          {errors.firstName ? <p className="text-red-500">{errors.firstName.message}</p> : null}
+        </div>
+        <div>
+          <Label htmlFor="lastName">Last Name</Label>
           <Input
             id="lastName"
             type="text"
+            isInvalid={Boolean(errors.lastName)}
             {...register('lastName', {
               required: 'Last Name is required.',
             })}
           />
-          {errors.lastName ? <FormErrorMessage>{errors.lastName.message}</FormErrorMessage> : null}
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.email)}>
-          <FormLabel htmlFor="email">Email</FormLabel>
+          {errors.lastName ? <p className="text-red-500">{errors.lastName.message}</p> : null}
+        </div>
+        <div>
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
+            isInvalid={Boolean(errors.email)}
             {...register('email', {
               required: 'Email is required.',
               pattern: {
@@ -131,8 +122,8 @@ export function SignUpForm() {
               },
             })}
           />
-          {errors.email ? <FormErrorMessage>{errors.email.message}</FormErrorMessage> : null}
-        </FormControl>
+          {errors.email ? <p className="text-red-500">{errors.email.message}</p> : null}
+        </div>
         <PasswordField
           id="password"
           label="Password"
@@ -146,7 +137,7 @@ export function SignUpForm() {
             },
           })}
         >
-          {errors.password ? <FormErrorMessage>{errors.password.message}</FormErrorMessage> : null}
+          {errors.password ? <p className="text-red-500">{errors.password.message}</p> : null}
         </PasswordField>
         <PasswordField
           id="confirmPassword"
@@ -158,27 +149,23 @@ export function SignUpForm() {
             validate: (value) => value === watch('password') || "Passwords don't match.",
           })}
         >
-          {' '}
           {errors.confirmPassword ? (
-            <FormErrorMessage>{errors.confirmPassword.message}</FormErrorMessage>
+            <p className="text-red-500">{errors.confirmPassword.message}</p>
           ) : null}
         </PasswordField>
-      </Stack>
+      </div>
 
-      <Stack spacing="6">
+      <div className="flex gap-6 flex-col">
         <Button variant="outline" type="submit" disabled={loading}>
           Sign up
         </Button>
-      </Stack>
+      </div>
 
-      <Flex marginTop={8} justifyContent="center">
-        <Text color="gray.500">
-          Have an account?{' '}
-          <Link href="/login" color="muted">
-            Sign In
-          </Link>
-        </Text>
-      </Flex>
-    </Stack>
+      <div className="flex justify-center mt-8">
+        <span className="text-slate-500">
+          Have an account? <Link href="/login">Log In</Link>
+        </span>
+      </div>
+    </form>
   );
 }

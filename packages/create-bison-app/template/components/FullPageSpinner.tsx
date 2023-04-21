@@ -1,10 +1,10 @@
-import { Spinner, Center } from '@chakra-ui/react';
+import { Loader } from 'lucide-react';
 
 /** Renders a full page loading spinner */
 export function FullPageSpinner() {
   return (
-    <Center height="100vh" width="100vw">
-      <Spinner />
-    </Center>
+    <div className="h-screen w-screen flex items-center justify-center">
+      <Loader className="animate-spin" />
+    </div>
   );
 }
