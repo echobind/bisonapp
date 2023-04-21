@@ -24,20 +24,20 @@ describe("cli", () => {
 
     expect(createBisonApp).toHaveBeenCalledTimes(1);
     expect(createBisonApp.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
-        "db": Object {
-          "dev": Object {
+      {
+        "db": {
+          "dev": {
             "host": "localhost",
             "name": "appName1_dev",
             "password": "",
             "port": "5432",
             "user": "postgres",
           },
-          "test": Object {
+          "test": {
             "name": "appName1_test",
           },
         },
-        "host": Object {
+        "host": {
           "name": "vercel",
         },
         "name": "appName1",
@@ -54,20 +54,20 @@ describe("cli", () => {
 
     expect(createBisonApp).toHaveBeenCalledTimes(1);
     expect(createBisonApp.mock.calls[0][0]).toMatchInlineSnapshot(`
-      Object {
-        "db": Object {
-          "dev": Object {
+      {
+        "db": {
+          "dev": {
             "host": "localhost",
             "name": "custom",
             "password": "",
             "port": "5432",
             "user": "postgres",
           },
-          "test": Object {
+          "test": {
             "name": "appName2_test",
           },
         },
-        "host": Object {
+        "host": {
           "name": "vercel",
         },
         "name": "appName2",

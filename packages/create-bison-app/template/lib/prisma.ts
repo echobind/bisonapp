@@ -1,6 +1,8 @@
 import { Profile, User } from '@prisma/client';
 import { Prisma, PrismaClient } from '@prisma/client';
 
+import { isProduction } from '@/config';
+
 /**
  * Instantiate prisma client for Next.js:
  * https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices#solution
@@ -27,7 +29,7 @@ export const prisma =
     log: logOptions,
   });
 
-if (process.env.NODE_ENV !== 'production') {
+if (!isProduction()) {
   global.prisma = prisma;
 }
 
