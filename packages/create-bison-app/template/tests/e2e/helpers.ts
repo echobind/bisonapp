@@ -4,8 +4,8 @@ import { Role } from '@prisma/client';
 import { encode as encodeJwt } from 'next-auth/jwt';
 import { nanoid } from 'nanoid';
 
-import { UserFactory } from '@/tests/factories/user';
-import playwrightConfig from '@/playwright.config';
+import { UserFactory } from '~/prisma/factories/user';
+import playwrightConfig from '~/playwright.config';
 import { config } from '@/config';
 
 const chance = new Chance();

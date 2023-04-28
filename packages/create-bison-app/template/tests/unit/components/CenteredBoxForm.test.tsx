@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render } from '@/tests/utils';
+import { render } from '~/tests/utils';
 import { CenteredBoxForm } from '@/components/CenteredBoxForm';
 
 describe('CenteredBoxForm', () => {

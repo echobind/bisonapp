@@ -26,7 +26,7 @@ const DEFAULT_VARS = {
 
 describe('copyFiles', () => {
   describe('defaults', () => {
-    let targetFolder, variables;
+    let targetFolder, targetSrcFolder, targetTestFolder, variables;
 
     beforeAll(async () => {
       variables = {
@@ -36,6 +36,8 @@ describe('copyFiles', () => {
 
       const temp = await makeTempDir();
       targetFolder = path.join(temp, variables.name);
+      targetSrcFolder = path.join(targetFolder, 'src');
+      targetTestFolder = path.join(targetFolder, 'tests');
       await copyFiles({ variables, targetFolder });
     });
 
@@ -78,7 +80,6 @@ describe('copyFiles', () => {
         '.eslintrc.js',
         '.hygen.js',
         '.tool-versions',
-        'constants.ts',
         'jest.config.js',
         'playwright.config.ts',
         'next-env.d.ts',
@@ -89,6 +90,19 @@ describe('copyFiles', () => {
 
       files.forEach((file) => {
         const filePath = path.join(targetFolder, file);
+
+        expect(() => fs.statSync(filePath)).not.toThrowError();
+      });
+    });
+
+    it('copies src files', async () => {
+      const files = [
+        'config.ts',
+        'constants.ts',
+      ];
+
+      files.forEach((file) => {
+        const filePath = path.join(targetSrcFolder, file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -106,7 +120,7 @@ describe('copyFiles', () => {
       const files = ['api/trpc/[trpc].ts', '_app.tsx', 'index.tsx', 'login.tsx', 'signup.tsx'];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'pages', file);
+        const filePath = path.join(targetSrcFolder, 'pages', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -145,7 +159,7 @@ describe('copyFiles', () => {
       ];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'server', file);
+        const filePath = path.join(targetSrcFolder, 'server', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -161,7 +175,7 @@ describe('copyFiles', () => {
       ];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'tests', 'e2e', file);
+        const filePath = path.join(targetTestFolder, 'e2e', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -171,7 +185,7 @@ describe('copyFiles', () => {
       const files = ['user.ts', 'index.ts'];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'tests', 'factories', file);
+        const filePath = path.join(targetFolder, 'prisma', 'factories', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -181,7 +195,7 @@ describe('copyFiles', () => {
       const files = ['createUser.test.ts', 'me.test.ts', 'users.test.ts'];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'tests', 'requests', 'user', file);
+        const filePath = path.join(targetTestFolder, 'requests', 'user', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -198,7 +212,7 @@ describe('copyFiles', () => {
       ];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'tests', 'unit', file);
+        const filePath = path.join(targetTestFolder, 'unit', file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });
@@ -216,7 +230,7 @@ describe('copyFiles', () => {
       ];
 
       files.forEach((file) => {
-        const filePath = path.join(targetFolder, 'tests', file);
+        const filePath = path.join(targetTestFolder, file);
 
         expect(() => fs.statSync(filePath)).not.toThrowError();
       });

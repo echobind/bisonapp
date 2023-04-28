@@ -1,4 +1,4 @@
-describe("cli", () => {
+describe('cli', () => {
   let createBisonApp;
   let originalArgv;
 
@@ -7,8 +7,8 @@ describe("cli", () => {
     // multiple times with different arguments.
     jest.resetModules();
 
-    jest.mock("..");
-    createBisonApp = require("..");
+    jest.mock('..');
+    createBisonApp = require('..');
 
     // Each test overwrites process arguments so store the original arguments
     originalArgv = process.argv;
@@ -19,8 +19,8 @@ describe("cli", () => {
     process.argv = originalArgv;
   });
 
-  it("should create app with default configuration", async () => {
-    await runCreateBisonAppCommand("appName1", "--acceptDefaults");
+  it('should create app with default configuration', async () => {
+    await runCreateBisonAppCommand('appName1', '--acceptDefaults');
 
     expect(createBisonApp).toHaveBeenCalledTimes(1);
     expect(createBisonApp.mock.calls[0][0]).toMatchInlineSnapshot(`
@@ -45,12 +45,8 @@ describe("cli", () => {
     `);
   });
 
-  it("should create app with default configuration and override with any arguments", async () => {
-    await runCreateBisonAppCommand(
-      "appName2",
-      "--acceptDefaults",
-      "--db.dev.name=custom"
-    );
+  it('should create app with default configuration and override with any arguments', async () => {
+    await runCreateBisonAppCommand('appName2', '--acceptDefaults', '--db.dev.name=custom');
 
     expect(createBisonApp).toHaveBeenCalledTimes(1);
     expect(createBisonApp.mock.calls[0][0]).toMatchInlineSnapshot(`
@@ -84,11 +80,11 @@ describe("cli", () => {
  */
 async function runCreateBisonAppCommand(appName, ...options) {
   process.argv = [
-    "node", // Not used but required at this index in the array
-    "../cli.js", // Not used but required at this index in the array
+    'node', // Not used but required at this index in the array
+    '../cli.js', // Not used but required at this index in the array
     appName, // App name positional argument
     ...options, // Any option arguments
   ];
 
-  return require("../cli");
+  return require('../cli');
 }

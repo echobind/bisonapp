@@ -1,7 +1,7 @@
 import { Prisma, Role } from '@prisma/client';
 
+import { seedUsers } from '~/prisma/seeds/users';
 import { hashPassword } from '@/services/auth';
-import { seedUsers } from '@/prisma/seeds/users';
 import { prisma } from '@/lib/prisma';
 
 // HR: Hey, we've had a few more employees join -- can you create an account for them?!
