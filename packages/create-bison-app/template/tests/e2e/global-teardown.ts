@@ -1,7 +1,7 @@
 import { FullConfig } from '@playwright/test';
 
 import { prisma } from '@/lib/prisma';
-import { getSchema } from '@/tests/helpers/db';
+import { getSchema } from '~/tests/helpers/db';
 import { config } from '@/config';
 
 async function globalTeardown(_config: FullConfig) {

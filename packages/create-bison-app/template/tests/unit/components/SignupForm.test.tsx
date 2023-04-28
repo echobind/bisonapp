@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render, waitFor, userEvent, fireEvent, act } from '@/tests/utils';
+import { render, waitFor, userEvent, fireEvent, act } from '~/tests/utils';
 import { SignUpForm } from '@/components/auth/SignUpForm';
 
 // need this in order to use `act`

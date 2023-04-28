@@ -19,7 +19,8 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "~/*": ["./*"],
+      "@/*": ["./src/*"]
     },
     "incremental": true
   },

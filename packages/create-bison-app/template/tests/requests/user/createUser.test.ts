@@ -1,7 +1,7 @@
 import { Role } from '@prisma/client';
 
-import { resetDB, disconnect, trpcRequest } from '@/tests/helpers';
-import { UserFactory } from '@/tests/factories/user';
+import { resetDB, disconnect, trpcRequest } from '~/tests/helpers';
+import { UserFactory } from '~/prisma/factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

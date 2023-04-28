@@ -8,7 +8,7 @@ import { NextRouter } from 'next/router';
 import fetch from 'cross-fetch';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@testing-library/jest-dom/extend-expect';
-import '@/tests/matchMedia.mock';
+import '~/tests/matchMedia.mock';
 
 import { AllProviders } from '@/components/AllProviders';
 import type { AppRouter } from '@/server/routers/_app';

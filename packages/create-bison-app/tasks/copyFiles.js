@@ -7,12 +7,14 @@ const { copyDirectoryWithTemplate } = require('../utils/copyDirectoryWithTemplat
 
 const templateFolder = path.join(__dirname, '..', 'template');
 const fromPath = (file) => path.join(templateFolder, file);
+const fromSrcPath = (file) => path.join(templateFolder, 'src', file);
 
 /**
  * Copies files based on variables and a target folder
  */
 async function copyFiles({ variables, targetFolder }) {
   const toPath = (file) => path.join(targetFolder, file);
+  const toSrcPath = (file) => path.join(targetFolder, 'src', file);
 
   // Files to render when using Heroku
   const isHeroku = variables.host.name === 'heroku';
@@ -51,10 +53,10 @@ async function copyFiles({ variables, targetFolder }) {
 
     copyDirectoryWithTemplate(fromPath('.github'), toPath('.github'), variables),
 
-    copyDirectoryWithTemplate(fromPath('pages'), toPath('pages'), variables),
+    copyDirectoryWithTemplate(fromSrcPath('pages'), toSrcPath('pages'), variables),
     copyDirectoryWithTemplate(fromPath('prisma'), toPath('prisma'), variables),
 
-    copyDirectoryWithTemplate(fromPath('server'), toPath('server'), variables),
+    copyDirectoryWithTemplate(fromSrcPath('server'), toSrcPath('server'), variables),
 
     copyDirectoryWithTemplate(fromPath('tests'), toPath('tests'), variables),
 
@@ -65,23 +67,13 @@ async function copyFiles({ variables, targetFolder }) {
         '__mocks__',
         '_templates',
         '.vscode',
-        'components',
-        'context',
-        'hooks',
-        'layouts',
-        'lib',
         'prisma',
         'public',
         'scripts',
-        'services',
-        'styles',
-        'types',
-        'utils',
         '.eslintrc.js',
         '.hygen.js',
         '.nvmrc',
         '.tool-versions',
-        'constants.ts',
         'jest.config.js',
         'playwright.config.ts',
         'next-env.d.ts',
@@ -90,11 +82,33 @@ async function copyFiles({ variables, targetFolder }) {
         'tsconfig.cjs.json',
         'tailwind.config.js',
         'postcss.config.js',
-        'config.ts',
       ],
       targetFolder,
       {
         cwd: templateFolder,
+        dot: true,
+        // preserve path
+        parents: true,
+      }
+    ),
+
+    cpy(
+      [
+        'components',
+        'context',
+        'hooks',
+        'layouts',
+        'lib',
+        'services',
+        'styles',
+        'types',
+        'utils',
+        'config.ts',
+        'constants.ts',
+      ],
+      path.join(targetFolder, 'src'),
+      {
+        cwd: path.join(templateFolder, 'src'),
         dot: true,
         // preserve path
         parents: true,

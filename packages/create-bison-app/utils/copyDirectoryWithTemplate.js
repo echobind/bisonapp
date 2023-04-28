@@ -28,7 +28,7 @@ async function copyDirectoryWithTemplate(from, to, variables) {
 
   // Glob patterns can only contain forward-slashes (even on Windows)
   const globPattern = `${from.replace(/\\/g, '/')}/**`;
-  const files = await globby([globPattern], { expandDirectories: true });
+  const files = await globby([globPattern], { expandDirectories: true, dot: true });
 
   return await Promise.all(
     files.map(async (file) => {

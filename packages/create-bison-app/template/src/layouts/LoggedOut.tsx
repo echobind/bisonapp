@@ -15,10 +15,8 @@ export function LoggedOutLayout({ children }: Props) {
         <div className="flex justify-between items-center p-4">
           <Logo />
 
-          <Link href="/login" passHref>
-            <a className={buttonVariants({ variant: 'outline' })} href="/login">
-              Login
-            </a>
+          <Link className={buttonVariants({ variant: 'outline' })} href="/login" passHref>
+            Login
           </Link>
         </div>
       </>

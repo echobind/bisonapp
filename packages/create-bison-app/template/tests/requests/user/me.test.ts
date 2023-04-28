@@ -1,5 +1,5 @@
-import { trpcRequest, resetDB, disconnect } from '@/tests/helpers';
-import { UserFactory } from '@/tests/factories/user';
+import { trpcRequest, resetDB, disconnect } from '~/tests/helpers';
+import { UserFactory } from '~/prisma/factories/user';
 
 beforeEach(async () => resetDB());
 afterAll(async () => disconnect());

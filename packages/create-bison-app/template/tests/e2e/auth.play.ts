@@ -4,7 +4,7 @@ import { Role } from '@prisma/client';
 
 import { loginAs } from './helpers';
 
-import { resetDB } from '@/tests/helpers/db';
+import { resetDB } from '~/tests/helpers/db';
 import { disconnect } from '@/lib/prisma';
 
 test.beforeEach(async () => resetDB());
