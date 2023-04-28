@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.24 (2023-04-28)
+
+
+### Features
+
+* add src directory ([4f6a606](https://github.com/echobind/bisonapp/commit/4f6a606cc1649a9ed48c2b07270703a4de7dbd70))
+
+
+
 ## 1.13.0-canary.23 (2023-04-28)
 
 **Note:** Version bump only for package root
