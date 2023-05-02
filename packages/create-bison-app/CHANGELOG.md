@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.25 (2023-05-02)
+
+
+### Bug Fixes
+
+* update hygen templates to be generated in src directory ([0d8c2a3](https://github.com/echobind/bisonapp/commit/0d8c2a3e6a3c1d53a88b280c65338b0c799a5d76))
+
+
+
 ## 1.13.0-canary.24 (2023-04-28)
 
 
