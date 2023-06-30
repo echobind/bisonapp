@@ -103,7 +103,7 @@ async function copyFiles({ variables, targetFolder }) {
         'styles',
         'types',
         'utils',
-        'config.ts',
+        'env.mjs',
         'constants.ts',
       ],
       path.join(targetFolder, 'src'),

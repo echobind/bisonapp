@@ -96,10 +96,7 @@ describe('copyFiles', () => {
     });
 
     it('copies src files', async () => {
-      const files = [
-        'config.ts',
-        'constants.ts',
-      ];
+      const files = ['env.mjs', 'constants.ts'];
 
       files.forEach((file) => {
         const filePath = path.join(targetSrcFolder, file);
