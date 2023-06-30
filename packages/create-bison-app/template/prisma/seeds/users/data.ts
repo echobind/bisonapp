@@ -1,7 +1,7 @@
 import { Prisma, Role } from '@prisma/client';
 
 import { hashPassword } from '@/services/auth';
-import { isLocal } from '@/config';
+import { isLocal } from '~/src/env.mjs';
 
 // *********************************************
 // ** DEVELOPMENT DATA SET

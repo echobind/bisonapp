@@ -1,7 +1,9 @@
 import { Profile, User } from '@prisma/client';
 import { Prisma, PrismaClient } from '@prisma/client';
 
-import { isProduction } from '@/config';
+import { env } from '~/src/env.mjs';
+
+const isProduction = env.NODE_ENV === 'production';
 
 /**
  * Instantiate prisma client for Next.js:
@@ -21,7 +23,7 @@ declare global {
 }
 
 // Set default prisma logs. More logs in debug mode.
-const logOptions: Prisma.LogLevel[] = process.env.DEBUG ? ['query', 'error'] : ['error'];
+const logOptions: Prisma.LogLevel[] = env.DEBUG ? ['query', 'error'] : ['error'];
 
 export const prisma =
   global.prisma ||
@@ -29,7 +31,7 @@ export const prisma =
     log: logOptions,
   });
 
-if (!isProduction()) {
+if (!isProduction) {
   global.prisma = prisma;
 }
 

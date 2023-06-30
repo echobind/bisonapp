@@ -1,9 +1,9 @@
 import { spawn } from 'child_process';
-import { config } from '@/config';
+import { env } from '~/src/env.mjs';
 
 const DEFAULT_BUILD_COMMAND = `yarn build:prisma && yarn build:next`;
 
-const buildCommand = config.database.shouldMigrate
+const buildCommand = env.SHOULD_MIGRATE
   ? `yarn db:deploy && ${DEFAULT_BUILD_COMMAND}`
   : DEFAULT_BUILD_COMMAND;
 

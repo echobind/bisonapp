@@ -3,6 +3,8 @@ import superjson from 'superjson';
 import { createTRPCNext } from '@trpc/next';
 import { httpBatchLink } from '@trpc/client';
 
+import { env } from '../env.mjs';
+
 import type { AppRouter } from '@/server/routers/_app';
 
 // exporting this so that we consistently use the same transformer everywhere.
@@ -34,9 +36,9 @@ export const trpc = createTRPCNext<AppRouter>({
 
     // The server needs to know your app's full url
     // On render.com you can use `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}/api/trpc`
-    const url = process.env.RENDER_INTERNAL_HOSTNAME
-      ? `https://${process.env.RENDER_INTERNAL_HOSTNAME}/api/trpc`
-      : 'http://localhost:3000/api/trpc';
+    const url = env.RENDER_EXTERNAL_URL
+      ? `${env.RENDER_EXTERNAL_URL}/api/trpc`
+      : `${env.APP_URL}/api/trpc`;
 
     return {
       transformer,

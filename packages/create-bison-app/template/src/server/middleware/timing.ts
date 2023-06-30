@@ -1,5 +1,5 @@
 import { t } from '@/server/trpc';
-import { isTesting } from '@/config';
+import { isTesting } from '~/src/env.mjs';
 
 const timingMiddleware = t.middleware(async ({ path, type, next }) => {
   // Don't log timing in tests.

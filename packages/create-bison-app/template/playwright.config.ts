@@ -1,10 +1,10 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
-import { config as appConfig } from '@/config';
+import { env } from '~/src/env.mjs';
 
-const TEST_SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
-const IS_CI = appConfig.ci.isCi;
+const TEST_SERVER_PORT = env.PORT || 3001;
+const IS_CI = env.IS_CI;
 
 const baseUrl = `http://localhost:${TEST_SERVER_PORT}`;
 

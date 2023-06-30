@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { config } from '@/config';
+import { env } from '~/src/env.mjs';
 import { prisma } from '@/lib/prisma';
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
@@ -12,12 +12,12 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   } catch (err) {}
 
   const data = {
-    stage: config.stage,
+    stage: env.APP_ENV,
     env: {
-      NODE_ENV: process.env.NODE_ENV,
-      NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
-      SHOULD_MIGRATE: process.env.SHOULD_MIGRATE,
-      FC_GIT_COMMIT_SHA: process.env.FC_GIT_COMMIT_SHA,
+      NODE_ENV: env.NODE_ENV,
+      NEXT_PUBLIC_APP_ENV: env.NEXT_PUBLIC_APP_ENV,
+      SHOULD_MIGRATE: env.SHOULD_MIGRATE,
+      FC_GIT_COMMIT_SHA: env.FC_GIT_COMMIT_SHA,
     },
     status: {
       database: databaseWorking,

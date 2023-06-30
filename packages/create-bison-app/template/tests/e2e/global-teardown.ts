@@ -2,7 +2,7 @@ import { FullConfig } from '@playwright/test';
 
 import { prisma } from '@/lib/prisma';
 import { getSchema } from '~/tests/helpers/db';
-import { config } from '@/config';
+import { config } from '~/src/env.mjs';
 
 async function globalTeardown(_config: FullConfig) {
   const schema = getSchema(config.database.url);

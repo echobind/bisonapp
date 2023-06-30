@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 
 import { UserFactory } from '~/prisma/factories/user';
 import playwrightConfig from '~/playwright.config';
-import { config } from '@/config';
+import { config } from '~/src/env.mjs';
 
 const chance = new Chance();
 

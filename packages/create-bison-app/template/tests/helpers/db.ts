@@ -3,7 +3,9 @@ import util from 'util';
 
 import { Client } from 'pg';
 
-import { config, isProduction } from '@/config';
+import { env } from '~/src/env.mjs';
+
+const isProduction = env.NODE_ENV === 'production';
 
 const exec = util.promisify(childProcess.exec);
 
@@ -12,16 +14,16 @@ const exec = util.promisify(childProcess.exec);
  * Truncates all tables except for _Migrations
  */
 export const resetDB = async (): Promise<boolean> => {
-  if (isProduction()) {
+  if (isProduction) {
     return Promise.resolve(false);
   }
 
-  const match = config.database.url.match(/schema=(.*)(&.*)*$/);
+  const match = env.DATABASE_URL.match(/schema=(.*)(&.*)*$/);
   const schema = match ? match[1] : 'public';
 
   // NOTE: the prisma client does not handle this query well, use pg instead
   const client = new Client({
-    connectionString: config.database.url,
+    connectionString: env.DATABASE_URL,
   });
 
   await client.connect();
