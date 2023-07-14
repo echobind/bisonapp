@@ -34,7 +34,7 @@
     "lint:fix": "yarn lint --fix",
     "run:script": "yarn ts-node-wrap prisma/scripts/run.ts -f",
     "setup": "yarn setup:dev && yarn setup:test",
-    "setup:dev": "yarn build:prisma && yarn db:deploy && yarn db:seed",
+    "setup:dev": "yarn withEnv:dev yarn build:prisma && yarn withEnv:dev yarn db:deploy && yarn withEnv:dev yarn db:seed",
     "setup:test": "yarn withEnv:test -- yarn db:deploy",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
