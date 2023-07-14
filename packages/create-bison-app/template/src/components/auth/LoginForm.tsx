@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -91,11 +90,11 @@ export function LoginForm() {
         </PasswordField>
       </div>
       <div className="flex justify-between">
-        <NextLink href="/reset-password">
-          <Button variant="link" size="sm">
+        <Link href="/reset-password">
+          <Button variant="link" size="sm" type="button">
             Forgot password?
           </Button>
-        </NextLink>
+        </Link>
       </div>
       <div className="flex gap-6 flex-col">
         <Button variant="outline" type="submit" disabled={loading} data-testid="login-submit">
