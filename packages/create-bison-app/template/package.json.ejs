@@ -34,7 +34,7 @@
     "lint:fix": "yarn lint --fix",
     "run:script": "yarn ts-node-wrap prisma/scripts/run.ts -f",
     "setup": "yarn setup:dev && yarn setup:test",
-    "setup:dev": "yarn build:prisma && yarn db:deploy && yarn db:seed",
+    "setup:dev": "yarn withEnv:dev yarn build:prisma && yarn withEnv:dev yarn db:deploy && yarn withEnv:dev yarn db:seed",
     "setup:test": "yarn withEnv:test -- yarn db:deploy",
     "start": "next start -p $PORT",
     "test": "yarn withEnv:test jest --runInBand --watch",
@@ -82,7 +82,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.2",
+    "@playwright/test": "^1.36.0",
     "@swc/jest": "^0.2.24",
     "@testing-library/dom": "^9.2.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -114,7 +114,6 @@
     "lint-staged": "^13.2.1",
     "nanoid": "^3.3.6",
     "pg": "^8.10.0",
-    "playwright": "^1.32.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
     "prisma": "^4.12.0",
