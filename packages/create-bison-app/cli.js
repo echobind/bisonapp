@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-const createBisonApp = require(".");
-const inquirer = require("inquirer");
-const get = require("lodash/get");
-const set = require("lodash/set");
-const Logo = require("./logo");
+const createBisonApp = require('.');
+const inquirer = require('inquirer');
+const get = require('lodash/get');
+const set = require('lodash/set');
+const displayLogo = require('./logo');
 
 const TYPE_MAPPING = {
-  input: "string",
-  list: "string",
-  confirm: "boolean",
+  input: 'string',
+  list: 'string',
+  confirm: 'boolean',
 };
 
 function convertInquirerTypeToYarnType(type) {
-  return TYPE_MAPPING[type] || "string";
+  return TYPE_MAPPING[type] || 'string';
 }
 
 /**
@@ -22,68 +22,68 @@ function convertInquirerTypeToYarnType(type) {
 function generateQuestions(appName) {
   return [
     {
-      name: "db.dev.name",
-      type: "input",
-      message: "What is the local database name?",
-      description: "The database to use in development",
+      name: 'db.dev.name',
+      type: 'input',
+      message: 'What is the local database name?',
+      description: 'The database to use in development',
       default: `${appName}_dev`,
     },
     {
-      name: "db.dev.user",
-      type: "input",
-      message: "What is the local database username?",
-      description: "The database user",
-      default: "postgres",
+      name: 'db.dev.user',
+      type: 'input',
+      message: 'What is the local database username?',
+      description: 'The database user',
+      default: 'postgres',
     },
     {
-      name: "db.dev.password",
-      type: "input",
-      message: "What is the local database password?",
-      description: "The database password",
-      default: "",
+      name: 'db.dev.password',
+      type: 'input',
+      message: 'What is the local database password?',
+      description: 'The database password',
+      default: '',
     },
     {
-      name: "db.dev.host",
-      type: "input",
-      message: "What is the local database host?",
-      description: "The database host",
-      default: "localhost",
+      name: 'db.dev.host',
+      type: 'input',
+      message: 'What is the local database host?',
+      description: 'The database host',
+      default: 'localhost',
     },
     {
-      name: "db.dev.port",
-      type: "input",
-      message: "What is the local database port?",
-      description: "The database port",
-      default: "5432",
+      name: 'db.dev.port',
+      type: 'input',
+      message: 'What is the local database port?',
+      description: 'The database port',
+      default: '5432',
     },
     {
-      name: "db.test.name",
-      type: "input",
-      message: "What is the local test database name?",
-      description: "The database name used in test env",
+      name: 'db.test.name',
+      type: 'input',
+      message: 'What is the local test database name?',
+      description: 'The database name used in test env',
       default: `${appName}_test`,
     },
     {
-      name: "host.name",
-      type: "list",
-      message: "Where will you deploy the app?",
-      description: "Where you want to deploy the app",
+      name: 'host.name',
+      type: 'list',
+      message: 'Where will you deploy the app?',
+      description: 'Where you want to deploy the app',
       choices: [
-        { name: "Vercel (recommended)", value: "vercel" },
-        { name: "Heroku", value: "heroku" },
+        { name: 'Vercel (recommended)', value: 'vercel' },
+        { name: 'Heroku', value: 'heroku' },
       ],
-      default: "vercel",
+      default: 'vercel',
     },
   ];
 }
 
-require("yargs").usage(
-  "$0 <name>",
-  "Creates a new Bison application",
+require('yargs').usage(
+  '$0 <name>',
+  'Creates a new Bison application',
   function (yargs) {
-    yargs.positional("name", {
-      describe: "Creates a new Bison app with the specified name",
-      type: "string",
+    yargs.positional('name', {
+      describe: 'Creates a new Bison app with the specified name',
+      type: 'string',
     });
 
     const options = generateQuestions();
@@ -97,7 +97,7 @@ require("yargs").usage(
   },
   async function (yargs) {
     // Show the logo!
-    console.log(Logo);
+    await displayLogo();
 
     async function fetchAnswers(answers = {}) {
       const questions = generateQuestions(name);
