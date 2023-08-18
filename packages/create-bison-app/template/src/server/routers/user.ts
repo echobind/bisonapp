@@ -23,7 +23,7 @@ export const userRouter = t.router({
     .input(z.object({ id: z.string().optional(), email: z.string().optional() }).optional())
     .query(({ ctx, input }) => ctx.db.user.findMany({ where: input, select: defaultUserSelect })),
   find: t.procedure
-    .input(z.object({ id: z.string().optional(), email: z.string().optional() }))
+    .input(z.union([z.object({ id: z.string() }), z.object({ email: z.string() })]))
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUniqueOrThrow({
         where: input,
