@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.0-canary.27 (2023-08-19)
+
+
+### Bug Fixes
+
+* prisma type error ([6e1f273](https://github.com/echobind/bisonapp/commit/6e1f273bf076c9c6e48c0aa77d0a35156c7cc909))
+
+
+
 ## 1.13.0-canary.26 (2023-07-14)
 
 **Note:** Version bump only for package create-bison-app
