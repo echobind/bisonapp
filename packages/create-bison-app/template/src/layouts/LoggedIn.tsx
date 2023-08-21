@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 
 import { Logo } from '@/components/Logo';
@@ -12,11 +11,8 @@ interface Props {
 }
 
 export function LoggedInLayout({ children }: Props) {
-  const router = useRouter();
-
   async function handleLogout() {
-    signOut();
-    await router.replace('/login');
+    await signOut({ callbackUrl: '/login' });
   }
 
   return (
